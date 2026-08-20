@@ -1,8 +1,8 @@
 // reporte.js
-import { getSession } from '../services/auth.service.js';
+import { getSesion } from '../services/auth.service.js';
 import { fetchAPI } from '../services/api.js';
 
-const session = getSession();
+const session = getSesion();
 
 // --- Alerta ---
 function mostrarAlerta(mensaje, tipo = 'error') {
@@ -26,14 +26,14 @@ document.getElementById('form-reporte').addEventListener('submit', async (e) => 
   try {
     const datos = {
       empresaId:            session.empresaId,
-      empresaNombre:        session.email,
+      empresaNombre:        session.nombre || session.email,
       inversionEjecutada:   parseFloat(document.getElementById('inversion-ejecutada').value),
       empleosReales:        parseInt(document.getElementById('empleos-reales').value),
       exportacionesTotales: parseFloat(document.getElementById('exportaciones-totales').value),
       fechaReporte:         new Date().toISOString(),
     };
 
-    await fetchAPI('/reportesCumplimiento', {
+    await fetchAPI('/reportes_cumplimiento', {
       method: 'POST',
       body: JSON.stringify(datos),
     });
