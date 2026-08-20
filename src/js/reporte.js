@@ -33,7 +33,7 @@ document.getElementById('form-reporte').addEventListener('submit', async (e) => 
       fechaReporte:         new Date().toISOString(),
     };
 
-    await fetchAPI('/reportesCumplimiento', {
+    await fetchAPI('/reportes_cumplimiento', {
       method: 'POST',
       body: JSON.stringify(datos),
     });

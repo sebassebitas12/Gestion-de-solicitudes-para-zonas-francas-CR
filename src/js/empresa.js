@@ -23,7 +23,7 @@ async function inicializar() {
   try {
     const [empresas, zonasFrancas] = await Promise.all([
       fetchAPI(`/empresas?id=${session.empresaId}`),
-      fetchAPI('/zonasFrancas'),
+      fetchAPI('/zonas_francas'),
     ]);
 
     const empresa = empresas[0];
