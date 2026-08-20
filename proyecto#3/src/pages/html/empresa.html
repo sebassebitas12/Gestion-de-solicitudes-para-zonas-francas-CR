@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZoFranca CR - Portal de Empresa</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-content">
+            <h1>ZoFranca CR <span class="subtitle">Portal de Empresa</span></h1>
+            <nav class="user-nav">
+                <span id="user-email-display">empresa@demo.com</span>
+                <button id="btn-logout" class="btn btn-outline">Cerrar Sesión</button>
+            </nav>
+        </div>
+    </header>
+
+    <nav class="tabs-nav" aria-label="Navegación de módulos">
+        <button class="tab-btn active" data-tab="solicitud">Nueva Solicitud</button>
+        <button class="tab-btn" data-tab="reporte">Reporte Periódico de Cumplimiento</button>
+    </nav>
+
+    <main class="app-main">
+        <div id="alert-message" class="alert hidden" role="alert" aria-live="assertive"></div>
+
+        <!-- Pestaña 1: Nueva Solicitud -->
+        <section id="tab-solicitud" class="tab-content active">
+            <article class="card">
+                <h2>Formulario de Solicitud de Instalación</h2>
+                <form id="form-solicitud" enctype="multipart/form-data">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="empresa-nombre">Nombre de la Empresa</label>
+                            <input type="text" id="empresa-nombre" name="empresa-nombre" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="empresa-sector">Sector Industrial</label>
+                            <select id="empresa-sector" name="empresa-sector" required>
+                                <option value="">Seleccione...</option>
+                                <option value="tecnologia">Tecnología</option>
+                                <option value="manufactura">Manufactura</option>
+                                <option value="bpo">BPO / Servicios</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="inversion-proyectada">Inversión Proyectada (USD)</label>
+                            <input type="number" id="inversion-proyectada" name="inversion-proyectada" min="0" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="empleos-proyectados">Empleos Proyectados</label>
+                            <input type="number" id="empleos-proyectados" name="empleos-proyectados" min="0" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="doc-respaldo">Documentos de Respaldo (PDF, ZIP)</label>
+                        <input type="file" id="doc-respaldo" name="doc-respaldo" accept=".pdf,.zip" multiple required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" id="btn-guardar-solicitud" class="btn btn-primary">
+                            <span id="spinner-solicitud" class="spinner hidden" aria-hidden="true"></span>
+                            <span class="btn-text">Guardar y Enviar Solicitud</span>
+                        </button>
+                    </div>
+                </form>
+            </article>
+        </section>
+
+        <!-- Pestaña 2: Reporte de Cumplimiento -->
+        <section id="tab-reporte" class="tab-content hidden">
+            <article class="card">
+                <h2>Reporte Periódico de Cumplimiento</h2>
+                <form id="form-reporte">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="inversion-ejecutada">Inversión Ejecutada Real (USD)</label>
+                            <input type="number" id="inversion-ejecutada" name="inversion-ejecutada" min="0" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="empleos-reales">Empleos Reales Actuales</label>
+                            <input type="number" id="empleos-reales" name="empleos-reales" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="exportaciones-totales">Exportaciones Totales (USD)</label>
+                            <input type="number" id="exportaciones-totales" name="exportaciones-totales" min="0" step="0.01" required>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" id="btn-enviar-reporte" class="btn btn-success">
+                            <span id="spinner-reporte" class="spinner hidden" aria-hidden="true"></span>
+                            <span class="btn-text">Enviar Reporte</span>
+                        </button>
+                    </div>
+                </form>
+            </article>
+        </section>
+    </main>
+
+    <script src="js/empresa.js"></script>
+</body>
+</html>
