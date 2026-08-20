@@ -1,0 +1,683 @@
+{
+  "usuarios": [
+    {
+      "id": "USR-001",
+      "nombre": "Ana Chaves",
+      "email": "ana.chaves@procomer.go.cr",
+      "password": "analista123",
+      "rol": "analista",
+      "organizacion": "PROCOMER",
+      "activo": true
+    },
+    {
+      "id": "USR-002",
+      "nombre": "Carlos Méndez",
+      "email": "carlos.mendez@procomer.go.cr",
+      "password": "gerente123",
+      "rol": "gerente",
+      "organizacion": "PROCOMER",
+      "activo": true
+    },
+    {
+      "id": "USR-003",
+      "nombre": "Laura Vargas",
+      "email": "laura.vargas@procomer.go.cr",
+      "password": "admin123",
+      "rol": "administrador",
+      "organizacion": "PROCOMER",
+      "activo": true
+    },
+    {
+      "id": "USR-004",
+      "nombre": "TechNova Solutions CR",
+      "email": "contacto@technova.cr",
+      "password": "empresa123",
+      "rol": "empresa",
+      "organizacion": "TechNova Solutions CR",
+      "empresaId": "EMP-001",
+      "activo": true
+    },
+    {
+      "id": "USR-005",
+      "nombre": "Manufactura Global LATAM",
+      "email": "contacto@mfglobal.mx",
+      "password": "empresa123",
+      "rol": "empresa",
+      "organizacion": "Manufactura Global LATAM",
+      "empresaId": "EMP-002",
+      "activo": true
+    },
+    {
+      "id": "USR-006",
+      "nombre": "Servitech BPO Group",
+      "email": "contacto@servitech.co",
+      "password": "empresa123",
+      "rol": "empresa",
+      "organizacion": "Servitech BPO Group",
+      "empresaId": "EMP-003",
+      "activo": true
+    },
+    {
+      "id": "USR-007",
+      "nombre": "IndusCR Metales S.A.",
+      "email": "contacto@induscr.cr",
+      "password": "empresa123",
+      "rol": "empresa",
+      "organizacion": "IndusCR Metales S.A.",
+      "empresaId": "EMP-004",
+      "activo": true
+    },
+    {
+      "id": "USR-008",
+      "nombre": "DataStream Analytics",
+      "email": "contacto@datastream.us",
+      "password": "empresa123",
+      "rol": "empresa",
+      "organizacion": "DataStream Analytics",
+      "empresaId": "EMP-005",
+      "activo": true
+    },
+    {
+      "id": "USR-009",
+      "nombre": "CallCenter Pro LATAM",
+      "email": "contacto@callcenterpro.gt",
+      "password": "empresa123",
+      "rol": "empresa",
+      "organizacion": "CallCenter Pro LATAM",
+      "empresaId": "EMP-006",
+      "activo": true
+    }
+  ],
+
+  "zonas_francas": [
+    {
+      "id": "ZF-001",
+      "nombre": "Zona Franca Coyol",
+      "ubicacion": "Alajuela, Costa Rica",
+      "provincia": "Alajuela",
+      "pais": "Costa Rica",
+      "inversionMinima": 150000,
+      "empleosMinimos": 100,
+      "sectores": [
+        "Manufactura",
+        "Tecnología"
+      ],
+      "capacidadEmpresas": 45,
+      "empresasActivas": 38,
+      "estado": "activa",
+      "fechaCreacion": "2020-01-15",
+      "descripcion": "Zona franca orientada principalmente a manufactura avanzada y servicios tecnológicos."
+    },
+    {
+      "id": "ZF-002",
+      "nombre": "Zona Franca América",
+      "ubicacion": "Heredia, Costa Rica",
+      "provincia": "Heredia",
+      "pais": "Costa Rica",
+      "inversionMinima": 100000,
+      "empleosMinimos": 50,
+      "sectores": [
+        "BPO",
+        "Tecnología"
+      ],
+      "capacidadEmpresas": 30,
+      "empresasActivas": 24,
+      "estado": "activa",
+      "fechaCreacion": "2021-03-10",
+      "descripcion": "Zona franca enfocada en servicios empresariales, BPO y tecnología."
+    },
+    {
+      "id": "ZF-003",
+      "nombre": "Zona Franca Metropolitana",
+      "ubicacion": "San José, Costa Rica",
+      "provincia": "San José",
+      "pais": "Costa Rica",
+      "inversionMinima": 125000,
+      "empleosMinimos": 75,
+      "sectores": [
+        "BPO",
+        "Manufactura",
+        "Tecnología"
+      ],
+      "capacidadEmpresas": 60,
+      "empresasActivas": 51,
+      "estado": "activa",
+      "fechaCreacion": "2019-08-20",
+      "descripcion": "Zona franca de operación diversificada para empresas de servicios y manufactura."
+    }
+  ],
+
+  "empresas": [
+    {
+      "id": "EMP-001",
+      "nombre": "TechNova Solutions CR",
+      "pais": "Costa Rica",
+      "sector": "Tecnología",
+      "zonaFrancaId": "ZF-001",
+      "contactoNombre": "Ricardo Solano",
+      "contactoEmail": "r.solano@technova.cr",
+      "telefono": "+506 2200-1001",
+      "estado": "activa",
+      "fechaRegistro": "2024-11-05",
+      "solicitudId": "SOL-2024-001"
+    },
+    {
+      "id": "EMP-002",
+      "nombre": "Manufactura Global LATAM",
+      "pais": "México",
+      "sector": "Manufactura",
+      "zonaFrancaId": "ZF-001",
+      "contactoNombre": "Jorge Hernández",
+      "contactoEmail": "j.hernandez@mfglobal.mx",
+      "telefono": "+52 55 2000-1002",
+      "estado": "activa",
+      "fechaRegistro": "2024-11-08",
+      "solicitudId": "SOL-2024-002"
+    },
+    {
+      "id": "EMP-003",
+      "nombre": "Servitech BPO Group",
+      "pais": "Colombia",
+      "sector": "BPO",
+      "zonaFrancaId": "ZF-002",
+      "contactoNombre": "María Ospina",
+      "contactoEmail": "m.ospina@servitech.co",
+      "telefono": "+57 601 300-1003",
+      "estado": "activa",
+      "fechaRegistro": "2024-11-12",
+      "solicitudId": "SOL-2024-003"
+    },
+    {
+      "id": "EMP-004",
+      "nombre": "IndusCR Metales S.A.",
+      "pais": "Costa Rica",
+      "sector": "Manufactura",
+      "zonaFrancaId": "ZF-001",
+      "contactoNombre": "Pablo Quirós",
+      "contactoEmail": "p.quiros@induscr.cr",
+      "telefono": "+506 2200-1004",
+      "estado": "rechazada",
+      "fechaRegistro": "2024-11-12",
+      "solicitudId": "SOL-2024-004"
+    },
+    {
+      "id": "EMP-005",
+      "nombre": "DataStream Analytics",
+      "pais": "Estados Unidos",
+      "sector": "Tecnología",
+      "zonaFrancaId": "ZF-003",
+      "contactoNombre": "Sarah Johnson",
+      "contactoEmail": "s.johnson@datastream.us",
+      "telefono": "+1 305 400-1005",
+      "estado": "activa",
+      "fechaRegistro": "2024-11-14",
+      "solicitudId": "SOL-2024-005"
+    },
+    {
+      "id": "EMP-006",
+      "nombre": "CallCenter Pro LATAM",
+      "pais": "Guatemala",
+      "sector": "BPO",
+      "zonaFrancaId": "ZF-002",
+      "contactoNombre": "Andrea López",
+      "contactoEmail": "a.lopez@callcenterpro.gt",
+      "telefono": "+502 2200-1006",
+      "estado": "activa",
+      "fechaRegistro": "2024-11-15",
+      "solicitudId": "SOL-2024-006"
+    }
+  ],
+
+  "solicitudes": [
+    {
+      "id": "SOL-2024-001",
+      "empresaId": "EMP-001",
+      "zonaFrancaId": "ZF-001",
+      "empresa": "TechNova Solutions CR",
+      "sector": "Tecnología",
+      "pais": "Costa Rica",
+      "descripcion": "Centro de desarrollo de software y servicios cloud para América Latina.",
+      "inversion": 4200000,
+      "empleos": 320,
+      "exportaciones": 8000000,
+      "contactoNombre": "Ricardo Solano",
+      "contactoEmail": "r.solano@technova.cr",
+      "documentos": [
+        "Plan_Negocio.pdf",
+        "Estados_Financieros.pdf",
+        "Carta_Intencion.pdf"
+      ],
+      "puntajeIA": 87,
+      "clasificacionIA": "Recomendada",
+      "justificacionIA": "La empresa presenta una inversión sólida de $4.2M USD, superando el umbral mínimo configurado. Los 320 empleos proyectados son de alta especialización y el sector tecnológico está permitido en la zona seleccionada.",
+      "estado": "aprobada",
+      "estadoHumano": "Recomendada",
+      "analistaId": "USR-001",
+      "fecha": "2024-11-03",
+      "fechaEvaluacionIA": "2024-11-04",
+      "fechaDecision": "2024-11-05"
+    },
+    {
+      "id": "SOL-2024-002",
+      "empresaId": "EMP-002",
+      "zonaFrancaId": "ZF-001",
+      "empresa": "Manufactura Global LATAM",
+      "sector": "Manufactura",
+      "pais": "México",
+      "descripcion": "Planta de ensamblaje de dispositivos electrónicos para exportación.",
+      "inversion": 890000,
+      "empleos": 145,
+      "exportaciones": 2500000,
+      "contactoNombre": "Jorge Hernández",
+      "contactoEmail": "j.hernandez@mfglobal.mx",
+      "documentos": [
+        "Estudio_Factibilidad.pdf",
+        "Certificados_Empresa.pdf"
+      ],
+      "puntajeIA": 62,
+      "clasificacionIA": "Revisar",
+      "justificacionIA": "La inversión proyectada está por encima del mínimo requerido, pero se recomienda revisar la sostenibilidad financiera, la cadena de suministro y la documentación ambiental.",
+      "estado": "pendiente",
+      "estadoHumano": null,
+      "analistaId": null,
+      "fecha": "2024-11-08",
+      "fechaEvaluacionIA": "2024-11-09",
+      "fechaDecision": null
+    },
+    {
+      "id": "SOL-2024-003",
+      "empresaId": "EMP-003",
+      "zonaFrancaId": "ZF-002",
+      "empresa": "Servitech BPO Group",
+      "sector": "BPO",
+      "pais": "Colombia",
+      "descripcion": "Centro de servicios compartidos bilingüe con operaciones 24/7.",
+      "inversion": 1750000,
+      "empleos": 580,
+      "exportaciones": 12000000,
+      "contactoNombre": "María Ospina",
+      "contactoEmail": "m.ospina@servitech.co",
+      "documentos": [
+        "Business_Plan.pdf",
+        "HR_Strategy.pdf",
+        "Financial_Projections.pdf",
+        "ISO_Certifications.pdf"
+      ],
+      "puntajeIA": 91,
+      "clasificacionIA": "Recomendada",
+      "justificacionIA": "Perfil sólido debido a la alta generación de empleo, inversión superior al mínimo y proyección significativa de exportaciones de servicios.",
+      "estado": "aprobada",
+      "estadoHumano": "Recomendada",
+      "analistaId": "USR-001",
+      "fecha": "2024-11-10",
+      "fechaEvaluacionIA": "2024-11-11",
+      "fechaDecision": "2024-11-12"
+    },
+    {
+      "id": "SOL-2024-004",
+      "empresaId": "EMP-004",
+      "zonaFrancaId": "ZF-001",
+      "empresa": "IndusCR Metales S.A.",
+      "sector": "Manufactura",
+      "pais": "Costa Rica",
+      "descripcion": "Procesamiento de metales no ferrosos con exportación regional.",
+      "inversion": 210000,
+      "empleos": 38,
+      "exportaciones": 500000,
+      "contactoNombre": "Pablo Quirós",
+      "contactoEmail": "p.quiros@induscr.cr",
+      "documentos": [
+        "Solicitud_Basica.pdf"
+      ],
+      "puntajeIA": 29,
+      "clasificacionIA": "Rechazada",
+      "justificacionIA": "La inversión proyectada supera ligeramente el mínimo, pero la cantidad de empleos se encuentra muy por debajo del mínimo establecido para la zona. La documentación presentada también resulta insuficiente.",
+      "estado": "rechazada",
+      "estadoHumano": "Rechazada",
+      "analistaId": "USR-001",
+      "fecha": "2024-11-12",
+      "fechaEvaluacionIA": "2024-11-13",
+      "fechaDecision": "2024-11-14"
+    },
+    {
+      "id": "SOL-2024-005",
+      "empresaId": "EMP-005",
+      "zonaFrancaId": "ZF-003",
+      "empresa": "DataStream Analytics",
+      "sector": "Tecnología",
+      "pais": "Estados Unidos",
+      "descripcion": "Hub de análisis de datos e inteligencia artificial para fintech.",
+      "inversion": 2800000,
+      "empleos": 195,
+      "exportaciones": 6500000,
+      "contactoNombre": "Sarah Johnson",
+      "contactoEmail": "s.johnson@datastream.us",
+      "documentos": [
+        "Investor_Deck.pdf",
+        "Tech_Roadmap.pdf",
+        "Employment_Plan.pdf"
+      ],
+      "puntajeIA": 78,
+      "clasificacionIA": "Recomendada",
+      "justificacionIA": "Empresa con una propuesta tecnológica alineada con los sectores estratégicos de la zona y una inversión superior al mínimo configurado.",
+      "estado": "pendiente",
+      "estadoHumano": null,
+      "analistaId": null,
+      "fecha": "2024-11-14",
+      "fechaEvaluacionIA": "2024-11-15",
+      "fechaDecision": null
+    },
+    {
+      "id": "SOL-2024-006",
+      "empresaId": "EMP-006",
+      "zonaFrancaId": "ZF-002",
+      "empresa": "CallCenter Pro LATAM",
+      "sector": "BPO",
+      "pais": "Guatemala",
+      "descripcion": "Centro de atención al cliente multicanal en español e inglés.",
+      "inversion": 340000,
+      "empleos": 210,
+      "exportaciones": 1200000,
+      "contactoNombre": "Andrea López",
+      "contactoEmail": "a.lopez@callcenterpro.gt",
+      "documentos": [
+        "Propuesta_Ejecutiva.pdf",
+        "Contratos_Clientes.pdf"
+      ],
+      "puntajeIA": 55,
+      "clasificacionIA": "Revisar",
+      "justificacionIA": "La generación de empleo es positiva, pero se recomienda revisar la sostenibilidad financiera y verificar los contratos de clientes presentados.",
+      "estado": "pendiente",
+      "estadoHumano": null,
+      "analistaId": null,
+      "fecha": "2024-11-15",
+      "fechaEvaluacionIA": "2024-11-16",
+      "fechaDecision": null
+    }
+  ],
+
+  "decisiones": [
+    {
+      "id": "DEC-001",
+      "solicitudId": "SOL-2024-001",
+      "empresaId": "EMP-001",
+      "analistaId": "USR-001",
+      "clasificacionIA": "Recomendada",
+      "puntajeIA": 87,
+      "decisionFinal": "Recomendada",
+      "comentario": "Solicitud aprobada después de revisar la documentación presentada.",
+      "fecha": "2024-11-05",
+      "tipo": "confirmacion"
+    },
+    {
+      "id": "DEC-002",
+      "solicitudId": "SOL-2024-003",
+      "empresaId": "EMP-003",
+      "analistaId": "USR-001",
+      "clasificacionIA": "Recomendada",
+      "puntajeIA": 91,
+      "decisionFinal": "Recomendada",
+      "comentario": "Solicitud aprobada. Cumple ampliamente con los criterios configurados.",
+      "fecha": "2024-11-12",
+      "tipo": "confirmacion"
+    },
+    {
+      "id": "DEC-003",
+      "solicitudId": "SOL-2024-004",
+      "empresaId": "EMP-004",
+      "analistaId": "USR-001",
+      "clasificacionIA": "Rechazada",
+      "puntajeIA": 29,
+      "decisionFinal": "Rechazada",
+      "comentario": "No cumple con el mínimo de empleos requerido y presenta documentación insuficiente.",
+      "fecha": "2024-11-14",
+      "tipo": "rechazo"
+    }
+  ],
+
+  "reportes_cumplimiento": [
+    {
+      "id": "RPT-001",
+      "empresaId": "EMP-001",
+      "solicitudId": "SOL-2024-001",
+      "zonaFrancaId": "ZF-001",
+      "empresa": "TechNova Solutions CR",
+      "sector": "Tecnología",
+      "inversionComprometida": 4200000,
+      "inversionReal": 4510000,
+      "empleosComprometidos": 320,
+      "empleosReales": 334,
+      "exportacionesComprometidas": 8000000,
+      "exportacionesReales": 9200000,
+      "periodo": "2024-Q3",
+      "estado": "en_regla",
+      "fechaReporte": "2024-11-16"
+    },
+    {
+      "id": "RPT-002",
+      "empresaId": "EMP-003",
+      "solicitudId": "SOL-2024-003",
+      "zonaFrancaId": "ZF-002",
+      "empresa": "Servitech BPO Group",
+      "sector": "BPO",
+      "inversionComprometida": 1750000,
+      "inversionReal": 1820000,
+      "empleosComprometidos": 580,
+      "empleosReales": 612,
+      "exportacionesComprometidas": 12000000,
+      "exportacionesReales": 11400000,
+      "periodo": "2024-Q3",
+      "estado": "en_revision",
+      "fechaReporte": "2024-11-16"
+    },
+    {
+      "id": "RPT-003",
+      "empresaId": "EMP-002",
+      "solicitudId": "SOL-2024-002",
+      "zonaFrancaId": "ZF-001",
+      "empresa": "Manufactura Global LATAM",
+      "sector": "Manufactura",
+      "inversionComprometida": 890000,
+      "inversionReal": 623000,
+      "empleosComprometidos": 145,
+      "empleosReales": 89,
+      "exportacionesComprometidas": 2500000,
+      "exportacionesReales": 1870000,
+      "periodo": "2024-Q3",
+      "estado": "incumplimiento",
+      "fechaReporte": "2024-11-17"
+    },
+    {
+      "id": "RPT-004",
+      "empresaId": "EMP-006",
+      "solicitudId": "SOL-2024-006",
+      "zonaFrancaId": "ZF-002",
+      "empresa": "CallCenter Pro LATAM",
+      "sector": "BPO",
+      "inversionComprometida": 340000,
+      "inversionReal": 198000,
+      "empleosComprometidos": 210,
+      "empleosReales": 187,
+      "exportacionesComprometidas": 1200000,
+      "exportacionesReales": 980000,
+      "periodo": "2024-Q3",
+      "estado": "incumplimiento",
+      "fechaReporte": "2024-11-17"
+    },
+    {
+      "id": "RPT-005",
+      "empresaId": "EMP-005",
+      "solicitudId": "SOL-2024-005",
+      "zonaFrancaId": "ZF-003",
+      "empresa": "DataStream Analytics",
+      "sector": "Tecnología",
+      "inversionComprometida": 2800000,
+      "inversionReal": 2950000,
+      "empleosComprometidos": 195,
+      "empleosReales": 167,
+      "exportacionesComprometidas": 6500000,
+      "exportacionesReales": 6100000,
+      "periodo": "2024-Q3",
+      "estado": "incumplimiento",
+      "fechaReporte": "2024-11-15"
+    }
+  ],
+
+  "alertas": [
+    {
+      "id": "ALR-001",
+      "reporteId": "RPT-003",
+      "empresaId": "EMP-002",
+      "empresa": "Manufactura Global LATAM",
+      "sector": "Manufactura",
+      "tipo": "empleo",
+      "comprometido": 145,
+      "real": 89,
+      "diferencia": -56,
+      "porcentajeCumplimiento": 61.38,
+      "severidad": "critica",
+      "estado": "pendiente",
+      "fecha": "2024-11-18"
+    },
+    {
+      "id": "ALR-002",
+      "reporteId": "RPT-004",
+      "empresaId": "EMP-006",
+      "empresa": "CallCenter Pro LATAM",
+      "sector": "BPO",
+      "tipo": "inversion",
+      "comprometido": 340000,
+      "real": 198000,
+      "diferencia": -142000,
+      "porcentajeCumplimiento": 58.24,
+      "severidad": "critica",
+      "estado": "pendiente",
+      "fecha": "2024-11-17"
+    },
+    {
+      "id": "ALR-003",
+      "reporteId": "RPT-003",
+      "empresaId": "EMP-002",
+      "empresa": "Manufactura Global LATAM",
+      "sector": "Manufactura",
+      "tipo": "exportacion",
+      "comprometido": 2500000,
+      "real": 1870000,
+      "diferencia": -630000,
+      "porcentajeCumplimiento": 74.8,
+      "severidad": "advertencia",
+      "estado": "pendiente",
+      "fecha": "2024-11-17"
+    },
+    {
+      "id": "ALR-004",
+      "reporteId": "RPT-005",
+      "empresaId": "EMP-005",
+      "empresa": "DataStream Analytics",
+      "sector": "Tecnología",
+      "tipo": "empleo",
+      "comprometido": 195,
+      "real": 167,
+      "diferencia": -28,
+      "porcentajeCumplimiento": 85.64,
+      "severidad": "advertencia",
+      "estado": "pendiente",
+      "fecha": "2024-11-15"
+    },
+    {
+      "id": "ALR-005",
+      "reporteId": "RPT-005",
+      "empresaId": "EMP-005",
+      "empresa": "DataStream Analytics",
+      "sector": "Tecnología",
+      "tipo": "exportacion",
+      "comprometido": 6500000,
+      "real": 6100000,
+      "diferencia": -400000,
+      "porcentajeCumplimiento": 93.85,
+      "severidad": "advertencia",
+      "estado": "pendiente",
+      "fecha": "2024-11-15"
+    }
+  ],
+
+  "historial": [
+    {
+      "id": "HIS-001",
+      "empresaId": "EMP-001",
+      "solicitudId": "SOL-2024-001",
+      "usuarioId": "USR-001",
+      "tipo": "decision",
+      "accion": "Solicitud aprobada",
+      "descripcion": "El analista confirmó la clasificación Recomendada generada por IA.",
+      "fecha": "2024-11-05T10:30:00"
+    },
+    {
+      "id": "HIS-002",
+      "empresaId": "EMP-003",
+      "solicitudId": "SOL-2024-003",
+      "usuarioId": "USR-001",
+      "tipo": "decision",
+      "accion": "Solicitud aprobada",
+      "descripcion": "El analista confirmó la clasificación Recomendada.",
+      "fecha": "2024-11-12T11:15:00"
+    },
+    {
+      "id": "HIS-003",
+      "empresaId": "EMP-004",
+      "solicitudId": "SOL-2024-004",
+      "usuarioId": "USR-001",
+      "tipo": "decision",
+      "accion": "Solicitud rechazada",
+      "descripcion": "El analista rechazó la solicitud debido al incumplimiento del mínimo de empleos y documentación insuficiente.",
+      "fecha": "2024-11-14T14:20:00"
+    },
+    {
+      "id": "HIS-004",
+      "empresaId": "EMP-002",
+      "solicitudId": "SOL-2024-002",
+      "usuarioId": "USR-001",
+      "tipo": "evaluacion",
+      "accion": "Evaluación IA completada",
+      "descripcion": "La IA asignó un puntaje de 62 y clasificación Revisar.",
+      "fecha": "2024-11-09T09:45:00"
+    },
+    {
+      "id": "HIS-005",
+      "empresaId": "EMP-005",
+      "solicitudId": "SOL-2024-005",
+      "usuarioId": "USR-001",
+      "tipo": "evaluacion",
+      "accion": "Evaluación IA completada",
+      "descripcion": "La IA asignó un puntaje de 78 y clasificación Recomendada.",
+      "fecha": "2024-11-15T10:00:00"
+    },
+    {
+      "id": "HIS-006",
+      "empresaId": "EMP-002",
+      "usuarioId": "USR-001",
+      "tipo": "alerta",
+      "accion": "Alerta generada",
+      "descripcion": "Se detectó incumplimiento en empleo y exportaciones.",
+      "fecha": "2024-11-17T15:30:00"
+    }
+  ],
+
+  "metricas": [
+    {
+      "id": "MET-001",
+      "periodo": "2024-Q3",
+      "totalSolicitudes": 6,
+      "solicitudesAprobadas": 2,
+      "solicitudesPendientes": 3,
+      "solicitudesRechazadas": 1,
+      "porcentajeAprobacion": 33.33,
+      "totalReportes": 5,
+      "reportesEnRegla": 1,
+      "reportesIncumplimiento": 3,
+      "reportesRevision": 1,
+      "alertasActivas": 5,
+      "tiempoPromedioRespuestaHoras": 48
+    }
+  ]
+}
