@@ -182,4 +182,3 @@ La IA **nunca toma la decisión final** — solo recomienda. La resolución siem
 ## 📄 Licencia
 
 Este proyecto es desarrollado con fines académicos para el curso de **Programación Front End con IA Aplicada**.
-
