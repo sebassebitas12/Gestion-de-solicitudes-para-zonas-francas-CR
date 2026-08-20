@@ -48,7 +48,7 @@
       "activo": true
     },
     {
-      "id": "USR-006",
+      "id": "USR-006",  
       "nombre": "Servitech BPO Group",
       "email": "contacto@servitech.co",
       "password": "empresa123",
