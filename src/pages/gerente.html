@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZoFranca CR - Panel Ejecutivo PROCOMER</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-content">
+            <h1>ZoFranca CR <span class="subtitle">Panel Consolidado PROCOMER</span></h1>
+            <button id="btn-logout" class="btn btn-outline">Cerrar Sesión</button>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <div id="alert-message" class="alert hidden" role="alert" aria-live="assertive"></div>
+
+        <!-- Sección de KPIs -->
+        <section class="kpi-grid" aria-label="Indicadores Clave de Desempeño">
+            <article class="kpi-card">
+                <h3>Total Solicitudes Procesadas</h3>
+                <span id="kpi-total-solicitudes" class="kpi-value">0</span>
+            </article>
+            <article class="kpi-card">
+                <h3>% Solicitudes Aprobadas</h3>
+                <span id="kpi-porcentaje-aprobadas" class="kpi-value">0%</span>
+            </article>
+            <article class="kpi-card">
+                <h3>Tiempo Prom. Respuesta</h3>
+                <span id="kpi-tiempo-respuesta" class="kpi-value">0 días</span>
+            </article>
+            <article class="kpi-card">
+                <h3>Inversión Total Captada</h3>
+                <span id="kpi-inversion-captada" class="kpi-value">$0</span>
+            </article>
+        </section>
+
+        <!-- Sección de Gráficos y Resumen -->
+        <section class="charts-grid">
+            <article class="card">
+                <h2>Resumen de Cumplimiento por Sector</h2>
+                <div class="chart-container">
+                    <!-- Contenedor preparado para librerías como Chart.js o D3.js -->
+                    <canvas id="chart-cumplimiento-sector" role="img" aria-label="Gráfico de cumplimiento por sector"></canvas>
+                    <div id="spinner-loading" class="spinner-container hidden">
+                        <span class="spinner"></span> Generando gráfico...
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <h2>Distribución de Inversión</h2>
+                <div id="resumen-inversion" class="summary-container">
+                    <!-- Resumen inyectado por JS -->
+                </div>
+            </article>
+        </section>
+
+        <!-- Acciones Ejecutivas -->
+        <section class="executive-actions">
+            <h2>Reportes Oficiales</h2>
+            <p>Genere el reporte consolidado para auditoría institucional.</p>
+            <button id="btn-exportar-procomer" class="btn btn-primary">
+                <span id="spinner-export" class="spinner hidden"></span>
+                <span class="btn-text">Generar y Exportar Reporte PROCOMER</span>
+            </button>
+        </section>
+    </main>
+
+    <script src="../js/gerente.js"></script>
+</body>
+</html>

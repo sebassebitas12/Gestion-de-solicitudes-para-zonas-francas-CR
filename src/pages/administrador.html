@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZoFranca CR - Panel de Administración</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-content">
+            <h1>ZoFranca CR <span class="subtitle">Administración del Sistema</span></h1>
+            <button id="btn-logout" class="btn btn-outline">Cerrar Sesión</button>
+        </div>
+    </header>
+
+    <main class="app-main grid-layout">
+        <div id="alert-message" class="alert hidden" role="alert" aria-live="assertive"></div>
+
+        <!-- Columna Izquierda: Configuración de Criterios -->
+        <aside class="sidebar-config">
+            <section class="card">
+                <h2>Criterios de Zona Franca</h2>
+                <form id="form-criterios">
+                    <div class="form-group">
+                        <label for="min-inversion">Inversión Mínima Requerida (USD)</label>
+                        <input type="number" id="min-inversion" name="min-inversion" min="0" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="min-empleos">Empleos Mínimos Requeridos</label>
+                        <input type="number" id="min-empleos" name="min-empleos" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sectores-autorizados">Sectores Autorizados</label>
+                        <select id="sectores-autorizados" name="sectores-autorizados" multiple>
+                            <option value="tecnologia">Tecnología</option>
+                            <option value="manufactura">Manufactura</option>
+                            <option value="bpo">BPO / Servicios</option>
+                            <option value="logistica">Logística</option>
+                        </select>
+                        <small>Mantener Ctrl/Cmd para seleccionar múltiples.</small>
+                    </div>
+                    <button type="submit" id="btn-actualizar-criterios" class="btn btn-primary btn-block">
+                        <span id="spinner-criterios" class="spinner hidden"></span>
+                        Actualizar Criterios
+                    </button>
+                </form>
+            </section>
+        </aside>
+
+        <!-- Columna Derecha: Alertas e Historial -->
+        <section class="main-content">
+            <article class="card">
+                <h2>Panel de Alertas de Incumplimiento</h2>
+                <p>Empresas que no cumplen con los compromisos reportados.</p>
+                <div id="contenedor-alertas" class="alerts-grid">
+                    <div id="spinner-loading" class="spinner-container hidden">
+                        <span class="spinner"></span> Cargando alertas...
+                    </div>
+                    <!-- Las tarjetas de alerta se inyectan aquí con JS -->
+                </div>
+            </article>
+
+            <article class="card mt-4">
+                <h2>Historial de Trazabilidad</h2>
+                <div class="table-container">
+                    <table class="data-table" id="tabla-historial">
+                        <thead>
+                            <tr>
+                                <th scope="col">Fecha</th>
+                                <th scope="col">Empresa</th>
+                                <th scope="col">Responsable</th>
+                                <th scope="col">Acción Realizada</th>
+                                <th scope="col">Detalles</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historial-trazabilidad">
+                            <!-- Filas de historial inyectadas vía JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <script src="../js/administrador.js"></script>
+</body>
+</html>

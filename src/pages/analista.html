@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZoFranca CR - Panel del Analista</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-content">
+            <h1>ZoFranca CR <span class="subtitle">Panel de Analista</span></h1>
+            <button id="btn-logout" class="btn btn-outline">Cerrar Sesión</button>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <div id="alert-message" class="alert hidden" role="alert" aria-live="assertive"></div>
+
+        <!-- Barra de Filtros -->
+        <section class="filters-bar" aria-label="Filtros de búsqueda">
+            <div class="form-group-inline">
+                <label for="filter-estado">Estado:</label>
+                <select id="filter-estado" name="filter-estado">
+                    <option value="todas">Todas</option>
+                    <option value="recomendada">Recomendada (IA)</option>
+                    <option value="revisar">Revisar</option>
+                    <option value="rechazada">Rechazada</option>
+                </select>
+            </div>
+            <div class="form-group-inline">
+                <label for="filter-sector">Sector:</label>
+                <select id="filter-sector" name="filter-sector">
+                    <option value="todos">Todos</option>
+                    <option value="tecnologia">Tecnología</option>
+                    <option value="manufactura">Manufactura</option>
+                    <option value="bpo">BPO</option>
+                </select>
+            </div>
+            <div class="form-group-inline">
+                <label for="filter-fecha">Fecha:</label>
+                <input type="date" id="filter-fecha" name="filter-fecha">
+            </div>
+            <button id="btn-apply-filters" class="btn btn-secondary">Filtrar</button>
+        </section>
+
+        <!-- Tabla Dinámica -->
+        <section class="table-container">
+            <h2>Solicitudes Pendientes</h2>
+            <table id="tabla-solicitudes" class="data-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Empresa</th>
+                        <th scope="col">Sector</th>
+                        <th scope="col">Inversión</th>
+                        <th scope="col">Empleos</th>
+                        <th scope="col">Puntaje IA</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody-solicitudes">
+                    <!-- Las filas se inyectan dinámicamente con JS -->
+                </tbody>
+            </table>
+            <div id="spinner-loading" class="spinner-container hidden">
+                <span class="spinner"></span> Cargando solicitudes...
+            </div>
+        </section>
+
+        <!-- Sección de Evaluación IA (Human-in-the-Loop) -->
+        <section id="ia-evaluation-panel" class="ia-panel hidden" aria-live="polite">
+            <h2>Evaluación de Pre-clasificación IA</h2>
+            <div class="ia-card">
+                <div class="ia-score-section">
+                    <h3>Puntaje de Afinidad</h3>
+                    <div class="score-circle">
+                        <span id="ia-puntaje">0</span> / 100
+                    </div>
+                    <div class="progress-bar-container">
+                        <div id="ia-progress-bar" class="progress-bar" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <div class="ia-justification-section">
+                    <h3>Justificación del Motor de IA</h3>
+                    <p id="ia-justificacion">Seleccione una solicitud de la tabla para ver el análisis de la IA...</p>
+                </div>
+            </div>
+            
+            <div class="human-decision-controls">
+                <h3>Decisión Final del Analista</h3>
+                <div class="btn-group">
+                    <button id="btn-aprobar" class="btn btn-success">Aprobar Solicitud</button>
+                    <button id="btn-revisar" class="btn btn-warning">Requerir Revisión</button>
+                    <button id="btn-rechazar" class="btn btn-danger">Rechazar Solicitud</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="../js/analista.js"></script>
+</body>
+</html>
