@@ -378,6 +378,28 @@
       "contactoNombre": "Prueba",
       "contactoEmail": "prueba@test.com",
       "estado": "pendiente"
+    },
+    {
+      "id": "ccfb",
+      "empresaId": "EMP-001",
+      "zonaFrancaId": "ZF-001",
+      "empresa": "TechNova Solutions CR",
+      "sector": "Tecnología",
+      "inversion": 200000,
+      "empleos": 120,
+      "exportaciones": 0,
+      "documentos": [
+        "CV_Sebastian_Flores_DesarrolloWeb_IA.pdf"
+      ],
+      "puntajeIA": 100,
+      "clasificacionIA": "Recomendada",
+      "justificacionIA": "Cumple la inversión mínima de $150,000. Cumple los 100 empleos mínimos. El sector Tecnología está autorizado en Zona Franca Coyol.",
+      "estado": "pendiente",
+      "estadoHumano": "Pendiente",
+      "analistaId": null,
+      "fecha": "2026-08-21T20:08:25.221Z",
+      "fechaEvaluacionIA": "2026-08-21T20:08:25.221Z",
+      "fechaDecision": null
     }
   ],
   "decisiones": [

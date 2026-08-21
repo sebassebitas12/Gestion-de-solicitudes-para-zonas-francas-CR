@@ -1,23 +1,39 @@
-const API_URL = "http://localhost:3001";
+const API_URL = 'http://localhost:3001';
 
 export async function fetchAPI(endpoint, options = {}) {
-    try {
-        const response = await fetch(`${API_URL}${endpoint}`, {
-            ...options,
-            headers: {
-                "Content-Type": "application/json",
-                ...options.headers
-            }
-        });
+  try {
+    const response = await fetch(`${API_URL}${endpoint}`, {
+      ...options,
+      headers: {
+        Accept: 'application/json',
+        ...(options.body ? { 'Content-Type': 'application/json' } : {}),
+        ...options.headers,
+      },
+    });
 
-        if (!response.ok) {
-            throw new Error(`Error ${response.status}: ${response.statusText}`);
-        }
+    if (!response.ok) {
+      let detalle = response.statusText;
 
-        return await response.json();
+      try {
+        const error = await response.json();
+        detalle = error.message || error.error || detalle;
+      } catch {
+        // La respuesta no contiene JSON.
+      }
 
-    } catch (error) {
-        console.error("Error en fetchAPI:", error);
-        throw error;
+      throw new Error(`Error ${response.status}: ${detalle}`);
     }
+
+    if (response.status === 204) return null;
+
+    return await response.json();
+  } catch (error) {
+    if (error instanceof TypeError) {
+      throw new Error(
+        'No se pudo conectar con json-server. Ejecute: npm run server'
+      );
+    }
+
+    throw error;
+  }
 }

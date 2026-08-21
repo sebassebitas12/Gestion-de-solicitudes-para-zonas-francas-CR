@@ -42,14 +42,13 @@
             <article class="card">
                 <h2>Resumen de Cumplimiento por Sector</h2>
                 <div class="chart-container">
-                    <!-- Contenedor preparado para librerías como Chart.js o D3.js -->
                     <canvas id="chart-cumplimiento-sector" role="img" aria-label="Gráfico de cumplimiento por sector"></canvas>
                     <div id="spinner-loading" class="spinner-container hidden">
                         <span class="spinner"></span> Generando gráfico...
                     </div>
                 </div>
             </article>
-            
+
             <article class="card">
                 <h2>Distribución de Inversión</h2>
                 <div id="resumen-inversion" class="summary-container">
@@ -69,6 +68,7 @@
         </section>
     </main>
 
-    <script src="../js/gerente.js"></script>
+    <!-- CORRECCIÓN: type="module" -->
+    <script type="module" src="../js/gerente.js"></script>
 </body>
 </html>
