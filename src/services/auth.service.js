@@ -1,46 +1,42 @@
-import { fetchAPI } from "./api.js";
+import { fetchAPI } from './api.js';
 
-export async function login(email, password, rol) {
-    try {
-        const usuarios = await fetchAPI("/usuarios");
+export async function login(email, password) {
+  try {
+    const usuarios = await fetchAPI('/usuarios');
 
-        const usuario = usuarios.find(
-            (usuario) =>
-                usuario.email === email &&
-                usuario.password === password &&
-                usuario.rol === rol &&
-                usuario.activo === true
-        );
+    const usuario = usuarios.find(
+      (item) =>
+        item.email === email &&
+        item.password === password &&
+        item.activo === true
+    );
 
-        if (!usuario) {
-            throw new Error("Credenciales o rol incorrectos");
-        }
-
-        const sesion = {
-            id: usuario.id,
-            nombre: usuario.nombre,
-            email: usuario.email,
-            rol: usuario.rol,
-            organizacion: usuario.organizacion,
-            empresaId: usuario.empresaId || null
-        };
-
-        sessionStorage.setItem("usuario", JSON.stringify(sesion));
-
-        return sesion;
-
-    } catch (error) {
-        console.error("Error en login:", error);
-        throw error;
+    if (!usuario) {
+      throw new Error('Correo o contraseña incorrectos.');
     }
+
+    const sesion = {
+      id: usuario.id,
+      nombre: usuario.nombre,
+      email: usuario.email,
+      rol: usuario.rol,
+      organizacion: usuario.organizacion,
+      empresaId: usuario.empresaId || null,
+    };
+
+    sessionStorage.setItem('usuario', JSON.stringify(sesion));
+
+    return sesion;
+  } catch (error) {
+    throw new Error(`No se pudo iniciar sesión: ${error.message}`);
+  }
 }
 
 export function getSesion() {
-    const sesion = sessionStorage.getItem("usuario");
-
-    return sesion ? JSON.parse(sesion) : null;
+  const sesion = sessionStorage.getItem('usuario');
+  return sesion ? JSON.parse(sesion) : null;
 }
 
 export function logout() {
-    sessionStorage.removeItem("usuario");
+  sessionStorage.removeItem('usuario');
 }

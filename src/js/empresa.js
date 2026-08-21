@@ -1,64 +1,78 @@
-// empresa.js — fusiona reporte.js
 import { getSesion, logout } from '../services/auth.service.js';
 import { crearSolicitud } from '../services/solicitudes.service.js';
-import { recomendarClasificacion } from '../services/ia.service.js';
 import { fetchAPI } from '../services/api.js';
 
-// --- Sesión ---
 const session = getSesion();
+let zonaFrancaId = null;
+
 document.getElementById('user-email-display').textContent = session.email;
 
-// CORRECCIÓN: logout con redirección
 document.getElementById('btn-logout').addEventListener('click', () => {
   logout();
   window.location.href = '../pages/login.html';
 });
 
-// --- Alerta ---
 function mostrarAlerta(mensaje, tipo = 'error') {
   const alerta = document.getElementById('alert-message');
+
   alerta.textContent = mensaje;
   alerta.className = `alert-banner alert-${tipo}`;
   alerta.classList.remove('hidden');
+
   setTimeout(() => alerta.classList.add('hidden'), 5000);
 }
 
-// --- Carga inicial con Promise.all ---
 async function inicializar() {
   try {
     const [empresas, zonasFrancas] = await Promise.all([
       fetchAPI(`/empresas?id=${session.empresaId}`),
-      fetchAPI('/zonas_francas'),  // CORRECCIÓN: guión bajo
+      fetchAPI('/zonas_francas'),
     ]);
 
-    // CORRECCIÓN: json-server con ?id= retorna array, tomamos [0]
     const empresa = empresas[0];
-    if (empresa) {
-      document.getElementById('empresa-nombre').value = empresa.nombre;
+
+    if (!empresa) {
+      throw new Error('No se encontró la empresa asociada a la sesión.');
     }
 
+    zonaFrancaId = empresa.zonaFrancaId;
+
+    document.getElementById('empresa-nombre').value = empresa.nombre;
+
     const selectSector = document.getElementById('empresa-sector');
-    const sectoresUnicos = [...new Set(zonasFrancas.flatMap(z => z.sectores))];
+    const zonaFranca = zonasFrancas.find(
+      (zona) => zona.id === zonaFrancaId
+    );
+
+    if (!zonaFranca) {
+      throw new Error('La zona franca asociada a la empresa no existe.');
+    }
 
     selectSector.innerHTML = '<option value="">Seleccione...</option>';
-    sectoresUnicos.forEach(sector => {
+
+    zonaFranca.sectores.forEach((sector) => {
       const option = document.createElement('option');
       option.value = sector;
-      option.textContent = sector.charAt(0).toUpperCase() + sector.slice(1);
+      option.textContent = sector;
       selectSector.appendChild(option);
     });
 
+    if (empresa.sector) {
+      selectSector.value = empresa.sector;
+    }
   } catch (error) {
-    mostrarAlerta('Error al cargar los datos iniciales.', 'error');
+    mostrarAlerta(error.message || 'Error al cargar los datos iniciales.');
   }
 }
 
-// --- Tabs ---
-document.querySelectorAll('.tab-btn').forEach(btn => {
+document.querySelectorAll('.tab-btn').forEach((btn) => {
   btn.addEventListener('click', () => {
     const tab = btn.dataset.tab;
 
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach((boton) => {
+      boton.classList.remove('active');
+    });
+
     btn.classList.add('active');
 
     document.getElementById('tab-solicitud').classList.add('hidden');
@@ -67,91 +81,90 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
   });
 });
 
-// --- Formulario Solicitud ---
-document.getElementById('form-solicitud').addEventListener('submit', async (e) => {
-  e.preventDefault();
+document
+  .getElementById('form-solicitud')
+  .addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-  const btn = document.getElementById('btn-guardar-solicitud');
-  const spinner = document.getElementById('spinner-solicitud');
+    const btn = document.getElementById('btn-guardar-solicitud');
+    const spinner = document.getElementById('spinner-solicitud');
 
-  btn.disabled = true;
-  spinner.classList.remove('hidden');
+    btn.disabled = true;
+    spinner.classList.remove('hidden');
 
-  try {
-    const inversion = parseFloat(document.getElementById('inversion-proyectada').value);
-    const empleos   = parseInt(document.getElementById('empleos-proyectados').value);
+    try {
+      if (!zonaFrancaId) {
+        throw new Error('No se pudo identificar la zona franca de la empresa.');
+      }
 
-    // IA evalúa — solo recomienda, nunca decide
-    const { puntaje, clasificacion } = await recomendarClasificacion({
-      inversion,
-      empleos,
-      exportaciones: 0,
-    });
+      const archivos = document.getElementById('doc-respaldo').files;
+      const documentos = Array.from(archivos).map((archivo) => archivo.name);
 
-    // CORRECCIÓN: campos alineados con db.json real
-    await crearSolicitud({
-      empresaId:        session.empresaId,
-      empresa:          document.getElementById('empresa-nombre').value,
-      sector:           document.getElementById('empresa-sector').value,
-      inversion,
-      empleos,
-      exportaciones:    0,
-      puntajeIA:        puntaje,
-      clasificacionIA:  clasificacion,
-      justificacionIA:  `Puntaje IA: ${puntaje}/100. Clasificación sugerida: ${clasificacion}. Decisión final pendiente del analista.`,
-      estadoHumano:     null,
-      fecha:            new Date().toISOString(),
-      fechaDecision:    null,
-      analistaId:       null,
-    });
+      await crearSolicitud({
+        empresaId: session.empresaId,
+        zonaFrancaId,
+        empresa: document.getElementById('empresa-nombre').value,
+        sector: document.getElementById('empresa-sector').value,
+        inversion: parseFloat(
+          document.getElementById('inversion-proyectada').value
+        ),
+        empleos: parseInt(
+          document.getElementById('empleos-proyectados').value,
+          10
+        ),
+        exportaciones: 0,
+        documentos,
+      });
 
-    mostrarAlerta('Solicitud enviada correctamente.', 'success');
-    e.target.reset();
+      mostrarAlerta('Solicitud enviada correctamente.', 'success');
+      e.target.reset();
+    } catch (error) {
+      mostrarAlerta(error.message || 'No se pudo enviar la solicitud.');
+    } finally {
+      btn.disabled = false;
+      spinner.classList.add('hidden');
+    }
+  });
 
-  } catch (error) {
-    mostrarAlerta('No se pudo enviar la solicitud. Intentá de nuevo.', 'error');
-  } finally {
-    btn.disabled = false;
-    spinner.classList.add('hidden');
-  }
-});
+document
+  .getElementById('form-reporte')
+  .addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-// --- Formulario Reporte (fusionado desde reporte.js) ---
-document.getElementById('form-reporte').addEventListener('submit', async (e) => {
-  e.preventDefault();
+    const btn = document.getElementById('btn-enviar-reporte');
+    const spinner = document.getElementById('spinner-reporte');
 
-  const btn = document.getElementById('btn-enviar-reporte');
-  const spinner = document.getElementById('spinner-reporte');
+    btn.disabled = true;
+    spinner.classList.remove('hidden');
 
-  btn.disabled = true;
-  spinner.classList.remove('hidden');
+    try {
+      await fetchAPI('/reportes_cumplimiento', {
+        method: 'POST',
+        body: JSON.stringify({
+          empresaId: session.empresaId,
+          empresa: session.nombre || session.email,
+          inversionReal: parseFloat(
+            document.getElementById('inversion-ejecutada').value
+          ),
+          empleosReales: parseInt(
+            document.getElementById('empleos-reales').value,
+            10
+          ),
+          exportacionesReales: parseFloat(
+            document.getElementById('exportaciones-totales').value
+          ),
+          periodo: new Date().toISOString(),
+        }),
+      });
 
-  try {
-    const datos = {
-      empresaId:            session.empresaId,
-      empresa:              session.nombre || session.email,
-      inversionReal:        parseFloat(document.getElementById('inversion-ejecutada').value),
-      empleosReales:        parseInt(document.getElementById('empleos-reales').value),
-      exportacionesReales:  parseFloat(document.getElementById('exportaciones-totales').value),
-      periodo:              new Date().toISOString(),
-    };
+      mostrarAlerta('Reporte enviado correctamente.', 'success');
+      e.target.reset();
+    } catch (error) {
+      mostrarAlerta('No se pudo enviar el reporte. Intentá de nuevo.');
+    } finally {
+      btn.disabled = false;
+      spinner.classList.add('hidden');
+    }
+  });
 
-    // CORRECCIÓN: colección correcta con guión bajo
-    await fetchAPI('/reportes_cumplimiento', {
-      method: 'POST',
-      body: JSON.stringify(datos),
-    });
-
-    mostrarAlerta('Reporte enviado correctamente.', 'success');
-    e.target.reset();
-
-  } catch (error) {
-    mostrarAlerta('No se pudo enviar el reporte. Intentá de nuevo.', 'error');
-  } finally {
-    btn.disabled = false;
-    spinner.classList.add('hidden');
-  }
-});
-
-// --- Arrancar ---
 inicializar();
