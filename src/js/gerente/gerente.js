@@ -1,6 +1,6 @@
 // gerente.js
-import { getSesion, logout } from '../services/auth.service.js';
-import { fetchAPI } from '../services/api.js';
+import { getSesion, logout } from '../../services/auth.service.js';
+import { fetchAPI } from '../../services/api.js';
 
 // --- Sesión ---
 const session = getSesion();

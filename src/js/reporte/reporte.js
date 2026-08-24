@@ -1,6 +1,6 @@
 // reporte.js
-import { getSesion } from '../services/auth.service.js';
-import { fetchAPI } from '../services/api.js';
+import { getSesion } from '../../services/auth.service.js';
+import { fetchAPI } from '../../services/api.js';
 
 const session = getSesion();
 
