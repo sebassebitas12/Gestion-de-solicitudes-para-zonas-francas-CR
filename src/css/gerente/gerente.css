@@ -765,6 +765,14 @@ tbody tr:hover {
     color: #93000a;
 }
 
+.empty-row {
+    text-align: center;
+
+    padding: 28px 20px !important;
+
+    color: #76777d;
+}
+
 .view-button {
     width: 32px;
     height: 32px;

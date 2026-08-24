@@ -7,6 +7,21 @@ import {
     logout
 } from '../../services/auth.service.js';
 
+import {
+    configurarLogout
+} from '../shared/logout.js';
+
+import {
+    derivarTramites,
+    getDocumentos,
+    getNotificaciones,
+    getAlertasEmpresa
+} from './empresa-data.js';
+
+import {
+    actualizarBadgeNotificaciones
+} from './panel-base.js';
+
 
 // ==========================================
 // ESTADO DEL DASHBOARD
@@ -16,6 +31,9 @@ let usuarioActual = null;
 let empresaActual = null;
 let solicitudes = [];
 let actividades = [];
+let alertasEmpresa = [];
+let documentosEmpresa = [];
+let tramitesEmpresa = [];
 
 
 // ==========================================
@@ -33,7 +51,7 @@ async function iniciarDashboard() {
     usuarioActual = getSesion();
 
     if (!usuarioActual) {
-      window.location.href = 'login.html';
+      window.location.href = '../login.html';
       return;
     }
 
@@ -44,7 +62,7 @@ async function iniciarDashboard() {
     if (usuarioActual.rol !== 'empresa') {
       alert('No tienes permisos para acceder a esta página.');
       logout();
-      window.location.href = 'login.html';
+      window.location.href = '../login.html';
       return;
     }
 
@@ -55,7 +73,7 @@ async function iniciarDashboard() {
     if (!usuarioActual.empresaId) {
       alert('La sesión no tiene una empresa asociada.');
       logout();
-      window.location.href = 'login.html';
+      window.location.href = '../login.html';
       return;
     }
 
@@ -66,10 +84,21 @@ async function iniciarDashboard() {
     await cargarEmpresa();
     await cargarSolicitudes();
     await cargarActividad();
+    await cargarDocumentosEmpresa();
+    await cargarNotificaciones();
+
+    tramitesEmpresa = derivarTramites(solicitudes);
+
+    cargarResumenTramites();
+    await cargarEstadoGeneral();
 
     // --------------------------------------
     // 5. Eventos
     // --------------------------------------
+
+    configurarLogout('btnCerrarSesion');
+
+    configurarMenu();
 
     configurarEventos();
 
@@ -101,15 +130,111 @@ function configurarEventos() {
   }
 
 
-  const btnCerrarSesion =
-    document.getElementById('btnCerrarSesion');
+  // Accesos desde el dashboard
+  navegarA('btnVerTodas', 'solicitudes.html');
+  navegarA('btnVerTramites', 'tramites.html');
+  navegarA('qaNuevaSolicitud', 'nueva-solicitud.html');
+  navegarA('qaSubirDocumento', 'documentos.html');
+  navegarA('qaVerNotificaciones', 'notificaciones.html');
+  navegarA('qaGenerarReporte', 'reportes.html');
 
-  if (btnCerrarSesion) {
-    btnCerrarSesion.addEventListener(
+
+  // Campana de la barra superior
+  const btnNotificaciones =
+    document.querySelector('.notification-button');
+
+  if (btnNotificaciones) {
+    btnNotificaciones.addEventListener(
       'click',
-      cerrarSesion
+      () => {
+        window.location.href =
+          'notificaciones.html';
+      }
     );
   }
+}
+
+
+function navegarA(idBoton, destino) {
+
+  const boton =
+    document.getElementById(idBoton);
+
+  if (!boton) {
+    return;
+  }
+
+  boton.addEventListener(
+    'click',
+    () => {
+      window.location.href = destino;
+    }
+  );
+}
+
+
+// ==========================================
+// MENÚ LATERAL (SECCIONES PENDIENTES)
+// ==========================================
+
+function configurarMenu() {
+
+  const items =
+    document.querySelectorAll('.sidebar-menu .menu-item');
+
+  items.forEach((item) => {
+
+    if (item.id === 'btnCerrarSesion') {
+      return;
+    }
+
+
+    // Secciones aún sin pantalla propia
+    if (item.hasAttribute('data-proximamente')) {
+
+      item.addEventListener(
+        'click',
+        (event) => {
+
+          event.preventDefault();
+
+          alert(
+            'Esta sección estará disponible próximamente.'
+          );
+        }
+      );
+
+      return;
+    }
+
+
+    // Enlaces reales del módulo: navegación normal.
+    // Solo se interceptan enlaces muertos ("#").
+    item.addEventListener(
+      'click',
+      (event) => {
+
+        const destino =
+          item.getAttribute('href');
+
+        if (
+          !destino ||
+          destino === '#'
+        ) {
+
+          event.preventDefault();
+
+          if (!item.classList.contains('active')) {
+            alert(
+              'Esta sección estará disponible próximamente.'
+            );
+          }
+        }
+      }
+    );
+
+  });
+
 }
 
 
@@ -162,6 +287,55 @@ function renderizarEmpresa() {
 
     saludoEmpresa.textContent = nombre;
   }
+
+
+  const iniciales =
+    obtenerInicialesNombre(empresaActual.nombre);
+
+  const avatarSidebar =
+    document.getElementById('avatarEmpresaSidebar');
+
+  const avatarTopbar =
+    document.getElementById('avatarEmpresaTop');
+
+  if (avatarSidebar) {
+    avatarSidebar.textContent = iniciales;
+  }
+
+  if (avatarTopbar) {
+    avatarTopbar.textContent = iniciales;
+  }
+
+
+  const rolEmpresa =
+    document.getElementById('rolEmpresa');
+
+  if (rolEmpresa) {
+    rolEmpresa.textContent = 'Empresa Solicitante';
+  }
+}
+
+
+function obtenerInicialesNombre(nombre) {
+
+  const palabras =
+    String(nombre || '')
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean);
+
+  if (palabras.length === 0) {
+    return 'EM';
+  }
+
+  if (palabras.length === 1) {
+    return palabras[0].substring(0, 2).toUpperCase();
+  }
+
+  return (
+    palabras[0].charAt(0) +
+    palabras[1].charAt(0)
+  ).toUpperCase();
 }
 
 
@@ -189,6 +363,7 @@ async function cargarSolicitudes() {
   );
 
   renderizarSolicitudes();
+  renderListaDocumentos();
   actualizarEstadisticas();
 }
 
@@ -318,71 +493,36 @@ function obtenerTipoSolicitud(solicitud) {
 
 function actualizarEstadisticas() {
 
-  const total =
-    solicitudes.length;
-
-
-  const pendientes =
+  const activas =
     solicitudes.filter(
-      (solicitud) =>
-        solicitud.estado === 'pendiente'
+      (solicitud) => {
+        const estado =
+          String(solicitud.estado || '')
+            .toLowerCase();
+
+        return (
+          estado === 'pendiente' ||
+          estado === 'en_revision' ||
+          estado === 'en revisión'
+        );
+      }
     ).length;
 
 
-  const aprobadas =
-    solicitudes.filter(
-      (solicitud) =>
-        solicitud.estado === 'aprobada'
-    ).length;
-
-
-  const rechazadas =
-    solicitudes.filter(
-      (solicitud) =>
-        solicitud.estado === 'rechazada'
-    ).length;
-
-
-  // Intentamos diferentes IDs para que
-  // podamos adaptarnos al HTML existente.
-
   actualizarElemento(
-    [
-      'totalSolicitudes',
-      'statSolicitudes',
-      'total-solicitudes'
-    ],
-    total
+    ['solicitudesActivas'],
+    activas
   );
 
-
+  // Compatibilidad con IDs anteriores
   actualizarElemento(
-    [
-      'solicitudesPendientes',
-      'statPendientes',
-      'solicitudes-pendientes'
-    ],
-    pendientes
+    ['tramitesPendientes', 'tramitesEnProceso'],
+    activas
   );
 
-
   actualizarElemento(
-    [
-      'solicitudesAprobadas',
-      'statAprobadas',
-      'solicitudes-aprobadas'
-    ],
-    aprobadas
-  );
-
-
-  actualizarElemento(
-    [
-      'solicitudesRechazadas',
-      'statRechazadas',
-      'solicitudes-rechazadas'
-    ],
-    rechazadas
+    ['cantidadDocumentos'],
+    documentosEmpresa.length
   );
 }
 
@@ -401,6 +541,72 @@ function actualizarElemento(ids, valor) {
       return;
     }
   }
+}
+
+
+// ==========================================
+// DOCUMENTOS DE LA EMPRESA (biblioteca)
+// ==========================================
+
+async function cargarDocumentosEmpresa() {
+
+  documentosEmpresa =
+    await getDocumentos(empresaActual.id);
+
+  actualizarConteoDocumentos();
+}
+
+
+function esDocumentoPendiente(documento) {
+
+  if (documento.estado === 'En revisión') {
+    return true;
+  }
+
+  if (!documento.vencimiento) {
+    return false;
+  }
+
+  const vencimiento =
+    new Date(documento.vencimiento).setHours(23, 59, 59, 999);
+
+  const hoy =
+    new Date().setHours(0, 0, 0, 0);
+
+  const diasRestantes =
+    Math.ceil((vencimiento - hoy) / 86400000);
+
+  return diasRestantes <= 30;
+}
+
+
+function actualizarConteoDocumentos() {
+
+  let pendientes = 0;
+  let vigentes = 0;
+
+  documentosEmpresa.forEach((documento) => {
+
+    if (
+      String(documento.estado || '') === 'Vencido' ||
+      esDocumentoPendiente(documento)
+    ) {
+      pendientes += 1;
+    } else {
+      vigentes += 1;
+    }
+
+  });
+
+  actualizarElemento(
+    ['documentosPendientes'],
+    pendientes
+  );
+
+  actualizarElemento(
+    ['documentosVigentes'],
+    vigentes
+  );
 }
 
 
@@ -674,6 +880,314 @@ function obtenerIconoActividad(tipo) {
 
 
 // ==========================================
+// DOCUMENTOS DE LA EMPRESA
+// ==========================================
+
+function renderListaDocumentos() {
+
+  const lista =
+    document.getElementById('listaDocumentos');
+
+  if (!lista) {
+    return;
+  }
+
+  lista.innerHTML = '';
+
+  const documentos = [];
+
+  solicitudes.forEach((solicitud) => {
+
+    const archivos =
+      Array.isArray(solicitud.documentos)
+        ? solicitud.documentos
+        : [];
+
+    archivos.forEach((nombre) => {
+      documentos.push({
+        nombre,
+        solicitudId: solicitud.id
+      });
+    });
+
+  });
+
+
+  if (documentos.length === 0) {
+
+    lista.innerHTML = `
+      <div class="document-item">
+        <div>
+          <h4>
+            No hay documentos registrados.
+          </h4>
+        </div>
+      </div>
+    `;
+
+    return;
+  }
+
+
+  documentos.slice(0, 4).forEach((documento) => {
+
+    const item =
+      document.createElement('div');
+
+    item.className = 'document-item';
+
+    item.innerHTML = `
+      <div>
+        <h4>
+          ${escaparHTML(documento.nombre)}
+        </h4>
+
+        <span class="document-date">
+          ${escaparHTML(documento.solicitudId)}
+        </span>
+      </div>
+    `;
+
+    lista.appendChild(item);
+
+  });
+}
+
+
+// ==========================================
+// NOTIFICACIONES / ALERTAS
+// ==========================================
+
+async function cargarNotificaciones() {
+
+  try {
+
+    alertasEmpresa =
+      await getAlertasEmpresa(empresaActual.id);
+
+    if (!Array.isArray(alertasEmpresa)) {
+      alertasEmpresa = [];
+    }
+
+  } catch (error) {
+
+    console.warn(
+      'No se pudieron cargar las alertas:',
+      error
+    );
+
+    alertasEmpresa = [];
+  }
+
+
+  let sinLeer = 0;
+
+  try {
+
+    const notificaciones =
+      await getNotificaciones(empresaActual.id);
+
+    sinLeer =
+      notificaciones.filter(
+        (notificacion) => !notificacion.leida
+      ).length;
+
+  } catch (error) {
+
+    console.warn(
+      'No se pudieron cargar las notificaciones:',
+      error
+    );
+  }
+
+
+  actualizarElemento(
+    ['notificacionesPendientes'],
+    sinLeer
+  );
+
+  actualizarBadgeNotificaciones(empresaActual.id);
+
+
+  const punto =
+    document.querySelector('.notification-dot');
+
+  if (punto) {
+    punto.style.display =
+      sinLeer > 0
+        ? 'block'
+        : 'none';
+  }
+}
+
+
+// ==========================================
+// RESUMEN DE TRÁMITES
+// ==========================================
+
+function cargarResumenTramites() {
+
+  const contenedor =
+    document.getElementById('resumenTramites');
+
+  if (!contenedor) {
+    return;
+  }
+
+  const enProceso =
+    tramitesEmpresa.filter(
+      (tramite) =>
+        tramite.estado === 'En proceso'
+    );
+
+  const visibles =
+    (enProceso.length > 0
+      ? enProceso
+      : tramitesEmpresa
+    ).slice(0, 3);
+
+  if (visibles.length === 0) {
+
+    contenedor.innerHTML = `
+
+      <p style="color: var(--text-secondary); font-size: 13px;">
+        No hay trámites registrados.
+      </p>
+
+    `;
+
+    return;
+  }
+
+  contenedor.innerHTML = visibles.map((tramite) => `
+
+    <div class="tramite-mini">
+
+      <strong>
+        ${escaparHTML(tramite.nombre)}
+      </strong>
+
+      <div class="progress-row">
+
+        <div class="progress-track">
+          <div
+            class="progress-fill"
+            style="width:${tramite.progreso}%"
+          ></div>
+        </div>
+
+        <span class="progress-value">${tramite.progreso}%</span>
+
+      </div>
+
+    </div>
+
+  `).join('');
+}
+
+
+// ==========================================
+// ESTADO GENERAL DE LA EMPRESA
+// ==========================================
+
+async function cargarEstadoGeneral() {
+
+  // Cumplimiento promedio según alertas reales
+  const porcentajes =
+    alertasEmpresa
+      .map(
+        (alerta) =>
+          Number(alerta.porcentajeCumplimiento)
+      )
+      .filter((valor) => Number.isFinite(valor));
+
+  const cumplimiento =
+    porcentajes.length > 0
+      ? Math.round(
+          porcentajes.reduce(
+            (suma, valor) => suma + valor,
+            0
+          ) / porcentajes.length
+        )
+      : 0;
+
+  pintarBarraEstado(
+    'textoCumplimiento',
+    'barraCumplimiento',
+    cumplimiento
+  );
+
+
+  // Documentos vigentes
+  const totalDocs =
+    documentosEmpresa.length || 1;
+
+  const vigentes =
+    Number(
+      document
+        .getElementById('documentosVigentes')
+        ?.textContent || 0
+    );
+
+  pintarBarraEstado(
+    'textoDocsVigentes',
+    'barraDocsVigentes',
+    Math.round((vigentes / totalDocs) * 100)
+  );
+
+
+  // Solicitudes aprobadas o completadas
+  const aprobadas =
+    solicitudes.filter(
+      (solicitud) => {
+        const estado =
+          String(solicitud.estado || '')
+            .toLowerCase();
+
+        return (
+          estado === 'aprobada' ||
+          estado === 'completada'
+        );
+      }
+    ).length;
+
+  const tasaAprobacion =
+    solicitudes.length > 0
+      ? Math.round(
+          (aprobadas / solicitudes.length) * 100
+        )
+      : 0;
+
+  pintarBarraEstado(
+    'textoSolicitudesAprobadas',
+    'barraSolicitudesAprobadas',
+    tasaAprobacion
+  );
+}
+
+
+function pintarBarraEstado(idTexto, idBarra, porcentaje) {
+
+  const texto =
+    document.getElementById(idTexto);
+
+  const barra =
+    document.getElementById(idBarra);
+
+  const valorSeguro =
+    Math.max(0, Math.min(100, Number(porcentaje) || 0));
+
+  if (texto) {
+    texto.textContent = `${valorSeguro}%`;
+  }
+
+  if (barra) {
+    barra.style.width = `${valorSeguro}%`;
+  }
+}
+
+
+// ==========================================
 // NUEVA SOLICITUD
 // ==========================================
 
@@ -681,35 +1195,6 @@ function nuevaSolicitud() {
 
   window.location.href =
     'nueva-solicitud.html';
-}
-
-
-// ==========================================
-// CERRAR SESIÓN
-// ==========================================
-
-function cerrarSesion(event) {
-
-  if (event) {
-    event.preventDefault();
-  }
-
-
-  const confirmar =
-    confirm(
-      '¿Está seguro de que desea cerrar sesión?'
-    );
-
-
-  if (!confirmar) {
-    return;
-  }
-
-
-  logout();
-
-  window.location.href =
-    'login.html';
 }
 
 

@@ -1097,6 +1097,20 @@ body {
 }
 
 
+.alert.success {
+
+    border-color:
+        rgba(22,138,82,.25);
+
+    background:
+        #eefaf3;
+
+    color:
+        #168a52;
+
+}
+
+
 .hidden {
 
     display:

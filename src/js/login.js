@@ -1,4 +1,4 @@
-import { login } from '../services/auth.service.js';
+import { login, getSesion } from '../services/auth.service.js';
 
 
 // ==========================================
@@ -20,6 +20,27 @@ const rutasPorRol = {
         'gerente/gerente.html'
 
 };
+
+
+// ==========================================
+// SESIÓN YA INICIADA → REDIRIGIR
+// ==========================================
+
+(function redirigirSiAutenticado() {
+
+    const sesion = getSesion();
+
+    if (!sesion?.rol) {
+        return;
+    }
+
+    const ruta = rutasPorRol[sesion.rol];
+
+    if (ruta) {
+        window.location.replace(ruta);
+    }
+
+})();
 
 
 // ==========================================
@@ -63,7 +84,7 @@ function mostrarAlerta(
     alerta.textContent = mensaje;
 
     alerta.className =
-        `alert-banner alert-${tipo}`;
+        `alert alert-${tipo}`;
 
     alerta.classList.remove('hidden');
 
@@ -207,9 +228,11 @@ async function manejarLogin(event) {
 
         // --------------------------------------
         // REDIRECCIÓN
+        // (replace evita que "atrás" regrese
+        //  al formulario con sesión activa)
         // --------------------------------------
 
-        window.location.href = ruta;
+        window.location.replace(ruta);
 
 
     } catch (error) {

@@ -1,4 +1,5 @@
 import { getSesion, logout } from "../../services/auth.service.js";
+import { configurarLogout } from "../shared/logout.js";
 import { fetchAPI } from "../../services/api.js";
 
 
@@ -13,6 +14,10 @@ const sesion = getSesion();
 
 if (!sesion) {
     window.location.href = "../login.html";
+
+    throw new Error(
+        "Sesión no válida. Redirigiendo al login."
+    );
 }
 
 
@@ -23,7 +28,13 @@ if (
     sesion.rol &&
     sesion.rol.toLowerCase() !== "gerente"
 ) {
+    logout();
+
     window.location.href = "../login.html";
+
+    throw new Error(
+        "Acceso restringido al rol gerente."
+    );
 }
 
 
@@ -368,97 +379,59 @@ async function cargarEmpresas() {
 
 /* ==========================================
    CARGAR TRÁMITES
+   (Derivado de solicitudes activas)
 ========================================== */
 
-async function cargarTramites() {
+function cargarTramites() {
 
-    try {
+    const tramitesActivos =
+        solicitudes.filter(
+            (solicitud) => {
 
-        const tramites =
-            await fetchAPI("/tramites");
+                const estado =
+                    String(
+                        solicitud.estado || ""
+                    ).toLowerCase();
 
-        if (statTramites) {
+                return (
+                    estado === "pendiente" ||
+                    estado === "en_revision" ||
+                    estado === "en revisión"
+                );
+            }
+        ).length;
 
-            statTramites.textContent =
-                Array.isArray(tramites)
-                    ? contarTramitesActivos(tramites)
-                    : 0;
-        }
 
-    } catch (error) {
-
-        console.warn(
-            "No se pudieron cargar los trámites:",
-            error
-        );
-
-        if (statTramites) {
-            statTramites.textContent = "0";
-        }
+    if (statTramites) {
+        statTramites.textContent =
+            tramitesActivos;
     }
-}
-
-
-function contarTramitesActivos(tramites) {
-
-    return tramites.filter(
-        (tramite) => {
-
-            const estado =
-                String(
-                    tramite.estado || ""
-                ).toLowerCase();
-
-            return (
-                estado.includes("pendiente") ||
-                estado.includes("proceso") ||
-                estado.includes("revisión") ||
-                estado.includes("revision")
-            );
-        }
-    ).length;
 }
 
 
 /* ==========================================
    CARGAR DOCUMENTOS
+   (Alertas de cumplimiento vigentes)
 ========================================== */
 
 async function cargarDocumentos() {
 
     try {
 
-        const documentos =
-            await fetchAPI("/documentos");
-
-        if (!Array.isArray(documentos)) {
-
-            if (statDocumentos) {
-                statDocumentos.textContent = "0";
-            }
-
-            return;
-        }
-
-
-        const proximos =
-            documentos.filter(
-                (documento) =>
-                    documento.proximoVencimiento === true ||
-                    documento.urgente === true
-            );
-
+        const alertas =
+            await fetchAPI("/alertas");
 
         if (statDocumentos) {
-
             statDocumentos.textContent =
-                proximos.length;
+                Array.isArray(alertas)
+                    ? alertas.length
+                    : 0;
         }
 
     } catch (error) {
 
         console.warn(
-            "No se pudieron cargar los documentos:",
+            "No se pudieron cargar las alertas:",
             error
         );
 
@@ -592,43 +565,62 @@ async function cargarActividad() {
         return;
     }
 
-    let actividades = [];
+    let historial = [];
 
 
     try {
 
-        actividades =
-            await fetchAPI("/actividades");
+        historial =
+            await fetchAPI("/historial");
 
     } catch (error) {
 
         console.warn(
-            "No existe el recurso actividades.",
+            "No se pudo cargar el historial.",
             error
         );
+
     }
 
 
+    let actividades = [];
+
     if (
-        !Array.isArray(actividades) ||
-        actividades.length === 0
+        Array.isArray(historial) &&
+        historial.length > 0
     ) {
+
+        actividades = historial
+            .map((registro) => ({
+                icono:
+                    obtenerIconoHistorial(
+                        registro.tipo,
+                        registro.accion
+                    ),
+                titulo:
+                    registro.accion ||
+                    "Actividad registrada",
+                detalle:
+                    registro.descripcion ||
+                    formatearFechaCorta(
+                        registro.fecha
+                    )
+            }))
+            .sort(
+                (a, b) =>
+                    new Date(b.fecha || 0) -
+                    new Date(a.fecha || 0)
+            );
+    }
+
+
+    if (actividades.length === 0) {
 
         actividades = [
             {
-                icono: "psychology",
-                titulo: "Solicitud evaluada por IA",
-                detalle: "Actividad reciente"
-            },
-            {
-                icono: "domain_add",
-                titulo: "Nueva empresa registrada",
-                detalle: "Actividad reciente"
-            },
-            {
-                icono: "assignment_turned_in",
-                titulo: "Trámite actualizado",
-                detalle: "Actividad reciente"
+                icono: "history",
+                titulo: "Sin actividad registrada",
+                detalle: "Aún no hay movimientos en el sistema"
             }
         ];
     }
@@ -839,15 +831,23 @@ function configurarNavegacion() {
 
                     event.preventDefault();
 
-                    navItems.forEach(
-                        (nav) =>
-                            nav.classList.remove(
-                                "active"
-                            )
-                    );
+                    const texto =
+                        item
+                            .querySelector("span:last-child")
+                            ?.textContent
+                            ?.trim();
 
-                    item.classList.add(
-                        "active"
+
+                    if (
+                        !texto ||
+                        texto === "Inicio"
+                    ) {
+                        return;
+                    }
+
+
+                    alert(
+                        `El módulo "${texto}" estará disponible próximamente.`
                     );
 
                 }
@@ -940,18 +940,7 @@ function configurarBusqueda() {
 
 function configurarBotones() {
 
-    document
-        .getElementById("btnLogout")
-        ?.addEventListener(
-            "click",
-            () => {
-
-                logout();
-
-                window.location.href =
-                    "../login.html";
-            }
-        );
+    configurarLogout("btnLogout");
 
 
     document
@@ -1074,7 +1063,7 @@ function configurarBotones() {
             () => {
 
                 alert(
-                    "Centro de ayuda de RRHH IA."
+                    "Centro de ayuda de ZoFranca CR."
                 );
             }
         );
@@ -1144,6 +1133,89 @@ function obtenerClaseEstado(estado) {
 
 
     return "status-pendiente";
+}
+
+
+function obtenerIconoHistorial(tipo, accion) {
+
+    const tipoNormalizado =
+        String(tipo || "")
+            .toLowerCase();
+
+    const accionNormalizada =
+        String(accion || "")
+            .toLowerCase();
+
+
+    if (
+        tipoNormalizado === "alerta" ||
+        accionNormalizada.includes("alerta")
+    ) {
+        return "warning";
+    }
+
+
+    if (
+        tipoNormalizado === "decision" &&
+        accionNormalizada.includes("rechaz")
+    ) {
+        return "cancel";
+    }
+
+
+    if (
+        tipoNormalizado === "decision" ||
+        accionNormalizada.includes("aprob")
+    ) {
+        return "check_circle";
+    }
+
+
+    if (
+        tipoNormalizado === "evaluacion"
+    ) {
+        return "auto_awesome";
+    }
+
+
+    if (
+        tipoNormalizado === "solicitud" ||
+        accionNormalizada.includes("envi")
+    ) {
+        return "assignment_add";
+    }
+
+
+    return "history";
+}
+
+
+function formatearFechaCorta(fecha) {
+
+    if (!fecha) {
+        return "";
+    }
+
+    const fechaObj =
+        new Date(fecha);
+
+    if (
+        Number.isNaN(
+            fechaObj.getTime()
+        )
+    ) {
+        return String(fecha);
+    }
+
+
+    return fechaObj.toLocaleDateString(
+        "es-CR",
+        {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        }
+    );
 }
 
 

@@ -6,6 +6,8 @@
 
     <title>Dashboard - ZoFranca CR</title>
 
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,9 +25,17 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="../../css/empresa/empresa.css">
+    <link rel="stylesheet" href="../../css/empresa/paneles.css">
+    <link rel="stylesheet" href="../../css/decor.css">
 </head>
 
 <body>
+
+    <div class="bg-blobs" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
 
     <!-- =========================
          SIDEBAR
@@ -44,29 +54,30 @@
                 <span>Inicio</span>
             </a>
 
-            <a href="#" class="menu-item">
+            <a href="solicitudes.html" class="menu-item">
                 <span class="material-symbols-outlined">assignment</span>
                 <span>Solicitudes</span>
             </a>
 
-            <a href="#" class="menu-item">
+            <a href="tramites.html" class="menu-item">
                 <span class="material-symbols-outlined">account_tree</span>
                 <span>Trámites</span>
             </a>
 
-            <a href="#" class="menu-item">
+            <a href="documentos.html" class="menu-item">
                 <span class="material-symbols-outlined">description</span>
                 <span>Documentos</span>
             </a>
 
-            <a href="#" class="menu-item">
+            <a href="reportes.html" class="menu-item">
                 <span class="material-symbols-outlined">analytics</span>
                 <span>Reportes</span>
             </a>
 
-            <a href="#" class="menu-item">
+            <a href="notificaciones.html" class="menu-item">
                 <span class="material-symbols-outlined">notifications</span>
                 <span>Notificaciones</span>
+                <span class="menu-badge" id="badgeNotificaciones" hidden></span>
             </a>
 
         </nav>
@@ -76,7 +87,7 @@
 
             <div class="user-profile">
 
-                <div class="user-avatar">
+                <div class="user-avatar" id="avatarEmpresaSidebar">
                     A
                 </div>
 
@@ -85,14 +96,14 @@
                         Empresa ABC S.A.
                     </strong>
 
-                    <span>
-                        Administrador
+                    <span id="rolEmpresa">
+                        Empresa Solicitante
                     </span>
                 </div>
 
             </div>
 
-            <a href="#" class="menu-item">
+            <a href="../configuracion/configuracion.html" class="menu-item">
                 <span class="material-symbols-outlined">settings</span>
                 <span>Ajustes</span>
             </a>
@@ -152,7 +163,7 @@
                 </span>
             </button>
 
-            <div class="topbar-avatar">
+            <div class="topbar-avatar" id="avatarEmpresaTop">
                 A
             </div>
 
@@ -200,14 +211,14 @@
         <!-- =========================
              TARJETAS
         ========================== -->
-        <section class="stats-grid">
+        <section class="stats-grid stats-grid-panel">
 
             <article class="stat-card">
 
                 <div class="stat-header">
 
                     <h3>
-                        Solicitudes activas
+                        Solicitudes pendientes
                     </h3>
 
                     <span class="stat-icon blue">
@@ -234,23 +245,23 @@
                 <div class="stat-header">
 
                     <h3>
-                        Trámites pendientes
+                        Trámites en proceso
                     </h3>
 
                     <span class="stat-icon red">
                         <span class="material-symbols-outlined">
-                            warning
+                            autorenew
                         </span>
                     </span>
 
                 </div>
 
-                <strong id="tramitesPendientes">
+                <strong id="tramitesEnProceso">
                     3
                 </strong>
 
-                <p class="danger-text">
-                    Requieren atención
+                <p>
+                    Avanzando hacia aprobación
                 </p>
 
             </article>
@@ -261,23 +272,23 @@
                 <div class="stat-header">
 
                     <h3>
-                        Documentos
+                        Documentos pendientes
                     </h3>
 
-                    <span class="stat-icon blue">
+                    <span class="stat-icon red">
                         <span class="material-symbols-outlined">
-                            description
+                            schedule
                         </span>
                     </span>
 
                 </div>
 
-                <strong id="cantidadDocumentos">
-                    18
+                <strong id="documentosPendientes">
+                    2
                 </strong>
 
-                <p>
-                    Registrados
+                <p class="danger-text">
+                    Por vencer o en revisión
                 </p>
 
             </article>
@@ -288,7 +299,34 @@
                 <div class="stat-header">
 
                     <h3>
-                        Notificaciones
+                        Documentos vigentes
+                    </h3>
+
+                    <span class="stat-icon green">
+                        <span class="material-symbols-outlined">
+                            verified
+                        </span>
+                    </span>
+
+                </div>
+
+                <strong id="documentosVigentes">
+                    16
+                </strong>
+
+                <p>
+                    Al día
+                </p>
+
+            </article>
+
+
+            <article class="stat-card">
+
+                <div class="stat-header">
+
+                    <h3>
+                        Notificaciones nuevas
                     </h3>
 
                     <span class="stat-icon blue">
@@ -326,7 +364,7 @@
                         Solicitudes recientes
                     </h3>
 
-                    <button class="text-button">
+                    <button class="text-button" id="btnVerTodas">
                         Ver todas
                     </button>
 
@@ -364,6 +402,125 @@
             <!-- Columna derecha -->
             <div class="right-column">
 
+                <!-- Acciones rápidas -->
+                <div class="documents-card">
+
+                    <div class="card-header">
+
+                        <h3>
+                            Acciones rápidas
+                        </h3>
+
+                    </div>
+
+                    <div class="quick-actions">
+
+                        <button class="quick-action" id="qaNuevaSolicitud">
+                            <span class="material-symbols-outlined">add_circle</span>
+                            Nueva solicitud
+                        </button>
+
+                        <button class="quick-action" id="qaSubirDocumento">
+                            <span class="material-symbols-outlined">upload_file</span>
+                            Subir documento
+                        </button>
+
+                        <button class="quick-action" id="qaVerNotificaciones">
+                            <span class="material-symbols-outlined">notifications</span>
+                            Ver notificaciones
+                        </button>
+
+                        <button class="quick-action" id="qaGenerarReporte">
+                            <span class="material-symbols-outlined">summarize</span>
+                            Generar reporte
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Resumen de trámites -->
+                <div class="documents-card">
+
+                    <div class="card-header">
+
+                        <h3>
+                            Resumen de trámites
+                        </h3>
+
+                        <button class="text-button" id="btnVerTramites">
+                            Ver todos
+                        </button>
+
+                    </div>
+
+                    <div class="tramites-resumen" id="resumenTramites">
+
+                        <!-- JavaScript cargará el resumen -->
+
+                    </div>
+
+                </div>
+
+
+                <!-- Estado general de la empresa -->
+                <div class="documents-card">
+
+                    <div class="card-header">
+
+                        <h3>
+                            Estado general
+                        </h3>
+
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 16px; padding: 4px 2px;" id="estadoGeneral">
+
+                        <div>
+
+                            <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                                <strong style="font-size: 13px;">Cumplimiento de compromisos</strong>
+                                <span class="progress-value" id="textoCumplimiento">—</span>
+                            </div>
+
+                            <div class="progress-track">
+                                <div class="progress-fill green" id="barraCumplimiento" style="width:0%"></div>
+                            </div>
+
+                        </div>
+
+                        <div>
+
+                            <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                                <strong style="font-size: 13px;">Documentos vigentes</strong>
+                                <span class="progress-value" id="textoDocsVigentes">—</span>
+                            </div>
+
+                            <div class="progress-track">
+                                <div class="progress-fill" id="barraDocsVigentes" style="width:0%"></div>
+                            </div>
+
+                        </div>
+
+                        <div>
+
+                            <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                                <strong style="font-size: 13px;">Solicitudes aprobadas</strong>
+                                <span class="progress-value" id="textoSolicitudesAprobadas">—</span>
+                            </div>
+
+                            <div class="progress-track">
+                                <div class="progress-fill green" id="barraSolicitudesAprobadas" style="width:0%"></div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
                 <!-- Documentos -->
                 <div class="documents-card">
 
@@ -372,11 +529,11 @@
                         <div class="card-title">
 
                             <span class="material-symbols-outlined danger-icon">
-                                event_busy
+                                folder_open
                             </span>
 
                             <h3>
-                                Documentos por vencer
+                                Documentos registrados
                             </h3>
 
                         </div>
@@ -447,7 +604,7 @@
 
 
     <!-- JavaScript -->
-   <script type="module"src="../../js/empresa/empresa.js"></script>
+   <script type="module" src="../../js/empresa/empresa.js"></script>
 
 </body>
 </html>

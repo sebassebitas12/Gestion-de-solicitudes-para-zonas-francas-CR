@@ -85,6 +85,8 @@ async function iniciarPagina() {
 
         await cargarEmpresa();
 
+        await cargarZonasFrancas();
+
 
         // --------------------------------------
         // 5. Eventos
@@ -142,6 +144,72 @@ async function cargarEmpresa() {
         nombreEmpresa.textContent =
             empresaActual.nombre;
     }
+}
+
+
+// ==========================================
+// ZONAS FRANCAS
+// ==========================================
+
+async function cargarZonasFrancas() {
+
+    const selector =
+        document.getElementById('zonaFranca');
+
+    if (!selector) {
+        return;
+    }
+
+
+    let zonas = [];
+
+    try {
+
+        zonas =
+            await fetchAPI('/zonas_francas');
+
+        if (!Array.isArray(zonas)) {
+            zonas = [];
+        }
+
+    } catch (error) {
+
+        console.warn(
+            'No se pudieron cargar las zonas francas:',
+            error
+        );
+
+    }
+
+
+    if (zonas.length === 0) {
+
+        selector.innerHTML =
+            '<option value="">No hay zonas francas disponibles</option>';
+
+        return;
+    }
+
+
+    selector.innerHTML =
+        '<option value="">Seleccione una zona</option>';
+
+
+    zonas
+        .filter(zona => zona.estado === 'activa')
+        .forEach((zona) => {
+
+            const opcion =
+                document.createElement('option');
+
+            opcion.value = zona.id;
+
+            opcion.textContent = zona.nombre;
+
+            selector.appendChild(opcion);
+
+        });
+
 }
 
 
@@ -454,7 +522,8 @@ async function guardarSolicitud(
 
         exportaciones,
 
-        zonaFranca,
+        zonaFrancaId:
+            zonaFranca || null,
 
         descripcion,
 

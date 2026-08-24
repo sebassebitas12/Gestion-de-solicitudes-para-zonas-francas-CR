@@ -1,8 +1,9 @@
 // ==========================================
-// RRHH IA - PANEL DEL ANALISTA
+// ZoFranca CR - PANEL DEL ANALISTA
 // ==========================================
 
 import { getSesion, logout } from '../../services/auth.service.js';
+import { configurarLogout } from '../shared/logout.js';
 import { fetchAPI } from '../../services/api.js';
 
 
@@ -21,6 +22,8 @@ if (!sesion) {
 
     window.location.href = '../login.html';
 
+    throw new Error('Sesión no válida. Redirigiendo al login.');
+
 }
 
 if (sesion && sesion.rol !== 'analista') {
@@ -28,6 +31,8 @@ if (sesion && sesion.rol !== 'analista') {
     logout();
 
     window.location.href = '../login.html';
+
+    throw new Error('Acceso restringido al rol analista.');
 
 }
 
@@ -1114,50 +1119,6 @@ function configurarBusqueda() {
 
 
 // ==========================================
-// CERRAR SESIÓN
-// ==========================================
-
-function configurarLogout() {
-
-    const button =
-        document.getElementById(
-            'btnLogout'
-        );
-
-    if (!button) {
-
-        return;
-
-    }
-
-
-    button.addEventListener(
-        'click',
-        () => {
-
-            const confirmar =
-                window.confirm(
-                    '¿Está seguro de que desea cerrar sesión?'
-                );
-
-            if (!confirmar) {
-
-                return;
-
-            }
-
-            logout();
-
-            window.location.href =
-                '../login.html';
-
-        }
-    );
-
-}
-
-
-// ==========================================
 // NAVEGACIÓN VISUAL
 // ==========================================
 
@@ -1216,6 +1177,41 @@ function configurarNavegacion() {
         );
 
     });
+
+
+    // Secciones aún sin pantalla propia
+
+    document
+        .querySelectorAll('.sidebar-nav .nav-item')
+        .forEach(item => {
+
+            if (
+                item.id ||
+                item.classList.contains('active')
+            ) {
+                return;
+            }
+
+            item.addEventListener(
+                'click',
+                event => {
+
+                    event.preventDefault();
+
+                    const texto =
+                        item
+                            .querySelector('span:last-child')
+                            ?.textContent
+                            ?.trim();
+
+                    alert(
+                        `El módulo "${texto || 'seleccionado'}" estará disponible próximamente.`
+                    );
+
+                }
+            );
+
+        });
 
 }
 
@@ -1294,7 +1290,7 @@ async function inicializar() {
 
     cargarUsuario();
 
-    configurarLogout();
+    configurarLogout('btnLogout');
 
     configurarBusqueda();
 

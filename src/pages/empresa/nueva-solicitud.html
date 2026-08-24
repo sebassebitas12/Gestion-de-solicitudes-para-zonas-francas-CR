@@ -10,7 +10,25 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Nueva solicitud | Zona Franca</title>
+    <title>Nueva solicitud - ZoFranca CR</title>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+    <!-- Google Fonts -->
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap"
+        rel="stylesheet"
+    >
 
     <!-- Material Symbols -->
     <link
@@ -23,11 +41,21 @@
         rel="stylesheet"
         href="../../css/empresa/nueva-solicitud.css"
     >
+    <link
+        rel="stylesheet"
+        href="../../css/decor.css"
+    >
 
 </head>
 
 
 <body>
+
+    <div class="bg-blobs" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
 
     <main class="page-container">
 
@@ -361,23 +389,7 @@
                     >
 
                         <option value="">
-                            Seleccione una zona
-                        </option>
-
-                        <option value="ZF-001">
-                            Zona Franca Metropolitana
-                        </option>
-
-                        <option value="ZF-002">
-                            Zona Franca Pacífico
-                        </option>
-
-                        <option value="ZF-003">
-                            Zona Franca Caribe
-                        </option>
-
-                        <option value="ZF-004">
-                            Zona Franca Norte
+                            Cargando zonas francas...
                         </option>
 
                     </select>

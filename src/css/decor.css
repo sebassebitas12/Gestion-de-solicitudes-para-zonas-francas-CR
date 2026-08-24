@@ -1,0 +1,134 @@
+/* ============================================================
+   ZoFranca CR
+   Fondo decorativo compartido (blobs sutiles)
+   ============================================================ */
+
+.bg-blobs {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: -1;
+
+    overflow: hidden;
+
+    pointer-events: none;
+}
+
+.bg-blobs span {
+
+    position: absolute;
+
+    border-radius: 50%;
+
+    filter: blur(90px);
+
+    opacity: 0.30;
+
+    animation:
+        blob-drift 30s ease-in-out infinite alternate;
+
+    will-change:
+        transform;
+}
+
+.bg-blobs span:nth-child(1) {
+
+    width: 440px;
+    height: 440px;
+
+    top: -140px;
+    left: -110px;
+
+    background: #5b94fd;
+}
+
+.bg-blobs span:nth-child(2) {
+
+    width: 380px;
+    height: 380px;
+
+    top: 42%;
+    right: -140px;
+
+    background: #085ac0;
+
+    animation-delay: -10s;
+}
+
+.bg-blobs span:nth-child(3) {
+
+    width: 320px;
+    height: 320px;
+
+    bottom: -140px;
+    left: 32%;
+
+    background: #adc6ff;
+
+    animation-delay: -20s;
+}
+
+
+@keyframes blob-drift {
+
+    from {
+        transform:
+            translate(0, 0)
+            scale(1);
+    }
+
+    to {
+        transform:
+            translate(70px, 45px)
+            scale(1.12);
+    }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+    .bg-blobs span {
+        animation: none;
+    }
+
+}
+
+
+/* ============================================================
+   Preferencia de usuario: animaciones reducidas
+   (se activa desde Configuración → html.anim-reducida)
+   ============================================================ */
+
+html.anim-reducida .bg-blobs span {
+    animation: none;
+}
+
+html.anim-reducida * {
+
+    animation-duration: 0.01ms !important;
+
+    transition-duration: 0.01ms !important;
+
+    scroll-behavior: auto !important;
+}
+
+
+/* ============================================================
+   Accesibilidad global
+   ============================================================ */
+
+::selection {
+
+    background: rgba(91, 148, 253, 0.35);
+}
+
+:focus-visible {
+
+    outline: 2px solid #5b94fd;
+
+    outline-offset: 2px;
+
+    border-radius: 4px;
+}

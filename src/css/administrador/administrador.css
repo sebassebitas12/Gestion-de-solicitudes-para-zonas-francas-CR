@@ -5,7 +5,7 @@
 
 :root {
 
-    --primary: #000000;
+    --primary: #131b2e;
     --primary-container: #131b2e;
 
     --secondary: #085ac0;
@@ -33,7 +33,7 @@
     --error: #ba1a1a;
     --error-container: #ffdad6;
 
-    --success: #10b981;
+    --success: #1e8e3e;
     --warning: #f59e0b;
 
     --radius: 8px;

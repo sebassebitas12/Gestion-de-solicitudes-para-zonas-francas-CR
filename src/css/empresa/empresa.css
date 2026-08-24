@@ -676,6 +676,11 @@ th:last-child {
     color: #ea8600;
 }
 
+.status.danger {
+    background: #ffdad6;
+    color: var(--error);
+}
+
 
 /* =========================
    RIGHT COLUMN

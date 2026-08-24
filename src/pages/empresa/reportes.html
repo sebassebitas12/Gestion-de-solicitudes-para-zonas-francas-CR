@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Reportes - ZoFranca CR</title>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Material Symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:FILL@0..1&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/empresa/empresa.css">
+    <link rel="stylesheet" href="../../css/empresa/paneles.css">
+    <link rel="stylesheet" href="../../css/decor.css">
+</head>
+
+<body>
+
+    <div class="bg-blobs" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+    <aside class="sidebar">
+
+        <div class="sidebar-header">
+            <h1>ZoFranca CR</h1>
+            <p>Enterprise Core</p>
+        </div>
+
+        <nav class="sidebar-menu">
+
+            <a href="empresa.html" class="menu-item">
+                <span class="material-symbols-outlined">dashboard</span>
+                <span>Inicio</span>
+            </a>
+
+            <a href="solicitudes.html" class="menu-item">
+                <span class="material-symbols-outlined">assignment</span>
+                <span>Solicitudes</span>
+            </a>
+
+            <a href="tramites.html" class="menu-item">
+                <span class="material-symbols-outlined">account_tree</span>
+                <span>Trámites</span>
+            </a>
+
+            <a href="documentos.html" class="menu-item">
+                <span class="material-symbols-outlined">description</span>
+                <span>Documentos</span>
+            </a>
+
+            <a href="reportes.html" class="menu-item active">
+                <span class="material-symbols-outlined">analytics</span>
+                <span>Reportes</span>
+            </a>
+
+            <a href="notificaciones.html" class="menu-item">
+                <span class="material-symbols-outlined">notifications</span>
+                <span>Notificaciones</span>
+                <span class="menu-badge" id="badgeNotificaciones" hidden></span>
+            </a>
+
+        </nav>
+
+        <!-- Usuario -->
+        <div class="sidebar-footer">
+
+            <div class="user-profile">
+
+                <div class="user-avatar" id="avatarEmpresaSidebar">
+                    A
+                </div>
+
+                <div class="user-info">
+                    <strong id="nombreEmpresa">
+                        Empresa ABC S.A.
+                    </strong>
+
+                    <span id="rolEmpresa">
+                        Empresa Solicitante
+                    </span>
+                </div>
+
+            </div>
+
+            <a href="../configuracion/configuracion.html" class="menu-item">
+                <span class="material-symbols-outlined">settings</span>
+                <span>Ajustes</span>
+            </a>
+
+            <a href="#" class="menu-item logout" id="btnCerrarSesion">
+                <span class="material-symbols-outlined">logout</span>
+                <span>Cerrar Sesión</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =========================
+         BARRA SUPERIOR
+    ========================== -->
+    <header class="topbar">
+
+        <div class="topbar-title">
+
+            <h2>Reportes</h2>
+
+            <p>
+                Indicadores y reportes de gestión de su empresa
+            </p>
+
+        </div>
+
+        <div class="topbar-actions">
+
+            <button class="icon-button notification-button" title="Notificaciones">
+
+                <span class="material-symbols-outlined">
+                    notifications
+                </span>
+
+                <span class="notification-dot"></span>
+
+            </button>
+
+            <button class="icon-button" title="Ayuda">
+                <span class="material-symbols-outlined">
+                    help_outline
+                </span>
+            </button>
+
+            <div class="topbar-avatar" id="avatarEmpresaTop">
+                A
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         CONTENIDO PRINCIPAL
+    ========================== -->
+    <main class="main-content">
+
+        <section class="page-head">
+
+            <div>
+
+                <h2>Centro de reportes</h2>
+
+                <p>
+                  Genere reportes de gestión con los datos reales de su expediente.
+                </p>
+
+            </div>
+
+            <div class="page-head-actions no-print">
+
+                <button class="secondary-button" id="btnImprimir">
+
+                    <span class="material-symbols-outlined">
+                        print
+                    </span>
+
+                    Imprimir
+
+                </button>
+
+                <button class="primary-button" id="btnGenerarReporte">
+
+                    <span class="material-symbols-outlined">
+                        summarize
+                    </span>
+
+                    Generar reporte
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- Filtros -->
+        <section class="filter-bar no-print">
+
+            <select id="filtroPeriodo" aria-label="Filtrar por periodo">
+
+                <option value="todo">Todo el histórico</option>
+                <option value="6m">Últimos 6 meses</option>
+                <option value="12m">Último año</option>
+
+            </select>
+
+            <select id="filtroTipo" aria-label="Tipo de reporte">
+
+                <option value="general">Resumen general</option>
+                <option value="solicitudes">Solicitudes</option>
+                <option value="cumplimiento">Cumplimiento</option>
+
+            </select>
+
+            <select id="filtroEstado" aria-label="Filtrar por estado">
+
+                <option value="">Todos los estados</option>
+                <option value="pendiente">Pendiente</option>
+                <option value="en_revision">En revisión</option>
+                <option value="aprobada">Aprobada</option>
+                <option value="rechazada">Rechazada</option>
+                <option value="completada">Completada</option>
+
+            </select>
+
+            <button class="secondary-button" id="btnAplicarFiltros">
+
+                <span class="material-symbols-outlined">
+                    filter_alt
+                </span>
+
+                Aplicar filtros
+
+            </button>
+
+        </section>
+
+
+        <!-- KPIs -->
+        <section class="stats-grid stats-grid-panel">
+
+            <article class="stat-card">
+
+                <div class="stat-header">
+
+                    <h3>Solicitudes</h3>
+
+                    <span class="stat-icon blue">
+                        <span class="material-symbols-outlined">assignment</span>
+                    </span>
+
+                </div>
+
+                <strong id="kpiSolicitudes">0</strong>
+
+                <p>Según filtros aplicados</p>
+
+            </article>
+
+            <article class="stat-card">
+
+                <div class="stat-header">
+
+                    <h3>Tasa de aprobación</h3>
+
+                    <span class="stat-icon green">
+                        <span class="material-symbols-outlined">thumb_up</span>
+                    </span>
+
+                </div>
+
+                <strong id="kpiTasaAprobacion">0%</strong>
+
+                <p>Aprobadas o completadas</p>
+
+            </article>
+
+            <article class="stat-card">
+
+                <div class="stat-header">
+
+                    <h3>Cumplimiento promedio</h3>
+
+                    <span class="stat-icon blue">
+                        <span class="material-symbols-outlined">fact_check</span>
+                    </span>
+
+                </div>
+
+                <strong id="kpiCumplimiento">0%</strong>
+
+                <p>Reportes de cumplimiento</p>
+
+            </article>
+
+            <article class="stat-card">
+
+                <div class="stat-header">
+
+                    <h3>Alertas activas</h3>
+
+                    <span class="stat-icon red">
+                        <span class="material-symbols-outlined">warning</span>
+                    </span>
+
+                </div>
+
+                <strong id="kpiAlertas">0</strong>
+
+                <p>Pendientes de atención</p>
+
+            </article>
+
+        </section>
+
+
+        <!-- Gráficos -->
+        <section class="dashboard-grid section-gap">
+
+            <div class="panel-card requests-card">
+
+                <div class="card-header">
+
+                    <h3>Actividad mensual (solicitudes)</h3>
+
+                </div>
+
+                <div class="bars-chart" id="graficoMensual">
+
+                    <!-- JavaScript construirá el gráfico -->
+
+                </div>
+
+            </div>
+
+
+            <div class="panel-card requests-card">
+
+                <div class="card-header">
+
+                    <h3>Distribución por estado</h3>
+
+                </div>
+
+                <div style="padding: 20px; display: flex; flex-direction: column; gap: 14px;" id="distribucionEstados">
+
+                    <!-- JavaScript construirá la distribución -->
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Reportes generados -->
+        <section class="panel-card section-gap">
+
+            <div class="card-header">
+
+                <h3>Reportes generados en esta sesión</h3>
+
+            </div>
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Tipo</th>
+                            <th>Periodo</th>
+                            <th>Solicitudes incluidas</th>
+                            <th>Fecha de generación</th>
+                            <th>Acciones</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="tablaReportes">
+
+                        <tr>
+
+                            <td colspan="6">
+
+                                <div class="empty-state">
+                                    <span class="material-symbols-outlined">description</span>
+                                    <p>Aún no ha generado reportes. Use el botón "Generar reporte".</p>
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+    <footer class="footer no-print">
+
+        <p>
+            ZoFranca CR | v2.4.1 | Sistema Seguro • ISO 27001
+        </p>
+
+        <div class="footer-links no-print">
+
+            <a href="#">
+                Certificaciones de Seguridad
+            </a>
+
+            <a href="#">
+                Términos de Servicio
+            </a>
+
+            <a href="#">
+                Privacidad
+            </a>
+
+        </div>
+
+    </footer>
+
+
+    <!-- JavaScript -->
+    <script type="module" src="../../js/empresa/reportes.js"></script>
+
+</body>
+</html>

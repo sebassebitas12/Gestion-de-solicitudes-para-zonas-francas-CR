@@ -6,9 +6,12 @@
  */
 
 import {
-    getSesion,
-    logout
+    getSesion
 } from '../../services/auth.service.js';
+
+import {
+    configurarLogout
+} from '../shared/logout.js';
 
 import {
     fetchAPI
@@ -182,34 +185,6 @@ function cargarPerfil() {
     setText(
         'top-avatar',
         initials
-    );
-}
-
-
-/* ============================================================
-   LOGOUT
-   ============================================================ */
-
-function configurarLogout() {
-
-    const button =
-        document.getElementById(
-            'btn-logout'
-        );
-
-    if (!button) {
-        return;
-    }
-
-    button.addEventListener(
-        'click',
-        () => {
-
-            logout();
-
-            window.location.href =
-                '../login.html';
-        }
     );
 }
 
@@ -869,6 +844,7 @@ async function cargarEstadoDocumentos() {
                         ).toLowerCase();
 
                     return (
+                        estado === 'en_regla' ||
                         estado === 'completo' ||
                         estado === 'aprobado' ||
                         estado === 'vigente'
@@ -877,21 +853,12 @@ async function cargarEstadoDocumentos() {
             ).length;
 
 
-        let porcentaje = 94;
-
-
-        if (total > 0) {
-
-            porcentaje =
-                Math.round(
+        const porcentaje =
+            total > 0
+                ? Math.round(
                     (vigentes / total) * 100
-                );
-
-
-            if (vigentes === 0) {
-                porcentaje = 94;
-            }
-        }
+                )
+                : 0;
 
 
         setText(
@@ -913,12 +880,12 @@ async function cargarEstadoDocumentos() {
 
         setText(
             'progress-documents-value',
-            '94%'
+            '0%'
         );
 
         setProgress(
             'progress-documents',
-            94
+            0
         );
     }
 }
@@ -1271,7 +1238,7 @@ async function inicializar() {
 
     cargarPerfil();
 
-    configurarLogout();
+    configurarLogout('btn-logout');
 
     configurarAcciones();
 
