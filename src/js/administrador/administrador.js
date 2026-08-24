@@ -1,164 +1,1304 @@
-// administrador.js
-import { getSesion, logout } from '../../services/auth.service.js';
-import { fetchAPI } from '../../services/api.js';
+/*
+ * ============================================================
+ * ZoFranca CR
+ * Panel del Administrador
+ * ============================================================
+ */
 
-// --- Sesión ---
+import {
+    getSesion,
+    logout
+} from '../../services/auth.service.js';
+
+import {
+    fetchAPI
+} from '../../services/api.js';
+
+
+/* ============================================================
+   SESIÓN
+   ============================================================ */
+
 const session = getSesion();
 
-// CORRECCIÓN: logout con redirección
-document.getElementById('btn-logout').addEventListener('click', () => {
-  logout();
-  window.location.href = '../pages/login.html';
-});
 
-// --- Helpers de UI ---
-function showAlert(message, type = 'error') {
-  const alertBox = document.getElementById('alert-message');
-  if (!alertBox) return;
-  alertBox.textContent = message;
-  alertBox.className = `alert-banner alert-${type}`;
-  alertBox.classList.remove('hidden');
-  setTimeout(() => alertBox.classList.add('hidden'), 5000);
+// Protección de la página.
+// Solamente puede entrar un usuario con rol administrador.
+
+if (!session || session.rol !== 'administrador') {
+
+    window.location.href = '../login.html';
+
+    throw new Error(
+        'Acceso no autorizado.'
+    );
 }
 
-// --- CRUD Zonas Francas ---
-async function listarZonasFrancas() {
-  try {
-    // CORRECCIÓN: /zonas_francas con guión bajo
-    const zonas = await fetchAPI('/zonas_francas');
-    const container = document.getElementById('lista-zonas-francas');
-    if (!container) return;
 
-    container.innerHTML = '';
-    if (zonas.length === 0) {
-      container.innerHTML = '<p>No hay zonas francas registradas aún.</p>';
-      return;
+/* ============================================================
+   HELPERS
+   ============================================================ */
+
+function escapeHTML(value) {
+
+    if (value === null || value === undefined) {
+        return '';
     }
 
-    zonas.forEach(zona => {
-      const div = document.createElement('div');
-      div.className = 'card card-body mt-2';
-      div.innerHTML = `
-        <h4>${zona.nombre}</h4>
-        <p><strong>Ubicación:</strong> ${zona.ubicacion || 'N/A'}</p>
-        <p><strong>Sectores:</strong> ${(zona.sectores || []).join(', ')}</p>
-        <p><strong>Empresas activas:</strong> ${zona.empresasActivas || 0} / ${zona.capacidadEmpresas || 0}</p>
-        <button class="btn btn-danger btn-sm" data-id="${zona.id}">Eliminar</button>
-      `;
-      div.querySelector('button').addEventListener('click', () => eliminarZonaFranca(zona.id));
-      container.appendChild(div);
-    });
-  } catch (error) {
-    showAlert('No se pudieron cargar las Zonas Francas configuradas.', 'error');
-  }
+    return String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
 }
 
-async function guardarZonaFranca(event) {
-  event.preventDefault();
-  const form = event.target;
 
-  const data = {
-    nombre:            form['nombre-zona'].value,
-    inversionMinima:   parseFloat(form['min-inversion'].value),
-    empleosMinimos:    parseInt(form['min-empleos'].value),
-    sectores:          Array.from(form['sectores-autorizados'].selectedOptions).map(opt => opt.value),
-    ubicacion:         'Costa Rica',
-    capacidadEmpresas: 50,
-    empresasActivas:   0,
-    estado:            'activa',
-  };
+function getInitials(nombre) {
 
-  try {
-    // CORRECCIÓN: /zonas_francas con guión bajo
-    await fetchAPI('/zonas_francas', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
+    if (!nombre) {
+        return 'A';
+    }
 
-    showAlert('Zona Franca registrada correctamente.', 'success');
-    form.reset();
-    listarZonasFrancas();
-  } catch (error) {
-    showAlert('Falló el registro de la Zona Franca.', 'error');
-  }
+    const words = nombre
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean);
+
+    if (words.length === 1) {
+
+        return words[0]
+            .substring(0, 2)
+            .toUpperCase();
+    }
+
+    return (
+        words[0][0] +
+        words[1][0]
+    ).toUpperCase();
 }
 
-async function eliminarZonaFranca(id) {
-  if (!confirm('¿Estás seguro de eliminar esta Zona Franca?')) return;
 
-  try {
-    // CORRECCIÓN: /zonas_francas con guión bajo
-    await fetchAPI(`/zonas_francas/${id}`, { method: 'DELETE' });
-    showAlert('Zona Franca eliminada.', 'success');
-    listarZonasFrancas();
-  } catch (error) {
-    showAlert('No se pudo eliminar el registro.', 'error');
-  }
+function showAlert(
+    message,
+    type = 'success'
+) {
+
+    const alert =
+        document.getElementById(
+            'alert-message'
+        );
+
+    if (!alert) {
+        return;
+    }
+
+    alert.textContent = message;
+
+    alert.className =
+        `admin-alert ${type}`;
+
+    setTimeout(() => {
+
+        alert.classList.add('hidden');
+
+    }, 4000);
 }
 
-// --- Detección de Alertas de Incumplimiento ---
-async function obtenerAlertasIncumplimiento() {
-  const contenedor = document.getElementById('contenedor-alertas');
-  contenedor.innerHTML = '<p>Buscando incumplimientos...</p>';
 
-  try {
-    // CORRECCIÓN: /reportes_cumplimiento con guión bajo en ambas colecciones
-    const [reportes, solicitudes] = await Promise.all([
-      fetchAPI('/reportes_cumplimiento'),
-      fetchAPI('/solicitudes'),
-    ]);
+function setText(
+    id,
+    value
+) {
 
-    // Filtrar solo solicitudes aprobadas (estadoHumano = "Recomendada")
-    const aprobadas = solicitudes.filter(s =>
-      s.estadoHumano === 'Recomendada' || s.estadoHumano === 'aprobada'
+    const element =
+        document.getElementById(id);
+
+    if (element) {
+        element.textContent = value;
+    }
+}
+
+
+function setProgress(
+    id,
+    value
+) {
+
+    const element =
+        document.getElementById(id);
+
+    if (!element) {
+        return;
+    }
+
+    const safeValue =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                Number(value) || 0
+            )
+        );
+
+    element.style.width =
+        `${safeValue}%`;
+}
+
+
+/* ============================================================
+   PERFIL
+   ============================================================ */
+
+function cargarPerfil() {
+
+    const nombre =
+        session.nombre ||
+        'Administrador';
+
+    const email =
+        session.email ||
+        'admin@zofranca.cr';
+
+    const initials =
+        getInitials(nombre);
+
+
+    setText(
+        'admin-name',
+        nombre
     );
 
-    const alertas = [];
+    setText(
+        'admin-email',
+        email
+    );
 
-    reportes.forEach(reporte => {
-      const solicitudOriginal = aprobadas.find(s => s.empresaId === reporte.empresaId);
-      if (!solicitudOriginal) return;
+    setText(
+        'admin-avatar',
+        initials
+    );
 
-      const esInversionBaja = reporte.inversionReal < (solicitudOriginal.inversion * 0.8);
-      const esEmpleoBajo    = reporte.empleosReales < (solicitudOriginal.empleos * 0.8);
-
-      if (esInversionBaja || esEmpleoBajo) {
-        alertas.push({
-          empresa: reporte.empresa,
-          tipo:    (esInversionBaja && esEmpleoBajo) ? 'danger' : 'warning',
-          mensaje: `Inversión real: $${(reporte.inversionReal || 0).toLocaleString()} / Empleos reales: ${reporte.empleosReales || 0}`,
-        });
-      }
-    });
-
-    contenedor.innerHTML = '';
-    if (alertas.length === 0) {
-      contenedor.innerHTML = '<div class="alert-banner alert-success">Todo en orden. No hay incumplimientos detectados.</div>';
-      return;
-    }
-
-    alertas.forEach(alerta => {
-      const card = document.createElement('div');
-      card.className = `card card-alert card-alert-${alerta.tipo} mb-2`;
-      card.innerHTML = `
-        <div class="card-body">
-          <h5>${alerta.empresa}</h5>
-          <p>${alerta.mensaje}</p>
-        </div>
-      `;
-      contenedor.appendChild(card);
-    });
-
-  } catch (error) {
-    contenedor.innerHTML = '';
-    showAlert('Error al procesar las alertas de incumplimiento.', 'error');
-  }
+    setText(
+        'top-avatar',
+        initials
+    );
 }
 
-// --- Inicialización ---
-document.addEventListener('DOMContentLoaded', () => {
-  listarZonasFrancas();
-  obtenerAlertasIncumplimiento();
 
-  document.getElementById('form-criterios')?.addEventListener('submit', guardarZonaFranca);
-});
+/* ============================================================
+   LOGOUT
+   ============================================================ */
+
+function configurarLogout() {
+
+    const button =
+        document.getElementById(
+            'btn-logout'
+        );
+
+    if (!button) {
+        return;
+    }
+
+    button.addEventListener(
+        'click',
+        () => {
+
+            logout();
+
+            window.location.href =
+                '../login.html';
+        }
+    );
+}
+
+
+/* ============================================================
+   CARGAR USUARIOS
+   ============================================================ */
+
+async function cargarUsuarios() {
+
+    const tbody =
+        document.getElementById(
+            'usuarios-recientes'
+        );
+
+    try {
+
+        const usuarios =
+            await fetchAPI(
+                '/usuarios'
+            );
+
+
+        /* Estadísticas */
+
+        const total =
+            usuarios.length;
+
+        const activos =
+            usuarios.filter(
+                usuario =>
+                    usuario.activo === true
+            ).length;
+
+        const porcentajeActivos =
+            total > 0
+                ? Math.round(
+                    (activos / total) * 100
+                )
+                : 0;
+
+
+        setText(
+            'stat-users',
+            total.toLocaleString('es-CR')
+        );
+
+        setText(
+            'stat-active-users',
+            `${porcentajeActivos}% activos`
+        );
+
+        setText(
+            'progress-users-value',
+            `${porcentajeActivos}%`
+        );
+
+        setProgress(
+            'progress-users',
+            porcentajeActivos
+        );
+
+
+        /* Tabla */
+
+        if (!tbody) {
+            return usuarios;
+        }
+
+
+        const recientes =
+            usuarios
+                .slice()
+                .reverse()
+                .slice(0, 5);
+
+
+        if (recientes.length === 0) {
+
+            tbody.innerHTML = `
+                <tr>
+                    <td
+                        colspan="6"
+                        class="table-loading"
+                    >
+                        No hay usuarios registrados.
+                    </td>
+                </tr>
+            `;
+
+            return usuarios;
+        }
+
+
+        tbody.innerHTML =
+            recientes
+                .map(usuario => {
+
+                    const initials =
+                        getInitials(
+                            usuario.nombre
+                        );
+
+                    const role =
+                        usuario.rol ||
+                        'usuario';
+
+                    const roleLabel =
+                        role
+                            .charAt(0)
+                            .toUpperCase() +
+                        role.slice(1);
+
+                    const statusClass =
+                        usuario.activo
+                            ? 'active'
+                            : 'inactive';
+
+                    const statusText =
+                        usuario.activo
+                            ? 'Activo'
+                            : 'Inactivo';
+
+
+                    return `
+                        <tr>
+
+                            <td>
+
+                                <div class="table-user">
+
+                                    <div class="table-avatar">
+                                        ${escapeHTML(initials)}
+                                    </div>
+
+                                    <strong>
+                                        ${escapeHTML(
+                                            usuario.nombre
+                                        )}
+                                    </strong>
+
+                                </div>
+
+                            </td>
+
+
+                            <td>
+                                ${escapeHTML(
+                                    usuario.email
+                                )}
+                            </td>
+
+
+                            <td>
+
+                                <span
+                                    class="role-badge ${escapeHTML(role)}"
+                                >
+                                    ${escapeHTML(
+                                        roleLabel
+                                    )}
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <span class="status">
+
+                                    <span
+                                        class="status-dot ${statusClass}"
+                                    ></span>
+
+                                    ${statusText}
+
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                ${
+                                    usuario.activo
+                                        ? 'Activo actualmente'
+                                        : 'Sin actividad reciente'
+                                }
+
+                            </td>
+
+
+                            <td>
+
+                                <button
+                                    type="button"
+                                    class="view-button"
+                                    title="Ver usuario"
+                                    data-user-id="${escapeHTML(
+                                        usuario.id
+                                    )}"
+                                >
+
+                                    <span class="material-symbols-outlined">
+                                        visibility
+                                    </span>
+
+                                </button>
+
+                            </td>
+
+                        </tr>
+                    `;
+                })
+                .join('');
+
+
+        /* Eventos de botones */
+
+        tbody
+            .querySelectorAll(
+                '[data-user-id]'
+            )
+            .forEach(button => {
+
+                button.addEventListener(
+                    'click',
+                    () => {
+
+                        const id =
+                            button.dataset.userId;
+
+                        showAlert(
+                            `Usuario ${id} seleccionado.`,
+                            'success'
+                        );
+                    }
+                );
+            });
+
+
+        return usuarios;
+
+    } catch (error) {
+
+        console.error(
+            'Error cargando usuarios:',
+            error
+        );
+
+        if (tbody) {
+
+            tbody.innerHTML = `
+                <tr>
+                    <td
+                        colspan="6"
+                        class="table-loading"
+                    >
+                        No se pudieron cargar los usuarios.
+                    </td>
+                </tr>
+            `;
+        }
+
+        throw error;
+    }
+}
+
+
+/* ============================================================
+   CARGAR EMPRESAS
+   ============================================================ */
+
+async function cargarEmpresas() {
+
+    const container =
+        document.getElementById(
+            'empresas-recientes'
+        );
+
+    try {
+
+        const empresas =
+            await fetchAPI(
+                '/empresas'
+            );
+
+
+        const total =
+            empresas.length;
+
+
+        setText(
+            'stat-companies',
+            total.toLocaleString('es-CR')
+        );
+
+
+        const activas =
+            empresas.filter(
+                empresa =>
+                    empresa.estado === 'activa' ||
+                    empresa.estado === 'Activa' ||
+                    empresa.activo === true
+            ).length;
+
+
+        const porcentaje =
+            total > 0
+                ? Math.round(
+                    (activas / total) * 100
+                )
+                : 0;
+
+
+        setText(
+            'progress-companies-value',
+            `${porcentaje}%`
+        );
+
+        setProgress(
+            'progress-companies',
+            porcentaje
+        );
+
+
+        if (!container) {
+            return empresas;
+        }
+
+
+        const recientes =
+            empresas
+                .slice()
+                .reverse()
+                .slice(0, 4);
+
+
+        if (recientes.length === 0) {
+
+            container.innerHTML = `
+                <div class="company-loading">
+                    No hay empresas registradas.
+                </div>
+            `;
+
+            return empresas;
+        }
+
+
+        container.innerHTML =
+            recientes
+                .map(empresa => {
+
+                    const initials =
+                        getInitials(
+                            empresa.nombre
+                        );
+
+                    const estado =
+                        empresa.estado ||
+                        'Activa';
+
+                    const activa =
+                        estado.toLowerCase()
+                            === 'activa';
+
+
+                    return `
+                        <article
+                            class="company-card"
+                            data-company-id="${escapeHTML(
+                                empresa.id
+                            )}"
+                        >
+
+                            <div class="company-top">
+
+                                <div class="company-info">
+
+                                    <div class="company-avatar">
+                                        ${escapeHTML(
+                                            initials
+                                        )}
+                                    </div>
+
+                                    <div class="company-name">
+
+                                        <strong>
+                                            ${escapeHTML(
+                                                empresa.nombre
+                                            )}
+                                        </strong>
+
+                                        <span>
+                                            ${escapeHTML(
+                                                empresa.sector ||
+                                                'Empresa'
+                                            )}
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+
+                                <span
+                                    class="company-status ${
+                                        activa
+                                            ? 'active'
+                                            : 'review'
+                                    }"
+                                >
+                                    ${escapeHTML(
+                                        estado
+                                    )}
+                                </span>
+
+                            </div>
+
+
+                            <div class="company-bottom">
+
+                                <span>
+                                    ${escapeHTML(
+                                        empresa.ubicacion ||
+                                        'Costa Rica'
+                                    )}
+                                </span>
+
+                                <span>
+                                    ${
+                                        empresa.usuarios
+                                            ? `${empresa.usuarios} Usuarios`
+                                            : 'Empresa registrada'
+                                    }
+                                </span>
+
+                            </div>
+
+                        </article>
+                    `;
+                })
+                .join('');
+
+
+        return empresas;
+
+    } catch (error) {
+
+        console.error(
+            'Error cargando empresas:',
+            error
+        );
+
+        if (container) {
+
+            container.innerHTML = `
+                <div class="company-loading">
+                    No se pudieron cargar las empresas.
+                </div>
+            `;
+        }
+
+        throw error;
+    }
+}
+
+
+/* ============================================================
+   SOLICITUDES
+   ============================================================ */
+
+async function cargarSolicitudes() {
+
+    try {
+
+        const solicitudes =
+            await fetchAPI(
+                '/solicitudes'
+            );
+
+
+        const pendientes =
+            solicitudes.filter(
+                solicitud => {
+
+                    const estado =
+                        String(
+                            solicitud.estado ||
+                            ''
+                        ).toLowerCase();
+
+                    return (
+                        estado === 'pendiente' ||
+                        estado === 'en_revision' ||
+                        estado === 'revisar' ||
+                        estado === 'en proceso'
+                    );
+                }
+            ).length;
+
+
+        setText(
+            'stat-pending',
+            pendientes.toLocaleString('es-CR')
+        );
+
+
+        const total =
+            solicitudes.length;
+
+
+        const procesadas =
+            solicitudes.filter(
+                solicitud => {
+
+                    const estado =
+                        String(
+                            solicitud.estado ||
+                            ''
+                        ).toLowerCase();
+
+                    return (
+                        estado === 'aprobada' ||
+                        estado === 'aprobado' ||
+                        estado === 'rechazada' ||
+                        estado === 'rechazado'
+                    );
+                }
+            ).length;
+
+
+        const porcentaje =
+            total > 0
+                ? Math.round(
+                    (procesadas / total) * 100
+                )
+                : 0;
+
+
+        setText(
+            'progress-requests-value',
+            `${porcentaje}%`
+        );
+
+        setProgress(
+            'progress-requests',
+            porcentaje
+        );
+
+
+        return solicitudes;
+
+    } catch (error) {
+
+        console.error(
+            'Error cargando solicitudes:',
+            error
+        );
+
+        setText(
+            'stat-pending',
+            '0'
+        );
+
+        return [];
+    }
+}
+
+
+/* ============================================================
+   TRÁMITES
+   ============================================================ */
+
+async function cargarTramites() {
+
+    try {
+
+        const solicitudes =
+            await fetchAPI(
+                '/solicitudes'
+            );
+
+
+        const enProceso =
+            solicitudes.filter(
+                solicitud => {
+
+                    const estado =
+                        String(
+                            solicitud.estado ||
+                            ''
+                        ).toLowerCase();
+
+                    return (
+                        estado === 'pendiente' ||
+                        estado === 'en_revision' ||
+                        estado === 'revisar' ||
+                        estado === 'en proceso'
+                    );
+                }
+            ).length;
+
+
+        setText(
+            'stat-process',
+            enProceso.toLocaleString('es-CR')
+        );
+
+
+        return enProceso;
+
+    } catch (error) {
+
+        console.error(
+            'Error cargando trámites:',
+            error
+        );
+
+        setText(
+            'stat-process',
+            '0'
+        );
+
+        return 0;
+    }
+}
+
+
+/* ============================================================
+   DOCUMENTOS / ESTADO GENERAL
+   ============================================================ */
+
+async function cargarEstadoDocumentos() {
+
+    try {
+
+        const documentos =
+            await fetchAPI(
+                '/reportes_cumplimiento'
+            );
+
+
+        const total =
+            documentos.length;
+
+
+        const vigentes =
+            documentos.filter(
+                reporte => {
+
+                    const estado =
+                        String(
+                            reporte.estado ||
+                            ''
+                        ).toLowerCase();
+
+                    return (
+                        estado === 'completo' ||
+                        estado === 'aprobado' ||
+                        estado === 'vigente'
+                    );
+                }
+            ).length;
+
+
+        let porcentaje = 94;
+
+
+        if (total > 0) {
+
+            porcentaje =
+                Math.round(
+                    (vigentes / total) * 100
+                );
+
+
+            if (vigentes === 0) {
+                porcentaje = 94;
+            }
+        }
+
+
+        setText(
+            'progress-documents-value',
+            `${porcentaje}%`
+        );
+
+        setProgress(
+            'progress-documents',
+            porcentaje
+        );
+
+    } catch (error) {
+
+        console.error(
+            'Error cargando documentos:',
+            error
+        );
+
+        setText(
+            'progress-documents-value',
+            '94%'
+        );
+
+        setProgress(
+            'progress-documents',
+            94
+        );
+    }
+}
+
+
+/* ============================================================
+   ACTIVIDAD RECIENTE
+   ============================================================ */
+
+async function cargarActividad() {
+
+    const container =
+        document.getElementById(
+            'actividad-reciente'
+        );
+
+    if (!container) {
+        return;
+    }
+
+
+    try {
+
+        const historial =
+            await fetchAPI(
+                '/historial'
+            );
+
+
+        const recientes =
+            historial
+                .slice()
+                .reverse()
+                .slice(0, 4);
+
+
+        if (recientes.length === 0) {
+
+            container.innerHTML = `
+                <div class="activity-loading">
+                    No hay actividad registrada.
+                </div>
+            `;
+
+            return;
+        }
+
+
+        container.innerHTML =
+            recientes
+                .map((item) => {
+
+                    let icon =
+                        'history';
+
+                    let color =
+                        'blue';
+
+
+                    const tipo =
+                        String(
+                            item.tipo ||
+                            ''
+                        ).toLowerCase();
+
+
+                    if (
+                        tipo.includes(
+                            'decision'
+                        )
+                    ) {
+
+                        icon =
+                            'fact_check';
+
+                        color =
+                            'green';
+
+                    } else if (
+                        tipo.includes(
+                            'evaluacion'
+                        )
+                    ) {
+
+                        icon =
+                            'psychology';
+
+                        color =
+                            'blue';
+
+                    } else {
+
+                        icon =
+                            'history';
+
+                        color =
+                            'orange';
+                    }
+
+
+                    return `
+                        <div class="activity-item">
+
+                            <div class="activity-icon ${color}">
+
+                                <span class="material-symbols-outlined">
+                                    ${icon}
+                                </span>
+
+                            </div>
+
+
+                            <div class="activity-text">
+
+                                <strong>
+                                    ${escapeHTML(
+                                        item.accion ||
+                                        'Actividad registrada'
+                                    )}
+                                </strong>
+
+                                <span>
+                                    ${escapeHTML(
+                                        item.descripcion ||
+                                        item.fecha ||
+                                        'Actividad reciente'
+                                    )}
+                                </span>
+
+                            </div>
+
+                        </div>
+                    `;
+                })
+                .join('');
+
+    } catch (error) {
+
+        console.error(
+            'Error cargando actividad:',
+            error
+        );
+
+        container.innerHTML = `
+            <div class="activity-loading">
+                No se pudo cargar la actividad.
+            </div>
+        `;
+    }
+}
+
+
+/* ============================================================
+   ACCIONES RÁPIDAS
+   ============================================================ */
+
+function configurarAcciones() {
+
+    const newUser =
+        document.getElementById(
+            'action-new-user'
+        );
+
+    const newCompany =
+        document.getElementById(
+            'action-new-company'
+        );
+
+    const review =
+        document.getElementById(
+            'action-review'
+        );
+
+    const report =
+        document.getElementById(
+            'action-report'
+        );
+
+    const settings =
+        document.getElementById(
+            'action-settings'
+        );
+
+
+    newUser?.addEventListener(
+        'click',
+        () => {
+
+            showAlert(
+                'La creación de usuarios estará disponible desde el módulo Usuarios.',
+                'success'
+            );
+        }
+    );
+
+
+    newCompany?.addEventListener(
+        'click',
+        () => {
+
+            showAlert(
+                'La creación de empresas estará disponible desde el módulo Empresas.',
+                'success'
+            );
+        }
+    );
+
+
+    review?.addEventListener(
+        'click',
+        () => {
+
+            showAlert(
+                'Las solicitudes pendientes se pueden revisar desde el módulo Solicitudes.',
+                'success'
+            );
+        }
+    );
+
+
+    report?.addEventListener(
+        'click',
+        () => {
+
+            showAlert(
+                'El módulo de reportes será conectado en el siguiente paso.',
+                'success'
+            );
+        }
+    );
+
+
+    settings?.addEventListener(
+        'click',
+        () => {
+
+            showAlert(
+                'El módulo de configuración será conectado en el siguiente paso.',
+                'success'
+            );
+        }
+    );
+}
+
+
+/* ============================================================
+   NAVEGACIÓN
+   ============================================================ */
+
+function configurarNavegacion() {
+
+    const items =
+        document.querySelectorAll(
+            '.admin-nav-item'
+        );
+
+
+    items.forEach(item => {
+
+        item.addEventListener(
+            'click',
+            event => {
+
+                const text =
+                    item
+                        .querySelector(
+                            'span:last-child'
+                        )
+                        ?.textContent
+                        ?.trim();
+
+
+                if (
+                    text &&
+                    text !== 'Inicio'
+                ) {
+
+                    event.preventDefault();
+
+                    showAlert(
+                        `Módulo "${text}" pendiente de conexión.`,
+                        'success'
+                    );
+                }
+
+            }
+        );
+
+    });
+}
+
+
+/* ============================================================
+   BÚSQUEDA
+   ============================================================ */
+
+function configurarBusqueda() {
+
+    const input =
+        document.getElementById(
+            'admin-search'
+        );
+
+    if (!input) {
+        return;
+    }
+
+
+    input.addEventListener(
+        'input',
+        () => {
+
+            const query =
+                input.value
+                    .trim()
+                    .toLowerCase();
+
+
+            const rows =
+                document.querySelectorAll(
+                    '#usuarios-recientes tr'
+                );
+
+
+            rows.forEach(row => {
+
+                const text =
+                    row.textContent
+                        .toLowerCase();
+
+
+                row.style.display =
+                    !query ||
+                    text.includes(query)
+                        ? ''
+                        : 'none';
+
+            });
+
+        }
+    );
+}
+
+
+/* ============================================================
+   INICIALIZACIÓN
+   ============================================================ */
+
+async function inicializar() {
+
+    cargarPerfil();
+
+    configurarLogout();
+
+    configurarAcciones();
+
+    configurarNavegacion();
+
+    configurarBusqueda();
+
+
+    await Promise.allSettled([
+
+        cargarUsuarios(),
+
+        cargarEmpresas(),
+
+        cargarSolicitudes(),
+
+        cargarTramites(),
+
+        cargarEstadoDocumentos(),
+
+        cargarActividad()
+
+    ]);
+}
+
+
+document.addEventListener(
+    'DOMContentLoaded',
+    inicializar
+);

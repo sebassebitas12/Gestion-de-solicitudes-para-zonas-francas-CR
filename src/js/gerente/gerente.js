@@ -1,145 +1,1191 @@
-// gerente.js
-import { getSesion, logout } from '../../services/auth.service.js';
-import { fetchAPI } from '../../services/api.js';
+import { getSesion, logout } from "../../services/auth.service.js";
+import { fetchAPI } from "../../services/api.js";
 
-// --- Sesión ---
-const session = getSesion();
 
-// CORRECCIÓN: logout con redirección
-document.getElementById('btn-logout').addEventListener('click', () => {
-  logout();
-  window.location.href = '../pages/login.html';
-});
+/* ==========================================
+   SESIÓN
+========================================== */
 
-function showSpinner(show) {
-  document.querySelectorAll('.spinner-container').forEach(el => el.classList.toggle('hidden', !show));
+const sesion = getSesion();
+
+
+// Protección básica de la página
+
+if (!sesion) {
+    window.location.href = "../login.html";
 }
 
-function showAlert(message, type = 'error') {
-  const alertBox = document.getElementById('alert-message');
-  alertBox.textContent = message;
-  alertBox.className = `alert-banner alert-${type}`;
-  alertBox.classList.remove('hidden');
+
+// El Gerente debe tener rol de gerente
+
+if (
+    sesion &&
+    sesion.rol &&
+    sesion.rol.toLowerCase() !== "gerente"
+) {
+    window.location.href = "../login.html";
 }
 
-// --- Carga Paralela y KPIs ---
-async function cargarMetricsDashboard() {
-  showSpinner(true);
-  try {
-    // CORRECCIÓN: /reportes_cumplimiento y /zonas_francas con guión bajo
-    const [solicitudes, empresas, reportes, zonas] = await Promise.all([
-      fetchAPI('/solicitudes'),
-      fetchAPI('/empresas'),
-      fetchAPI('/reportes_cumplimiento'),
-      fetchAPI('/zonas_francas'),
-    ]);
 
-    // CORRECCIÓN: estadoHumano === 'Recomendada' (minúscula, campo real del db.json)
-    const aprobadas = solicitudes.filter(s =>
-      s.estadoHumano === 'Recomendada' || s.estadoHumano === 'aprobada'
+/* ==========================================
+   ELEMENTOS
+========================================== */
+
+const userName = document.getElementById("userName");
+const userEmail = document.getElementById("userEmail");
+const userAvatar = document.getElementById("userAvatar");
+
+const statSolicitudes = document.getElementById("statSolicitudes");
+const statEmpresas = document.getElementById("statEmpresas");
+const statTramites = document.getElementById("statTramites");
+const statDocumentos = document.getElementById("statDocumentos");
+
+const solicitudesTable =
+    document.getElementById("solicitudesTable");
+
+const activityList =
+    document.getElementById("activityList");
+
+
+/* ==========================================
+   USUARIO
+========================================== */
+
+function cargarUsuario() {
+
+    if (!sesion) {
+        return;
+    }
+
+    const nombre =
+        sesion.nombre ||
+        "Gerente";
+
+    const email =
+        sesion.email ||
+        "gerente@empresa.com";
+
+    if (userName) {
+        userName.textContent = nombre;
+    }
+
+    if (userEmail) {
+        userEmail.textContent = email;
+    }
+
+    if (userAvatar) {
+
+        const inicial =
+            nombre
+                .trim()
+                .charAt(0)
+                .toUpperCase();
+
+        userAvatar.textContent =
+            inicial || "G";
+    }
+}
+
+
+/* ==========================================
+   SOLICITUDES
+========================================== */
+
+let solicitudes = [];
+
+
+async function cargarSolicitudes() {
+
+    try {
+
+        solicitudes =
+            await fetchAPI("/solicitudes");
+
+        if (!Array.isArray(solicitudes)) {
+            solicitudes = [];
+        }
+
+        renderSolicitudes(solicitudes);
+
+        actualizarEstadisticasSolicitudes();
+
+    } catch (error) {
+
+        console.error(
+            "Error cargando solicitudes:",
+            error
+        );
+
+        renderSolicitudes([]);
+    }
+}
+
+
+/* ==========================================
+   RENDER TABLA
+========================================== */
+
+function renderSolicitudes(data) {
+
+    if (!solicitudesTable) {
+        return;
+    }
+
+    solicitudesTable.innerHTML = "";
+
+    if (data.length === 0) {
+
+        solicitudesTable.innerHTML = `
+            <tr>
+                <td colspan="5" class="empty-row">
+                    No hay solicitudes disponibles.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+
+    // Mostrar máximo 5 en el dashboard
+
+    const solicitudesMostrar =
+        data.slice(0, 5);
+
+
+    solicitudesMostrar.forEach(
+        (solicitud) => {
+
+            const fila =
+                document.createElement("tr");
+
+
+            const empresa =
+                solicitud.empresa ||
+                solicitud.organizacion ||
+                "Empresa sin nombre";
+
+
+            const tipo =
+                solicitud.tipo ||
+                solicitud.tipoSolicitud ||
+                "Solicitud";
+
+
+            const puntaje =
+                Number(
+                    solicitud.puntajeIA ||
+                    solicitud.scoreIA ||
+                    0
+                );
+
+
+            const estado =
+                solicitud.estadoHumano ||
+                solicitud.estado ||
+                solicitud.clasificacionIA ||
+                "Pendiente";
+
+
+            const iniciales =
+                obtenerIniciales(empresa);
+
+
+            const claseScore =
+                puntaje < 60
+                    ? "low"
+                    : "";
+
+
+            const claseEstado =
+                obtenerClaseEstado(estado);
+
+
+            fila.innerHTML = `
+
+                <td>
+
+                    <div class="company-cell">
+
+                        <div class="company-avatar">
+                            ${iniciales}
+                        </div>
+
+                        <span class="company-name">
+                            ${escaparHTML(empresa)}
+                        </span>
+
+                    </div>
+
+                </td>
+
+
+                <td>
+                    ${escaparHTML(tipo)}
+                </td>
+
+
+                <td>
+
+                    <div class="score">
+
+                        <div class="score-track">
+
+                            <div
+                                class="score-fill ${claseScore}"
+                                style="width:${Math.min(
+                                    Math.max(puntaje, 0),
+                                    100
+                                )}%"
+                            ></div>
+
+                        </div>
+
+                        <span
+                            class="score-number ${claseScore}"
+                        >
+                            ${puntaje}%
+                        </span>
+
+                    </div>
+
+                </td>
+
+
+                <td>
+
+                    <span
+                        class="status-badge ${claseEstado}"
+                    >
+                        ${escaparHTML(estado)}
+                    </span>
+
+                </td>
+
+
+                <td>
+
+                    <button
+                        class="view-button"
+                        title="Ver solicitud"
+                        data-id="${solicitud.id}"
+                    >
+
+                        <span class="material-symbols-outlined">
+                            visibility
+                        </span>
+
+                    </button>
+
+                </td>
+            `;
+
+
+            const boton =
+                fila.querySelector(
+                    ".view-button"
+                );
+
+
+            boton.addEventListener(
+                "click",
+                () => abrirDetalle(solicitud)
+            );
+
+
+            solicitudesTable.appendChild(
+                fila
+            );
+        }
     );
-
-    const totalSolicitudes    = solicitudes.length;
-    const porcentajeAprobadas = totalSolicitudes > 0
-      ? ((aprobadas.length / totalSolicitudes) * 100).toFixed(1)
-      : 0;
-
-    // CORRECCIÓN: campos reales del db.json (inversion, empleos)
-    const inversionCaptada  = aprobadas.reduce((sum, s) => sum + (s.inversion || 0), 0);
-    const empleosProyectados = aprobadas.reduce((sum, s) => sum + (s.empleos || 0), 0);
-    const promedioEmpleos   = aprobadas.length > 0
-      ? Math.round(empleosProyectados / aprobadas.length)
-      : 0;
-
-    // Actualizar DOM
-    document.getElementById('kpi-total-solicitudes').textContent   = totalSolicitudes;
-    document.getElementById('kpi-porcentaje-aprobadas').textContent = `${porcentajeAprobadas}%`;
-    document.getElementById('kpi-inversion-captada').textContent   = `$${inversionCaptada.toLocaleString('en-US')}`;
-    document.getElementById('kpi-tiempo-respuesta').textContent    = `${promedioEmpleos} empleados`;
-
-    // Resumen de inversión por empresa
-    renderResumenInversion(aprobadas);
-
-    console.log('Datos listos para graficar por sector:', zonas);
-
-  } catch (error) {
-    console.error('Error en cargarMetricsDashboard:', error);
-    showAlert('No fue posible consolidar las métricas ejecutivas en este momento.', 'error');
-  } finally {
-    showSpinner(false);
-  }
 }
 
-// --- Resumen de inversión en el DOM ---
-function renderResumenInversion(aprobadas) {
-  const contenedor = document.getElementById('resumen-inversion');
-  if (!contenedor) return;
 
-  if (aprobadas.length === 0) {
-    contenedor.innerHTML = '<p>No hay solicitudes aprobadas aún.</p>';
-    return;
-  }
+/* ==========================================
+   ESTADÍSTICAS
+========================================== */
 
-  contenedor.innerHTML = aprobadas.map(s => `
-    <div class="summary-item">
-      <span class="summary-empresa">${s.empresa || 'N/A'}</span>
-      <span class="summary-valor">$${(s.inversion || 0).toLocaleString('en-US')}</span>
-    </div>
-  `).join('');
+function actualizarEstadisticasSolicitudes() {
+
+    const pendientes =
+        solicitudes.filter(
+            (solicitud) => {
+
+                const estado = (
+                    solicitud.estadoHumano ||
+                    solicitud.estado ||
+                    ""
+                ).toLowerCase();
+
+                return (
+                    estado.includes("pendiente") ||
+                    estado.includes("revisión") ||
+                    estado.includes("revision")
+                );
+            }
+        );
+
+
+    if (statSolicitudes) {
+        statSolicitudes.textContent =
+            pendientes.length;
+    }
 }
 
-// --- Exportación de Reporte PROCOMER ---
-async function exportarReportePROCOMER() {
-  const btn = document.getElementById('btn-exportar-procomer');
-  btn.classList.add('btn-loading');
 
-  try {
-    await new Promise(resolve => setTimeout(resolve, 1500));
+/* ==========================================
+   CARGAR EMPRESAS
+========================================== */
 
-    // CORRECCIÓN: /reportes_cumplimiento con guión bajo
-    const [solicitudes, reportes] = await Promise.all([
-      fetchAPI('/solicitudes'),
-      fetchAPI('/reportes_cumplimiento'),
-    ]);
+async function cargarEmpresas() {
 
-    const aprobadas = solicitudes.filter(s =>
-      s.estadoHumano === 'Recomendada' || s.estadoHumano === 'aprobada'
+    try {
+
+        const empresas =
+            await fetchAPI("/empresas");
+
+        if (statEmpresas) {
+
+            statEmpresas.textContent =
+                Array.isArray(empresas)
+                    ? empresas.length
+                    : 0;
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "No se pudieron cargar las empresas:",
+            error
+        );
+
+        if (statEmpresas) {
+            statEmpresas.textContent = "0";
+        }
+    }
+}
+
+
+/* ==========================================
+   CARGAR TRÁMITES
+========================================== */
+
+async function cargarTramites() {
+
+    try {
+
+        const tramites =
+            await fetchAPI("/tramites");
+
+        if (statTramites) {
+
+            statTramites.textContent =
+                Array.isArray(tramites)
+                    ? contarTramitesActivos(tramites)
+                    : 0;
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "No se pudieron cargar los trámites:",
+            error
+        );
+
+        if (statTramites) {
+            statTramites.textContent = "0";
+        }
+    }
+}
+
+
+function contarTramitesActivos(tramites) {
+
+    return tramites.filter(
+        (tramite) => {
+
+            const estado =
+                String(
+                    tramite.estado || ""
+                ).toLowerCase();
+
+            return (
+                estado.includes("pendiente") ||
+                estado.includes("proceso") ||
+                estado.includes("revisión") ||
+                estado.includes("revision")
+            );
+        }
+    ).length;
+}
+
+
+/* ==========================================
+   CARGAR DOCUMENTOS
+========================================== */
+
+async function cargarDocumentos() {
+
+    try {
+
+        const documentos =
+            await fetchAPI("/documentos");
+
+        if (!Array.isArray(documentos)) {
+
+            if (statDocumentos) {
+                statDocumentos.textContent = "0";
+            }
+
+            return;
+        }
+
+
+        const proximos =
+            documentos.filter(
+                (documento) =>
+                    documento.proximoVencimiento === true ||
+                    documento.urgente === true
+            );
+
+
+        if (statDocumentos) {
+
+            statDocumentos.textContent =
+                proximos.length;
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "No se pudieron cargar los documentos:",
+            error
+        );
+
+        if (statDocumentos) {
+            statDocumentos.textContent = "0";
+        }
+    }
+}
+
+
+/* ==========================================
+   INDICADORES
+========================================== */
+
+function cargarIndicadores() {
+
+    const total =
+        solicitudes.length;
+
+    const procesadas =
+        solicitudes.filter(
+            (solicitud) => {
+
+                const estado = (
+                    solicitud.estadoHumano ||
+                    solicitud.estado ||
+                    ""
+                ).toLowerCase();
+
+                return (
+                    estado.includes("recomendada") ||
+                    estado.includes("aprobada") ||
+                    estado.includes("rechazada") ||
+                    estado.includes("completada")
+                );
+            }
+        ).length;
+
+
+    const porcentajeProcesadas =
+        total > 0
+            ? Math.round(
+                (procesadas / total) * 100
+            )
+            : 0;
+
+
+    const progress =
+        document.getElementById(
+            "progressProcesadas"
+        );
+
+
+    const procesadasTexto =
+        document.getElementById(
+            "procesadas"
+        );
+
+
+    if (progress) {
+
+        progress.style.width =
+            `${porcentajeProcesadas}%`;
+    }
+
+
+    if (procesadasTexto) {
+
+        procesadasTexto.textContent =
+            procesadas;
+    }
+
+
+    const recomendadas =
+        solicitudes.filter(
+            (solicitud) => {
+
+                const estado = (
+                    solicitud.clasificacionIA ||
+                    solicitud.estadoHumano ||
+                    ""
+                ).toLowerCase();
+
+                return estado.includes(
+                    "recomendada"
+                );
+            }
+        ).length;
+
+
+    const porcentajeIA =
+        total > 0
+            ? Math.round(
+                (recomendadas / total) * 100
+            )
+            : 0;
+
+
+    const iaTexto =
+        document.getElementById(
+            "recomendadas"
+        );
+
+
+    const progressIA =
+        document.getElementById(
+            "progressIA"
+        );
+
+
+    if (iaTexto) {
+        iaTexto.textContent =
+            `${porcentajeIA}%`;
+    }
+
+
+    if (progressIA) {
+        progressIA.style.width =
+            `${porcentajeIA}%`;
+    }
+}
+
+
+/* ==========================================
+   ACTIVIDAD
+========================================== */
+
+async function cargarActividad() {
+
+    if (!activityList) {
+        return;
+    }
+
+    let actividades = [];
+
+
+    try {
+
+        actividades =
+            await fetchAPI("/actividades");
+
+    } catch (error) {
+
+        console.warn(
+            "No existe el recurso actividades.",
+            error
+        );
+    }
+
+
+    if (
+        !Array.isArray(actividades) ||
+        actividades.length === 0
+    ) {
+
+        actividades = [
+            {
+                icono: "psychology",
+                titulo: "Solicitud evaluada por IA",
+                detalle: "Actividad reciente"
+            },
+            {
+                icono: "domain_add",
+                titulo: "Nueva empresa registrada",
+                detalle: "Actividad reciente"
+            },
+            {
+                icono: "assignment_turned_in",
+                titulo: "Trámite actualizado",
+                detalle: "Actividad reciente"
+            }
+        ];
+    }
+
+
+    activityList.innerHTML = "";
+
+
+    actividades
+        .slice(0, 4)
+        .forEach(
+            (actividad) => {
+
+                const elemento =
+                    document.createElement(
+                        "div"
+                    );
+
+                elemento.className =
+                    "activity-item";
+
+
+                elemento.innerHTML = `
+
+                    <div class="activity-icon">
+
+                        <span class="material-symbols-outlined">
+                            ${
+                                actividad.icono ||
+                                "history"
+                            }
+                        </span>
+
+                    </div>
+
+                    <div class="activity-content">
+
+                        <p>
+                            ${escaparHTML(
+                                actividad.titulo ||
+                                actividad.texto ||
+                                "Actividad"
+                            )}
+                        </p>
+
+                        <small>
+                            ${escaparHTML(
+                                actividad.detalle ||
+                                actividad.tiempo ||
+                                "Reciente"
+                            )}
+                        </small>
+
+                    </div>
+
+                `;
+
+
+                activityList.appendChild(
+                    elemento
+                );
+            }
+        );
+}
+
+
+/* ==========================================
+   DETALLE DE SOLICITUD
+========================================== */
+
+function abrirDetalle(solicitud) {
+
+    const modal =
+        document.getElementById(
+            "detailModal"
+        );
+
+    const modalBody =
+        document.getElementById(
+            "modalBody"
+        );
+
+
+    if (!modal || !modalBody) {
+        return;
+    }
+
+
+    const empresa =
+        solicitud.empresa ||
+        solicitud.organizacion ||
+        "Sin empresa";
+
+
+    const tipo =
+        solicitud.tipo ||
+        solicitud.tipoSolicitud ||
+        "Sin especificar";
+
+
+    const puntaje =
+        solicitud.puntajeIA ||
+        solicitud.scoreIA ||
+        0;
+
+
+    const estado =
+        solicitud.estadoHumano ||
+        solicitud.estado ||
+        solicitud.clasificacionIA ||
+        "Pendiente";
+
+
+    modalBody.innerHTML = `
+
+        <div class="modal-detail">
+
+            <div>
+                <span>
+                    Empresa
+                </span>
+
+                <strong>
+                    ${escaparHTML(empresa)}
+                </strong>
+            </div>
+
+
+            <div>
+                <span>
+                    Tipo de solicitud
+                </span>
+
+                <strong>
+                    ${escaparHTML(tipo)}
+                </strong>
+            </div>
+
+
+            <div>
+                <span>
+                    Puntaje IA
+                </span>
+
+                <strong>
+                    ${puntaje}%
+                </strong>
+            </div>
+
+
+            <div>
+                <span>
+                    Estado
+                </span>
+
+                <strong>
+                    ${escaparHTML(estado)}
+                </strong>
+            </div>
+
+        </div>
+    `;
+
+
+    modal.classList.remove(
+        "hidden"
     );
-
-    const reporteConsolidado = {
-      fechaGeneracion:               new Date().toISOString(),
-      entidad:                       'PROCOMER - Zonas Francas',
-      totalEmpresasActivas:          aprobadas.length,
-      reportesCumplimientoRecibidos: reportes.length,
-      // CORRECCIÓN: campos reales del db.json
-      resumenInversiones: aprobadas.map(s => ({
-        empresa:   s.empresa,
-        inversion: s.inversion,
-        empleos:   s.empleos,
-      })),
-    };
-
-    const blob = new Blob([JSON.stringify(reporteConsolidado, null, 2)], { type: 'application/json' });
-    const url  = URL.createObjectURL(blob);
-    const a    = document.createElement('a');
-    a.href     = url;
-    a.download = `Reporte_Procomer_${new Date().getFullYear()}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-
-    showAlert('Reporte PROCOMER generado y descargado exitosamente.', 'success');
-
-  } catch (error) {
-    showAlert('Falló la exportación del reporte ejecutivo.', 'error');
-  } finally {
-    btn.classList.remove('btn-loading');
-  }
 }
 
-// --- Inicialización ---
-document.addEventListener('DOMContentLoaded', () => {
-  cargarMetricsDashboard();
-  document.getElementById('btn-exportar-procomer')?.addEventListener('click', exportarReportePROCOMER);
-});
+
+/* ==========================================
+   MODAL
+========================================== */
+
+function cerrarModal() {
+
+    const modal =
+        document.getElementById(
+            "detailModal"
+        );
+
+    if (modal) {
+        modal.classList.add(
+            "hidden"
+        );
+    }
+}
+
+
+/* ==========================================
+   NAVEGACIÓN
+========================================== */
+
+function configurarNavegacion() {
+
+    const navItems =
+        document.querySelectorAll(
+            ".nav-item"
+        );
+
+
+    navItems.forEach(
+        (item) => {
+
+            item.addEventListener(
+                "click",
+                (event) => {
+
+                    event.preventDefault();
+
+                    navItems.forEach(
+                        (nav) =>
+                            nav.classList.remove(
+                                "active"
+                            )
+                    );
+
+                    item.classList.add(
+                        "active"
+                    );
+
+                }
+            );
+        }
+    );
+}
+
+
+/* ==========================================
+   BÚSQUEDA
+========================================== */
+
+function configurarBusqueda() {
+
+    const input =
+        document.getElementById(
+            "searchInput"
+        );
+
+
+    if (!input) {
+        return;
+    }
+
+
+    input.addEventListener(
+        "input",
+        () => {
+
+            const texto =
+                input.value
+                    .trim()
+                    .toLowerCase();
+
+
+            if (!texto) {
+
+                renderSolicitudes(
+                    solicitudes
+                );
+
+                return;
+            }
+
+
+            const filtradas =
+                solicitudes.filter(
+                    (solicitud) => {
+
+                        const empresa =
+                            String(
+                                solicitud.empresa ||
+                                solicitud.organizacion ||
+                                ""
+                            ).toLowerCase();
+
+
+                        const tipo =
+                            String(
+                                solicitud.tipo ||
+                                solicitud.tipoSolicitud ||
+                                ""
+                            ).toLowerCase();
+
+
+                        return (
+                            empresa.includes(
+                                texto
+                            ) ||
+                            tipo.includes(
+                                texto
+                            )
+                        );
+                    }
+                );
+
+
+            renderSolicitudes(
+                filtradas
+            );
+        }
+    );
+}
+
+
+/* ==========================================
+   BOTONES
+========================================== */
+
+function configurarBotones() {
+
+    document
+        .getElementById("btnLogout")
+        ?.addEventListener(
+            "click",
+            () => {
+
+                logout();
+
+                window.location.href =
+                    "../login.html";
+            }
+        );
+
+
+    document
+        .getElementById("btnMenu")
+        ?.addEventListener(
+            "click",
+            () => {
+
+                document
+                    .getElementById("sidebar")
+                    ?.classList.toggle(
+                        "open"
+                    );
+            }
+        );
+
+
+    document
+        .getElementById("closeModal")
+        ?.addEventListener(
+            "click",
+            cerrarModal
+        );
+
+
+    document
+        .querySelector(".modal-overlay")
+        ?.addEventListener(
+            "click",
+            cerrarModal
+        );
+
+
+    document
+        .getElementById("btnNuevaSolicitud")
+        ?.addEventListener(
+            "click",
+            () => {
+
+                alert(
+                    "La pantalla de Nueva Solicitud se conectará próximamente."
+                );
+            }
+        );
+
+
+    document
+        .getElementById("btnTramites")
+        ?.addEventListener(
+            "click",
+            () => {
+
+                alert(
+                    "La sección de Trámites se conectará próximamente."
+                );
+            }
+        );
+
+
+    document
+        .getElementById("btnEmpresas")
+        ?.addEventListener(
+            "click",
+            () => {
+
+                alert(
+                    "La sección de Empresas se conectará próximamente."
+                );
+            }
+        );
+
+
+    document
+        .getElementById("btnReporte")
+        ?.addEventListener(
+            "click",
+            () => {
+
+                alert(
+                    "El módulo de Reportes se conectará próximamente."
+                );
+            }
+        );
+
+
+    document
+        .getElementById("btnVerSolicitudes")
+        ?.addEventListener(
+            "click",
+            () => {
+
+                document
+                    .querySelector(
+                        ".solicitudes-panel"
+                    )
+                    ?.scrollIntoView({
+                        behavior: "smooth"
+                    });
+            }
+        );
+
+
+    document
+        .getElementById("btnNotifications")
+        ?.addEventListener(
+            "click",
+            () => {
+
+                alert(
+                    "Aquí se mostrarán las notificaciones del Gerente."
+                );
+            }
+        );
+
+
+    document
+        .getElementById("btnHelp")
+        ?.addEventListener(
+            "click",
+            () => {
+
+                alert(
+                    "Centro de ayuda de RRHH IA."
+                );
+            }
+        );
+}
+
+
+/* ==========================================
+   HELPERS
+========================================== */
+
+function obtenerIniciales(nombre) {
+
+    const palabras =
+        String(nombre)
+            .trim()
+            .split(/\s+/)
+            .filter(Boolean);
+
+
+    if (palabras.length === 0) {
+        return "EM";
+    }
+
+
+    if (palabras.length === 1) {
+
+        return palabras[0]
+            .substring(0, 2)
+            .toUpperCase();
+    }
+
+
+    return (
+        palabras[0].charAt(0) +
+        palabras[1].charAt(0)
+    ).toUpperCase();
+}
+
+
+function obtenerClaseEstado(estado) {
+
+    const valor =
+        String(estado)
+            .toLowerCase();
+
+
+    if (
+        valor.includes("recomend")
+    ) {
+        return "status-recomendada";
+    }
+
+
+    if (
+        valor.includes("revisión") ||
+        valor.includes("revision")
+    ) {
+        return "status-revision";
+    }
+
+
+    if (
+        valor.includes("rechaz")
+    ) {
+        return "status-rechazada";
+    }
+
+
+    return "status-pendiente";
+}
+
+
+function escaparHTML(valor) {
+
+    return String(valor)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+
+/* ==========================================
+   INICIALIZACIÓN
+========================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async () => {
+
+        cargarUsuario();
+
+        configurarNavegacion();
+
+        configurarBusqueda();
+
+        configurarBotones();
+
+
+        await cargarSolicitudes();
+
+        await cargarEmpresas();
+
+        await cargarTramites();
+
+        await cargarDocumentos();
+
+        cargarIndicadores();
+
+        await cargarActividad();
+
+    }
+);

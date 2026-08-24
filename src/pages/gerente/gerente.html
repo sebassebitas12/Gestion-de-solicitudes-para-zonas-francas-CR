@@ -3,72 +3,667 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZoFranca CR - Panel Ejecutivo PROCOMER</title>
-    <link rel="stylesheet" href="../css/styles.css">
+
+    <title>Dashboard Gerente - RRHH IA</title>
+
+    <link rel="stylesheet" href="../../css/gerente/gerente.css">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:FILL,wght@0,400;0,500;1,400;1,500"
+        rel="stylesheet"
+    >
 </head>
+
 <body>
-    <header class="app-header">
-        <div class="header-content">
-            <h1>ZoFranca CR <span class="subtitle">Panel Consolidado PROCOMER</span></h1>
-            <button id="btn-logout" class="btn btn-outline">Cerrar Sesión</button>
+
+    <!-- =========================================
+         SIDEBAR
+    ========================================== -->
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="sidebar-brand">
+
+            <div class="brand-logo">
+                <span class="material-symbols-outlined">
+                    hub
+                </span>
+            </div>
+
+            <div>
+                <h1>RRHH IA</h1>
+                <p>Management Suite</p>
+            </div>
+
         </div>
-    </header>
 
-    <main class="app-main">
-        <div id="alert-message" class="alert hidden" role="alert" aria-live="assertive"></div>
 
-        <!-- Sección de KPIs -->
-        <section class="kpi-grid" aria-label="Indicadores Clave de Desempeño">
-            <article class="kpi-card">
-                <h3>Total Solicitudes Procesadas</h3>
-                <span id="kpi-total-solicitudes" class="kpi-value">0</span>
-            </article>
-            <article class="kpi-card">
-                <h3>% Solicitudes Aprobadas</h3>
-                <span id="kpi-porcentaje-aprobadas" class="kpi-value">0%</span>
-            </article>
-            <article class="kpi-card">
-                <h3>Tiempo Prom. Respuesta</h3>
-                <span id="kpi-tiempo-respuesta" class="kpi-value">0 días</span>
-            </article>
-            <article class="kpi-card">
-                <h3>Inversión Total Captada</h3>
-                <span id="kpi-inversion-captada" class="kpi-value">$0</span>
-            </article>
-        </section>
+        <nav class="sidebar-nav">
 
-        <!-- Sección de Gráficos y Resumen -->
-        <section class="charts-grid">
-            <article class="card">
-                <h2>Resumen de Cumplimiento por Sector</h2>
-                <div class="chart-container">
-                    <canvas id="chart-cumplimiento-sector" role="img" aria-label="Gráfico de cumplimiento por sector"></canvas>
-                    <div id="spinner-loading" class="spinner-container hidden">
-                        <span class="spinner"></span> Generando gráfico...
-                    </div>
-                </div>
-            </article>
+            <a href="#" class="nav-item active">
+                <span class="material-symbols-outlined">
+                    dashboard
+                </span>
+                <span>Inicio</span>
+            </a>
 
-            <article class="card">
-                <h2>Distribución de Inversión</h2>
-                <div id="resumen-inversion" class="summary-container">
-                    <!-- Resumen inyectado por JS -->
-                </div>
-            </article>
-        </section>
+            <a href="#" class="nav-item">
+                <span class="material-symbols-outlined">
+                    pending_actions
+                </span>
+                <span>Solicitudes</span>
+            </a>
 
-        <!-- Acciones Ejecutivas -->
-        <section class="executive-actions">
-            <h2>Reportes Oficiales</h2>
-            <p>Genere el reporte consolidado para auditoría institucional.</p>
-            <button id="btn-exportar-procomer" class="btn btn-primary">
-                <span id="spinner-export" class="spinner hidden"></span>
-                <span class="btn-text">Generar y Exportar Reporte PROCOMER</span>
+            <a href="#" class="nav-item">
+                <span class="material-symbols-outlined">
+                    business
+                </span>
+                <span>Empresas</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                <span class="material-symbols-outlined">
+                    assignment
+                </span>
+                <span>Trámites</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                <span class="material-symbols-outlined">
+                    description
+                </span>
+                <span>Documentos</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                <span class="material-symbols-outlined">
+                    analytics
+                </span>
+                <span>Reportes</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                <span class="material-symbols-outlined">
+                    group
+                </span>
+                <span>Usuarios</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                <span class="material-symbols-outlined">
+                    settings
+                </span>
+                <span>Configuración</span>
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-user">
+
+            <div class="user-avatar" id="userAvatar">
+                G
+            </div>
+
+            <div class="user-info">
+                <strong id="userName">
+                    Gerente
+                </strong>
+
+                <span id="userEmail">
+                    gerente@empresa.com
+                </span>
+
+                <small>
+                    Gerente
+                </small>
+            </div>
+
+            <button
+                id="btnLogout"
+                class="logout-button"
+                title="Cerrar sesión"
+            >
+                <span class="material-symbols-outlined">
+                    logout
+                </span>
             </button>
-        </section>
-    </main>
 
-    <!-- CORRECCIÓN: type="module" -->
-    <script type="module" src="../js/gerente.js"></script>
+        </div>
+
+    </aside>
+
+
+    <!-- =========================================
+         CONTENIDO PRINCIPAL
+    ========================================== -->
+
+    <div class="main-wrapper">
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button
+                    id="btnMenu"
+                    class="menu-button"
+                    aria-label="Abrir menú"
+                >
+                    <span class="material-symbols-outlined">
+                        menu
+                    </span>
+                </button>
+
+                <div>
+
+                    <h2>
+                        Panel del Gerente
+                    </h2>
+
+                    <p>
+                        Supervisión general y seguimiento de la operación
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="topbar-actions">
+
+                <div class="search-box">
+
+                    <span class="material-symbols-outlined">
+                        search
+                    </span>
+
+                    <input
+                        type="search"
+                        id="searchInput"
+                        placeholder="Buscar..."
+                    >
+
+                </div>
+
+
+                <button
+                    class="topbar-button"
+                    id="btnNotifications"
+                    title="Notificaciones"
+                >
+                    <span class="material-symbols-outlined">
+                        notifications
+                    </span>
+
+                    <span
+                        class="notification-dot"
+                        id="notificationDot"
+                    ></span>
+                </button>
+
+
+                <button
+                    class="topbar-button"
+                    id="btnHelp"
+                    title="Ayuda"
+                >
+                    <span class="material-symbols-outlined">
+                        help_outline
+                    </span>
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- =====================================
+             DASHBOARD
+        ====================================== -->
+
+        <main class="dashboard">
+
+            <!-- TARJETAS -->
+
+            <section class="stats-grid">
+
+                <article class="stat-card">
+
+                    <div class="stat-top">
+
+                        <span>
+                            Solicitudes pendientes
+                        </span>
+
+                        <div class="stat-icon danger">
+                            <span class="material-symbols-outlined">
+                                pending_actions
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <div class="stat-bottom">
+
+                        <strong id="statSolicitudes">
+                            0
+                        </strong>
+
+                        <span class="stat-warning">
+                            <span class="material-symbols-outlined">
+                                trending_up
+                            </span>
+
+                            Requieren atención
+                        </span>
+
+                    </div>
+
+                </article>
+
+
+                <article class="stat-card">
+
+                    <div class="stat-top">
+
+                        <span>
+                            Empresas activas
+                        </span>
+
+                        <div class="stat-icon blue-light">
+                            <span class="material-symbols-outlined">
+                                business
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <div class="stat-bottom">
+
+                        <strong id="statEmpresas">
+                            0
+                        </strong>
+
+                        <span class="stat-positive">
+                            <span class="material-symbols-outlined">
+                                trending_up
+                            </span>
+
+                            Activas
+                        </span>
+
+                    </div>
+
+                </article>
+
+
+                <article class="stat-card">
+
+                    <div class="stat-top">
+
+                        <span>
+                            Trámites en proceso
+                        </span>
+
+                        <div class="stat-icon blue">
+                            <span class="material-symbols-outlined">
+                                assignment
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <div class="stat-bottom">
+
+                        <strong id="statTramites">
+                            0
+                        </strong>
+
+                        <span class="stat-neutral">
+                            En seguimiento
+                        </span>
+
+                    </div>
+
+                </article>
+
+
+                <article class="stat-card">
+
+                    <div class="stat-top">
+
+                        <span>
+                            Próximos a vencer
+                        </span>
+
+                        <div class="stat-icon gray">
+                            <span class="material-symbols-outlined">
+                                event_busy
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <div class="stat-bottom">
+
+                        <strong id="statDocumentos">
+                            0
+                        </strong>
+
+                        <span class="stat-warning">
+                            Alerta de documentos
+                        </span>
+
+                    </div>
+
+                </article>
+
+            </section>
+
+
+            <!-- CONTENIDO PRINCIPAL -->
+
+            <section class="dashboard-grid">
+
+                <!-- SOLICITUDES -->
+
+                <div class="panel solicitudes-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h3>
+                                Solicitudes que requieren atención
+                            </h3>
+
+                            <p>
+                                Solicitudes pendientes de seguimiento
+                            </p>
+                        </div>
+
+                        <button
+                            class="text-button"
+                            id="btnVerSolicitudes"
+                        >
+                            Ver todas
+
+                            <span class="material-symbols-outlined">
+                                arrow_forward
+                            </span>
+                        </button>
+
+                    </div>
+
+
+                    <div class="table-wrapper">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Empresa
+                                    </th>
+
+                                    <th>
+                                        Tipo
+                                    </th>
+
+                                    <th>
+                                        IA Score
+                                    </th>
+
+                                    <th>
+                                        Estado
+                                    </th>
+
+                                    <th>
+                                        Acción
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="solicitudesTable">
+
+                                <!-- JS -->
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+
+                <!-- COLUMNA DERECHA -->
+
+                <div class="right-column">
+
+                    <!-- INDICADORES -->
+
+                    <div class="panel">
+
+                        <div class="panel-header simple">
+
+                            <h3>
+                                Indicadores de operación
+                            </h3>
+
+                        </div>
+
+
+                        <div class="indicators">
+
+                            <div class="indicator">
+
+                                <div class="indicator-header">
+
+                                    <span>
+                                        Solicitudes procesadas
+                                    </span>
+
+                                    <strong id="procesadas">
+                                        0
+                                    </strong>
+
+                                </div>
+
+                                <div class="progress">
+                                    <div
+                                        class="progress-bar blue"
+                                        id="progressProcesadas"
+                                    ></div>
+                                </div>
+
+                            </div>
+
+
+                            <div class="indicator">
+
+                                <div class="indicator-header">
+
+                                    <span>
+                                        Recomendadas por IA
+                                    </span>
+
+                                    <strong id="recomendadas">
+                                        0%
+                                    </strong>
+
+                                </div>
+
+                                <div class="progress">
+                                    <div
+                                        class="progress-bar light-blue"
+                                        id="progressIA"
+                                    ></div>
+                                </div>
+
+                            </div>
+
+
+                            <div class="average-time">
+
+                                <span>
+                                    Tiempo promedio
+                                </span>
+
+                                <strong id="tiempoPromedio">
+                                    2.4 días
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ACTIVIDAD -->
+
+                    <div class="panel activity-panel">
+
+                        <div class="panel-header simple">
+
+                            <h3>
+                                Actividad reciente
+                            </h3>
+
+                        </div>
+
+                        <div
+                            class="activity-list"
+                            id="activityList"
+                        >
+
+                            <!-- JS -->
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ACCIONES RÁPIDAS -->
+
+            <section class="quick-actions">
+
+                <h3>
+                    Acciones rápidas
+                </h3>
+
+                <div class="quick-actions-list">
+
+                    <button
+                        class="quick-action primary"
+                        id="btnNuevaSolicitud"
+                    >
+                        <span class="material-symbols-outlined">
+                            add
+                        </span>
+
+                        Nueva Solicitud
+                    </button>
+
+
+                    <button
+                        class="quick-action"
+                        id="btnTramites"
+                    >
+                        <span class="material-symbols-outlined">
+                            rule
+                        </span>
+
+                        Revisar trámites
+                    </button>
+
+
+                    <button
+                        class="quick-action"
+                        id="btnEmpresas"
+                    >
+                        <span class="material-symbols-outlined">
+                            business
+                        </span>
+
+                        Ver empresas
+                    </button>
+
+
+                    <button
+                        class="quick-action"
+                        id="btnReporte"
+                    >
+                        <span class="material-symbols-outlined">
+                            download
+                        </span>
+
+                        Generar reporte
+                    </button>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- =========================================
+         MODAL DE DETALLE
+    ========================================== -->
+
+    <div
+        id="detailModal"
+        class="modal hidden"
+    >
+
+        <div class="modal-overlay"></div>
+
+        <div class="modal-content">
+
+            <button
+                id="closeModal"
+                class="modal-close"
+            >
+                <span class="material-symbols-outlined">
+                    close
+                </span>
+            </button>
+
+            <h3>
+                Detalle de solicitud
+            </h3>
+
+            <div id="modalBody">
+                <!-- JS -->
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script
+        type="module"
+        src="../../js/gerente/gerente.js"
+    ></script>
+
 </body>
 </html>

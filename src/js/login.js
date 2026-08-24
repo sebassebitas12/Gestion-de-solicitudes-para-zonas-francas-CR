@@ -11,13 +11,13 @@ const rutasPorRol = {
         'empresa/empresa.html',
 
     analista:
-        'analista.html',
+        'analista/analista.html',
 
     administrador:
-        'administrador.html',
+        'administrador/administrador.html',
 
     gerente:
-        'gerente.html'
+        'gerente/gerente.html'
 
 };
 
@@ -27,10 +27,7 @@ const rutasPorRol = {
 // ==========================================
 
 const selectorRol =
-    document.getElementById(
-        'rol-usuario'
-    );
-
+    document.getElementById('rol-usuario');
 
 if (selectorRol) {
 
@@ -54,10 +51,7 @@ function mostrarAlerta(
 ) {
 
     const alerta =
-        document.getElementById(
-            'alert-message'
-        );
-
+        document.getElementById('alert-message');
 
     if (!alerta) {
 
@@ -66,30 +60,18 @@ function mostrarAlerta(
         return;
     }
 
-
-    alerta.textContent =
-        mensaje;
-
+    alerta.textContent = mensaje;
 
     alerta.className =
         `alert-banner alert-${tipo}`;
 
+    alerta.classList.remove('hidden');
 
-    alerta.classList.remove(
-        'hidden'
-    );
+    setTimeout(() => {
 
+        alerta.classList.add('hidden');
 
-    setTimeout(
-        () => {
-
-            alerta.classList.add(
-                'hidden'
-            );
-
-        },
-        5000
-    );
+    }, 5000);
 }
 
 
@@ -98,10 +80,7 @@ function mostrarAlerta(
 // ==========================================
 
 const formulario =
-    document.getElementById(
-        'login-form'
-    );
-
+    document.getElementById('login-form');
 
 if (formulario) {
 
@@ -121,60 +100,56 @@ async function manejarLogin(event) {
 
     event.preventDefault();
 
-
     const boton =
-        document.getElementById(
-            'btn-login'
-        );
-
+        document.getElementById('btn-login');
 
     const spinner =
-        document.getElementById(
-            'spinner-loading'
-        );
+        document.getElementById('spinner-loading');
 
 
     if (boton) {
-
         boton.disabled = true;
-
     }
 
-
     if (spinner) {
-
-        spinner.classList.remove(
-            'hidden'
-        );
-
+        spinner.classList.remove('hidden');
     }
 
 
     try {
 
-        const email =
-            document.getElementById(
-                'email'
-            )?.value.trim();
+        // --------------------------------------
+        // OBTENER DATOS
+        // --------------------------------------
 
+        const email =
+            document
+                .getElementById('email')
+                ?.value
+                .trim();
 
         const password =
-            document.getElementById(
-                'password'
-            )?.value;
+            document
+                .getElementById('password')
+                ?.value;
 
+
+        // --------------------------------------
+        // VALIDAR CAMPOS
+        // --------------------------------------
 
         if (!email || !password) {
 
             throw new Error(
                 'Ingrese su correo y contraseña.'
             );
+
         }
 
 
-        // ------------------------------
+        // --------------------------------------
         // AUTENTICAR
-        // ------------------------------
+        // --------------------------------------
 
         const sesion =
             await login(
@@ -184,23 +159,35 @@ async function manejarLogin(event) {
 
 
         console.log(
-            'Sesión iniciada:',
+            'Sesión iniciada correctamente:',
             sesion
         );
 
 
-        // ------------------------------
-        // OBTENER RUTA
-        // ------------------------------
+        // --------------------------------------
+        // OBTENER ROL
+        // --------------------------------------
+
+        const rol =
+            String(
+                sesion.rol || ''
+            )
+                .toLowerCase()
+                .trim();
+
+
+        console.log(
+            'Rol detectado:',
+            rol
+        );
+
+
+        // --------------------------------------
+        // BUSCAR RUTA
+        // --------------------------------------
 
         const ruta =
-            rutasPorRol[
-                String(
-                    sesion.rol
-                )
-                    .toLowerCase()
-                    .trim()
-            ];
+            rutasPorRol[rol];
 
 
         if (!ruta) {
@@ -208,48 +195,49 @@ async function manejarLogin(event) {
             throw new Error(
                 `El usuario tiene un rol no configurado: ${sesion.rol}`
             );
+
         }
 
 
-        // ------------------------------
-        // REDIRECCIÓN
-        // ------------------------------
+        console.log(
+            'Redirigiendo a:',
+            ruta
+        );
 
-        window.location.href =
-            ruta;
+
+        // --------------------------------------
+        // REDIRECCIÓN
+        // --------------------------------------
+
+        window.location.href = ruta;
 
 
     } catch (error) {
 
         console.error(
-            'Error de login:',
+            'Error durante el inicio de sesión:',
             error
         );
 
 
         mostrarAlerta(
-            error.message
+            error.message ||
+            'No se pudo iniciar sesión.'
         );
 
 
     } finally {
 
         if (boton) {
-
             boton.disabled = false;
-
         }
 
-
         if (spinner) {
-
-            spinner.classList.add(
-                'hidden'
-            );
-
+            spinner.classList.add('hidden');
         }
 
     }
+
 }
 
 
@@ -262,15 +250,10 @@ document.addEventListener(
     () => {
 
         const passwordInput =
-            document.getElementById(
-                'password'
-            );
-
+            document.getElementById('password');
 
         const togglePassword =
-            document.getElementById(
-                'toggle-password'
-            );
+            document.getElementById('toggle-password');
 
 
         if (

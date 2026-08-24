@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ZoFranca CR - Panel del Administrador</title>
+
+    <!-- Fuentes de Stitch -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Material Symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:FILL@0..1"
+        rel="stylesheet"
+    >
+
+    <!-- CSS del administrador -->
+    <link rel="stylesheet" href="../../css/administrador/administrador.css">
+</head>
+
+<body>
+
+    <!-- =========================================================
+         SIDEBAR
+    ========================================================== -->
+
+    <aside class="admin-sidebar">
+
+        <!-- Marca -->
+        <div class="admin-brand">
+
+            <div class="admin-brand-icon">
+                <span class="material-symbols-outlined">
+                    memory
+                </span>
+            </div>
+
+            <div class="admin-brand-text">
+                <h1>ZoFranca CR</h1>
+                <span>Plataforma de Gestión</span>
+            </div>
+
+        </div>
+
+
+        <!-- Navegación -->
+        <nav class="admin-navigation">
+
+            <a href="#" class="admin-nav-item active">
+                <span class="material-symbols-outlined filled">
+                    dashboard
+                </span>
+
+                <span>Inicio</span>
+            </a>
+
+
+            <a href="#" class="admin-nav-item">
+                <span class="material-symbols-outlined">
+                    group
+                </span>
+
+                <span>Usuarios</span>
+            </a>
+
+
+            <a href="#" class="admin-nav-item">
+                <span class="material-symbols-outlined">
+                    business
+                </span>
+
+                <span>Empresas</span>
+            </a>
+
+
+            <a href="#" class="admin-nav-item">
+                <span class="material-symbols-outlined">
+                    pending_actions
+                </span>
+
+                <span>Solicitudes</span>
+            </a>
+
+
+            <a href="#" class="admin-nav-item">
+                <span class="material-symbols-outlined">
+                    assignment
+                </span>
+
+                <span>Trámites</span>
+            </a>
+
+
+            <a href="#" class="admin-nav-item">
+                <span class="material-symbols-outlined">
+                    description
+                </span>
+
+                <span>Documentos</span>
+            </a>
+
+
+            <a href="#" class="admin-nav-item">
+                <span class="material-symbols-outlined">
+                    analytics
+                </span>
+
+                <span>Reportes</span>
+            </a>
+
+
+            <a href="#" class="admin-nav-item">
+                <span class="material-symbols-outlined">
+                    settings
+                </span>
+
+                <span>Configuración</span>
+            </a>
+
+        </nav>
+
+
+        <!-- Perfil -->
+        <div class="admin-profile">
+
+            <div class="admin-profile-info">
+
+                <div class="admin-avatar" id="admin-avatar">
+                    A
+                </div>
+
+                <div class="admin-profile-text">
+
+                    <strong id="admin-name">
+                        Administrador
+                    </strong>
+
+                    <span id="admin-email">
+                        admin@zofranca.cr
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="btn-logout"
+                class="admin-logout"
+            >
+
+                <span class="material-symbols-outlined">
+                    logout
+                </span>
+
+                Cerrar Sesión
+
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =========================================================
+         CONTENIDO PRINCIPAL
+    ========================================================== -->
+
+    <div class="admin-main">
+
+        <!-- HEADER -->
+
+        <header class="admin-topbar">
+
+            <div class="admin-page-title">
+
+                <h2>
+                    Panel del Administrador
+                </h2>
+
+                <p>
+                    Administración general y control de la plataforma
+                </p>
+
+            </div>
+
+
+            <div class="admin-topbar-actions">
+
+                <!-- Buscador -->
+
+                <div class="admin-search">
+
+                    <span class="material-symbols-outlined">
+                        search
+                    </span>
+
+                    <input
+                        type="text"
+                        id="admin-search"
+                        placeholder="Buscar..."
+                    >
+
+                </div>
+
+
+                <!-- Notificaciones -->
+
+                <button
+                    type="button"
+                    class="admin-icon-button"
+                    title="Notificaciones"
+                >
+
+                    <span class="material-symbols-outlined">
+                        notifications
+                    </span>
+
+                    <span class="notification-dot"></span>
+
+                </button>
+
+
+                <!-- Ayuda -->
+
+                <button
+                    type="button"
+                    class="admin-icon-button admin-help-button"
+                    title="Ayuda"
+                >
+
+                    <span class="material-symbols-outlined">
+                        help_outline
+                    </span>
+
+                </button>
+
+
+                <div class="admin-divider"></div>
+
+
+                <!-- Avatar superior -->
+
+                <button
+                    type="button"
+                    class="admin-top-avatar"
+                    title="Perfil"
+                >
+
+                    <span id="top-avatar">
+                        A
+                    </span>
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- =====================================================
+             CANVAS
+        ====================================================== -->
+
+        <main class="admin-content">
+
+            <div class="admin-container">
+
+                <!-- Mensaje -->
+
+                <div
+                    id="alert-message"
+                    class="admin-alert hidden"
+                    role="alert"
+                ></div>
+
+
+                <!-- =================================================
+                     ESTADÍSTICAS
+                ================================================== -->
+
+                <section class="admin-stats-grid">
+
+                    <!-- Usuarios -->
+
+                    <article class="admin-stat-card">
+
+                        <div class="admin-stat-decoration"></div>
+
+                        <div class="admin-stat-header">
+
+                            <span>
+                                Usuarios registrados
+                            </span>
+
+                            <div class="admin-stat-icon blue">
+
+                                <span class="material-symbols-outlined">
+                                    group
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="admin-stat-value" id="stat-users">
+                            0
+                        </div>
+
+                        <div class="admin-stat-footer">
+
+                            <span class="stat-positive">
+
+                                <span class="material-symbols-outlined">
+                                    trending_up
+                                </span>
+
+                                <span id="stat-active-users">
+                                    0% activos
+                                </span>
+
+                            </span>
+
+                        </div>
+
+                    </article>
+
+
+                    <!-- Empresas -->
+
+                    <article class="admin-stat-card">
+
+                        <div class="admin-stat-decoration"></div>
+
+                        <div class="admin-stat-header">
+
+                            <span>
+                                Empresas registradas
+                            </span>
+
+                            <div class="admin-stat-icon blue">
+
+                                <span class="material-symbols-outlined">
+                                    business
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="admin-stat-value" id="stat-companies">
+                            0
+                        </div>
+
+                        <div class="admin-stat-footer">
+
+                            <span class="stat-neutral">
+                                Empresas en la plataforma
+                            </span>
+
+                        </div>
+
+                    </article>
+
+
+                    <!-- Solicitudes -->
+
+                    <article class="admin-stat-card">
+
+                        <div class="admin-stat-decoration red"></div>
+
+                        <div class="admin-stat-header">
+
+                            <span>
+                                Solicitudes pendientes
+                            </span>
+
+                            <div class="admin-stat-icon red">
+
+                                <span class="material-symbols-outlined">
+                                    pending_actions
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="admin-stat-value" id="stat-pending">
+                            0
+                        </div>
+
+                        <div class="admin-stat-footer">
+
+                            <span class="stat-warning">
+                                Requieren atención
+                            </span>
+
+                        </div>
+
+                    </article>
+
+
+                    <!-- Trámites -->
+
+                    <article class="admin-stat-card">
+
+                        <div class="admin-stat-decoration orange"></div>
+
+                        <div class="admin-stat-header">
+
+                            <span>
+                                Trámites en proceso
+                            </span>
+
+                            <div class="admin-stat-icon orange">
+
+                                <span class="material-symbols-outlined">
+                                    autorenew
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="admin-stat-value" id="stat-process">
+                            0
+                        </div>
+
+                        <div class="admin-stat-footer">
+
+                            <span class="stat-neutral">
+                                En seguimiento
+                            </span>
+
+                        </div>
+
+                    </article>
+
+                </section>
+
+
+                <!-- =================================================
+                     FILA PRINCIPAL
+                ================================================== -->
+
+                <section class="admin-main-grid">
+
+                    <!-- Usuarios recientes -->
+
+                    <article class="admin-panel users-panel">
+
+                        <div class="admin-panel-header">
+
+                            <h3>
+                                Usuarios recientes
+                            </h3>
+
+                            <button
+                                type="button"
+                                class="admin-link-button"
+                            >
+                                Ver todos
+                            </button>
+
+                        </div>
+
+
+                        <div class="admin-table-wrapper">
+
+                            <table class="admin-table">
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>
+                                            Usuario
+                                        </th>
+
+                                        <th>
+                                            Email
+                                        </th>
+
+                                        <th>
+                                            Rol
+                                        </th>
+
+                                        <th>
+                                            Estado
+                                        </th>
+
+                                        <th>
+                                            Último acceso
+                                        </th>
+
+                                        <th>
+                                            Acción
+                                        </th>
+
+                                    </tr>
+
+                                </thead>
+
+
+                                <tbody id="usuarios-recientes">
+
+                                    <tr>
+
+                                        <td
+                                            colspan="6"
+                                            class="table-loading"
+                                        >
+                                            Cargando usuarios...
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </article>
+
+
+                    <!-- Actividad -->
+
+                    <article class="admin-panel activity-panel">
+
+                        <div class="admin-panel-header">
+
+                            <h3>
+                                Actividad reciente
+                            </h3>
+
+                        </div>
+
+
+                        <div
+                            id="actividad-reciente"
+                            class="activity-list"
+                        >
+
+                            <div class="activity-loading">
+                                Cargando actividad...
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                </section>
+
+
+                <!-- =================================================
+                     SEGUNDA FILA
+                ================================================== -->
+
+                <section class="admin-main-grid">
+
+                    <!-- Empresas -->
+
+                    <article class="admin-panel companies-panel">
+
+                        <div class="admin-panel-header">
+
+                            <h3>
+                                Empresas recientes
+                            </h3>
+
+                            <button
+                                type="button"
+                                class="admin-icon-small"
+                            >
+
+                                <span class="material-symbols-outlined">
+                                    more_vert
+                                </span>
+
+                            </button>
+
+                        </div>
+
+
+                        <div
+                            id="empresas-recientes"
+                            class="companies-grid"
+                        >
+
+                            <div class="company-loading">
+                                Cargando empresas...
+                            </div>
+
+                        </div>
+
+                    </article>
+
+
+                    <!-- Estado -->
+
+                    <article class="admin-panel system-panel">
+
+                        <div class="admin-panel-header">
+
+                            <h3>
+                                Estado del sistema
+                            </h3>
+
+                        </div>
+
+
+                        <div class="system-status">
+
+                            <div class="progress-item">
+
+                                <div class="progress-label">
+
+                                    <strong>
+                                        Usuarios activos
+                                    </strong>
+
+                                    <span id="progress-users-value">
+                                        0%
+                                    </span>
+
+                                </div>
+
+                                <div class="progress-bar">
+
+                                    <div
+                                        id="progress-users"
+                                        class="progress-fill blue"
+                                        style="width: 0%"
+                                    ></div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="progress-item">
+
+                                <div class="progress-label">
+
+                                    <strong>
+                                        Empresas activas
+                                    </strong>
+
+                                    <span id="progress-companies-value">
+                                        0%
+                                    </span>
+
+                                </div>
+
+                                <div class="progress-bar">
+
+                                    <div
+                                        id="progress-companies"
+                                        class="progress-fill blue-light"
+                                        style="width: 0%"
+                                    ></div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="progress-item">
+
+                                <div class="progress-label">
+
+                                    <strong>
+                                        Solicitudes procesadas
+                                    </strong>
+
+                                    <span id="progress-requests-value">
+                                        0%
+                                    </span>
+
+                                </div>
+
+                                <div class="progress-bar">
+
+                                    <div
+                                        id="progress-requests"
+                                        class="progress-fill dark"
+                                        style="width: 0%"
+                                    ></div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="progress-item">
+
+                                <div class="progress-label">
+
+                                    <strong>
+                                        Documentos vigentes
+                                    </strong>
+
+                                    <span id="progress-documents-value">
+                                        0%
+                                    </span>
+
+                                </div>
+
+                                <div class="progress-bar">
+
+                                    <div
+                                        id="progress-documents"
+                                        class="progress-fill green"
+                                        style="width: 0%"
+                                    ></div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                </section>
+
+
+                <!-- =================================================
+                     ACCIONES RÁPIDAS
+                ================================================== -->
+
+                <section class="quick-actions">
+
+                    <h3>
+                        Acciones rápidas
+                    </h3>
+
+
+                    <div class="quick-actions-list">
+
+                        <button
+                            type="button"
+                            class="quick-action primary"
+                            id="action-new-user"
+                        >
+
+                            <span class="material-symbols-outlined">
+                                person_add
+                            </span>
+
+                            Nuevo usuario
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="quick-action"
+                            id="action-new-company"
+                        >
+
+                            <span class="material-symbols-outlined">
+                                domain_add
+                            </span>
+
+                            Nueva empresa
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="quick-action"
+                            id="action-review"
+                        >
+
+                            <span class="material-symbols-outlined">
+                                fact_check
+                            </span>
+
+                            Revisar solicitudes
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="quick-action"
+                            id="action-report"
+                        >
+
+                            <span class="material-symbols-outlined">
+                                summarize
+                            </span>
+
+                            Generar reporte
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="quick-action"
+                            id="action-settings"
+                        >
+
+                            <span class="material-symbols-outlined">
+                                settings
+                            </span>
+
+                            Configuración
+
+                        </button>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+        </main>
+
+    </div>
+
+
+    <!-- JS del administrador -->
+
+    <script
+        type="module"
+        src="../../js/administrador/administrador.js"
+    ></script>
+
+</body>
+</html>

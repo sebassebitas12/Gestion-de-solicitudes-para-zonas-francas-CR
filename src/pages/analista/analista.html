@@ -3,102 +3,817 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZoFranca CR - Panel del Analista</title>
-    <link rel="stylesheet" href="../css/styles.css">
+
+    <title>RRHH IA - Panel del Analista</title>
+
+    <!-- Tipografía Stitch -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Material Symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- CSS global -->
+    <link rel="stylesheet" href="../../css/styles.css">
+
+    <!-- CSS específico del analista -->
+    <link rel="stylesheet" href="../../css/analista/analista.css">
 </head>
+
 <body>
-    <header class="app-header">
-        <div class="header-content">
-            <h1>ZoFranca CR <span class="subtitle">Panel de Analista</span></h1>
-            <button id="btn-logout" class="btn btn-outline">Cerrar Sesión</button>
+
+    <!-- ==========================================
+         SIDEBAR
+    =========================================== -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+
+            <div class="brand-icon">
+                R
+            </div>
+
+            <div>
+                <h1>RRHH IA</h1>
+                <span>Enterprise Analyst</span>
+            </div>
+
         </div>
-    </header>
 
-    <main class="app-main">
-        <div id="alert-message" class="alert hidden" role="alert" aria-live="assertive"></div>
 
-        <!-- Barra de Filtros -->
-        <section class="filters-bar" aria-label="Filtros de búsqueda">
-            <div class="form-group-inline">
-                <label for="filter-estado">Estado:</label>
-                <select id="filter-estado" name="filter-estado">
-                    <option value="todas">Todas</option>
-                    <option value="recomendada">Recomendada (IA)</option>
-                    <option value="revisar">Revisar</option>
-                    <option value="rechazada">Rechazada</option>
-                </select>
-            </div>
-            <div class="form-group-inline">
-                <label for="filter-sector">Sector:</label>
-                <select id="filter-sector" name="filter-sector">
-                    <option value="todos">Todos</option>
-                    <option value="tecnologia">Tecnología</option>
-                    <option value="manufactura">Manufactura</option>
-                    <option value="bpo">BPO</option>
-                </select>
-            </div>
-            <div class="form-group-inline">
-                <label for="filter-fecha">Fecha:</label>
-                <input type="date" id="filter-fecha" name="filter-fecha">
-            </div>
-            <button id="btn-apply-filters" class="btn btn-secondary">Filtrar</button>
-        </section>
+        <nav class="sidebar-nav">
 
-        <!-- Tabla Dinámica -->
-        <section class="table-container">
-            <h2>Solicitudes Pendientes</h2>
-            <table id="tabla-solicitudes" class="data-table">
-                <thead>
-                    <tr>
-                        <th scope="col">Empresa</th>
-                        <th scope="col">Sector</th>
-                        <th scope="col">Inversión</th>
-                        <th scope="col">Empleos</th>
-                        <th scope="col">Puntaje IA</th>
-                        <th scope="col">Estado</th>
-                        <th scope="col">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody id="tbody-solicitudes">
-                    <!-- Las filas se inyectan dinámicamente con JS -->
-                </tbody>
-            </table>
-            <div id="spinner-loading" class="spinner-container hidden">
-                <span class="spinner"></span> Cargando solicitudes...
-            </div>
-        </section>
+            <a href="#" class="nav-item active">
+                <span class="material-symbols-outlined">
+                    dashboard
+                </span>
 
-        <!-- Sección de Evaluación IA (Human-in-the-Loop) -->
-        <section id="ia-evaluation-panel" class="ia-panel hidden" aria-live="polite">
-            <h2>Evaluación de Pre-clasificación IA</h2>
-            <div class="ia-card">
-                <div class="ia-score-section">
-                    <h3>Puntaje de Afinidad</h3>
-                    <div class="score-circle">
-                        <span id="ia-puntaje">0</span> / 100
+                <span>
+                    Inicio
+                </span>
+            </a>
+
+
+            <a href="#" class="nav-item" id="navSolicitudes">
+                <span class="material-symbols-outlined">
+                    assignment
+                </span>
+
+                <span>
+                    Solicitudes
+                </span>
+            </a>
+
+
+            <a href="#" class="nav-item">
+                <span class="material-symbols-outlined">
+                    description
+                </span>
+
+                <span>
+                    Documentos
+                </span>
+            </a>
+
+
+            <a href="#" class="nav-item">
+                <span class="material-symbols-outlined">
+                    analytics
+                </span>
+
+                <span>
+                    Reportes
+                </span>
+            </a>
+
+
+            <a href="#" class="nav-item">
+                <span class="material-symbols-outlined">
+                    history
+                </span>
+
+                <span>
+                    Historial
+                </span>
+            </a>
+
+        </nav>
+
+
+        <!-- PERFIL -->
+
+        <div class="sidebar-profile">
+
+            <div class="profile-info">
+
+                <div
+                    class="profile-avatar"
+                    id="sidebarAvatar"
+                >
+                    AC
+                </div>
+
+                <div class="profile-text">
+
+                    <p id="sidebarNombre">
+                        Ana Chaves
+                    </p>
+
+                    <span id="sidebarRol">
+                        Analista
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <button
+                id="btnLogout"
+                class="logout-button"
+                type="button"
+            >
+
+                <span class="material-symbols-outlined">
+                    logout
+                </span>
+
+                Cerrar sesión
+
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ==========================================
+         CONTENIDO PRINCIPAL
+    =========================================== -->
+
+    <div class="main-wrapper">
+
+
+        <!-- ======================================
+             TOPBAR
+        ======================================= -->
+
+        <header class="topbar">
+
+            <div class="topbar-title">
+
+                <h2>
+                    Panel principal
+                </h2>
+
+                <p>
+                    Resumen de actividad y solicitudes pendientes
+                </p>
+
+            </div>
+
+
+            <div class="topbar-actions">
+
+                <!-- Buscador -->
+
+                <div class="top-search">
+
+                    <span class="material-symbols-outlined">
+                        search
+                    </span>
+
+                    <input
+                        type="text"
+                        id="searchGlobal"
+                        placeholder="Buscar..."
+                    >
+
+                </div>
+
+
+                <!-- Notificaciones -->
+
+                <button
+                    class="top-icon-button"
+                    type="button"
+                    title="Notificaciones"
+                >
+
+                    <span class="material-symbols-outlined">
+                        notifications
+                    </span>
+
+                    <span
+                        class="notification-dot"
+                        id="notificationDot"
+                    ></span>
+
+                </button>
+
+
+                <!-- Configuración -->
+
+                <button
+                    class="top-icon-button"
+                    type="button"
+                    title="Configuración"
+                >
+
+                    <span class="material-symbols-outlined">
+                        settings
+                    </span>
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- ======================================
+             MAIN
+        ======================================= -->
+
+        <main class="dashboard-content">
+
+
+            <!-- BIENVENIDA -->
+
+            <section class="welcome-section">
+
+                <h3 id="welcomeTitle">
+                    Buenos días, Ana
+                </h3>
+
+                <p>
+                    Aquí tienes el resumen de las solicitudes que requieren tu atención.
+                </p>
+
+            </section>
+
+
+            <!-- ==================================
+                 TARJETAS
+            =================================== -->
+
+            <section class="metrics-grid">
+
+
+                <!-- Pendientes -->
+
+                <article class="metric-card">
+
+                    <div class="metric-top">
+
+                        <div class="metric-icon">
+
+                            <span class="material-symbols-outlined">
+                                assignment_late
+                            </span>
+
+                        </div>
+
+                        <strong id="metricPendientes">
+                            0
+                        </strong>
+
                     </div>
-                    <div class="progress-bar-container">
-                        <div id="ia-progress-bar" class="progress-bar" style="width: 0%;"></div>
+
+                    <div>
+
+                        <h4>
+                            Solicitudes pendientes
+                        </h4>
+
+                        <p>
+                            Requieren revisión
+                        </p>
+
                     </div>
+
+                </article>
+
+
+                <!-- En revisión -->
+
+                <article class="metric-card">
+
+                    <div class="metric-top">
+
+                        <div class="metric-icon">
+
+                            <span class="material-symbols-outlined">
+                                visibility
+                            </span>
+
+                        </div>
+
+                        <strong id="metricRevision">
+                            0
+                        </strong>
+
+                    </div>
+
+                    <div>
+
+                        <h4>
+                            En revisión
+                        </h4>
+
+                        <p>
+                            Solicitudes en proceso
+                        </p>
+
+                    </div>
+
+                </article>
+
+
+                <!-- Aprobadas -->
+
+                <article class="metric-card">
+
+                    <div class="metric-top">
+
+                        <div class="metric-icon metric-icon-success">
+
+                            <span class="material-symbols-outlined">
+                                check_circle
+                            </span>
+
+                        </div>
+
+                        <strong id="metricAprobadas">
+                            0
+                        </strong>
+
+                    </div>
+
+                    <div>
+
+                        <h4>
+                            Solicitudes aprobadas
+                        </h4>
+
+                        <p>
+                            Solicitudes procesadas
+                        </p>
+
+                    </div>
+
+                </article>
+
+
+                <!-- Atención -->
+
+                <article class="metric-card metric-card-alert">
+
+                    <div class="metric-top">
+
+                        <div class="metric-icon metric-icon-alert">
+
+                            <span class="material-symbols-outlined">
+                                priority_high
+                            </span>
+
+                        </div>
+
+                        <strong id="metricAtencion">
+                            0
+                        </strong>
+
+                    </div>
+
+                    <div>
+
+                        <h4>
+                            Requieren atención
+                        </h4>
+
+                        <p>
+                            Casos prioritarios
+                        </p>
+
+                    </div>
+
+                </article>
+
+            </section>
+
+
+            <!-- ==================================
+                 TABLA + ACTIVIDAD
+            =================================== -->
+
+            <section class="dashboard-columns">
+
+
+                <!-- TABLA -->
+
+                <div class="panel requests-panel">
+
+                    <div class="panel-header">
+
+                        <h3>
+                            Solicitudes que requieren atención
+                        </h3>
+
+                        <button
+                            id="btnVerSolicitudes"
+                            class="text-action"
+                            type="button"
+                        >
+
+                            Ver todas
+
+                            <span class="material-symbols-outlined">
+                                arrow_forward
+                            </span>
+
+                        </button>
+
+                    </div>
+
+
+                    <div class="table-wrapper">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        ID
+                                    </th>
+
+                                    <th>
+                                        Empresa
+                                    </th>
+
+                                    <th>
+                                        Sector
+                                    </th>
+
+                                    <th>
+                                        Puntaje IA
+                                    </th>
+
+                                    <th>
+                                        Fecha
+                                    </th>
+
+                                    <th>
+                                        Estado
+                                    </th>
+
+                                    <th>
+                                        Acción
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="tbodySolicitudes">
+
+                                <tr>
+
+                                    <td
+                                        colspan="7"
+                                        class="loading-cell"
+                                    >
+                                        Cargando solicitudes...
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
                 </div>
-                <div class="ia-justification-section">
-                    <h3>Justificación del Motor de IA</h3>
-                    <p id="ia-justificacion">Seleccione una solicitud de la tabla para ver el análisis de la IA...</p>
+
+
+                <!-- ACTIVIDAD -->
+
+                <div class="panel activity-panel">
+
+                    <div class="panel-header">
+
+                        <h3>
+                            Actividad reciente
+                        </h3>
+
+                    </div>
+
+
+                    <div
+                        class="activity-list"
+                        id="activityList"
+                    >
+
+                        <div class="activity-loading">
+                            Cargando actividad...
+                        </div>
+
+                    </div>
+
                 </div>
+
+            </section>
+
+
+            <!-- ==================================
+                 EMPRESAS + ACCIONES
+            =================================== -->
+
+            <section class="bottom-columns">
+
+
+                <!-- EMPRESAS -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <h3>
+                            Empresas con solicitudes pendientes
+                        </h3>
+
+                    </div>
+
+
+                    <div
+                        class="companies-list"
+                        id="companiesList"
+                    >
+
+                        <div class="activity-loading">
+                            Cargando empresas...
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ACCIONES RÁPIDAS -->
+
+                <div class="panel quick-panel">
+
+                    <div class="panel-header">
+
+                        <h3>
+                            Acciones rápidas
+                        </h3>
+
+                    </div>
+
+
+                    <div class="quick-actions">
+
+
+                        <button
+                            type="button"
+                            id="quickSolicitudes"
+                            class="quick-action"
+                        >
+
+                            <span class="material-symbols-outlined">
+                                assignment
+                            </span>
+
+                            <span>
+                                Ver solicitudes
+                            </span>
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="quick-action"
+                        >
+
+                            <span class="material-symbols-outlined">
+                                folder
+                            </span>
+
+                            <span>
+                                Revisar documentos
+                            </span>
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="quick-action"
+                        >
+
+                            <span class="material-symbols-outlined">
+                                bar_chart
+                            </span>
+
+                            <span>
+                                Generar reporte
+                            </span>
+
+                        </button>
+
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- ==========================================
+         MODAL DE SOLICITUD
+    =========================================== -->
+
+    <div
+        id="solicitudModal"
+        class="modal-overlay hidden"
+    >
+
+        <div class="modal">
+
+            <div class="modal-header">
+
+                <div>
+
+                    <span class="modal-label">
+                        SOLICITUD
+                    </span>
+
+                    <h3 id="modalSolicitudId">
+                        -
+                    </h3>
+
+                </div>
+
+                <button
+                    id="btnCloseModal"
+                    class="modal-close"
+                    type="button"
+                >
+
+                    <span class="material-symbols-outlined">
+                        close
+                    </span>
+
+                </button>
+
             </div>
 
-            <div class="human-decision-controls">
-                <h3>Decisión Final del Analista</h3>
-                <div class="btn-group">
-                    <button id="btn-aprobar" class="btn btn-success">Aprobar Solicitud</button>
-                    <button id="btn-revisar" class="btn btn-warning">Requerir Revisión</button>
-                    <button id="btn-rechazar" class="btn btn-danger">Rechazar Solicitud</button>
-                </div>
-            </div>
-        </section>
-    </main>
 
-    <!-- CORRECCIÓN: type="module" -->
-    <script type="module" src="../js/analista.js"></script>
+            <div class="modal-body">
+
+                <div class="detail-grid">
+
+                    <div class="detail-item">
+
+                        <span>
+                            Empresa
+                        </span>
+
+                        <strong id="modalEmpresa">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Sector
+                        </span>
+
+                        <strong id="modalSector">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Inversión
+                        </span>
+
+                        <strong id="modalInversion">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Empleos
+                        </span>
+
+                        <strong id="modalEmpleos">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Puntaje IA
+                        </span>
+
+                        <strong id="modalPuntaje">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Clasificación IA
+                        </span>
+
+                        <strong id="modalClasificacion">
+                            -
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="ia-justification">
+
+                    <div class="ia-title">
+
+                        <span class="material-symbols-outlined">
+                            auto_awesome
+                        </span>
+
+                        Análisis de IA
+
+                    </div>
+
+                    <p id="modalJustificacion">
+                        -
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    id="btnCloseModalFooter"
+                    class="modal-button secondary"
+                    type="button"
+                >
+                    Cerrar
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- JS -->
+    <script
+        type="module"
+        src="../../js/analista/analista.js"
+    ></script>
+
 </body>
 </html>
