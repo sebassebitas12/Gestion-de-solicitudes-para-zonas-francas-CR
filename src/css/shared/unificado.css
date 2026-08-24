@@ -1,0 +1,384 @@
+/* ==========================================
+   Procomer - CAPA DE UNIFICACIÓN VISUAL
+   Iguala tarjetas, paneles, botones y
+   detalles entre los dashboards de los 4
+   roles (Administrador, Gerente, Analista,
+   Empresa). Se carga SIEMPRE al final para
+   normalizar sin reestructurar layouts.
+   ========================================== */
+
+
+/* ------------------------------------------
+   TARJETAS DE INDICADORES (una sola forma)
+------------------------------------------ */
+
+.stat-card,
+.metric-card,
+.admin-stat-card {
+
+    background: #ffffff;
+
+    border: 1px solid #e0e3e5;
+
+    border-radius: 14px;
+
+    padding: 20px 22px;
+
+    min-height: 150px;
+
+    box-shadow: 0 8px 24px rgba(19, 27, 46, 0.07);
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.stat-card:hover,
+.metric-card:hover,
+.admin-stat-card:hover {
+
+    border-color: rgba(8, 90, 192, 0.35);
+
+    box-shadow: 0 12px 28px rgba(19, 27, 46, 0.11);
+
+    transform: translateY(-2px);
+}
+
+
+/* Números grandes idénticos */
+
+.stat-card > strong,
+.metric-top strong,
+.admin-stat-value {
+
+    color: #131b2e;
+
+    font-size: 38px;
+
+    line-height: 1.1;
+
+    font-weight: 800;
+
+    letter-spacing: -0.02em;
+}
+
+
+/* Etiquetas superiores idénticas */
+
+.stat-top,
+.metric-top strong ~ *,
+.admin-stat-header > span {
+
+    font-size: 13.5px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.01em;
+
+    color: #45464d;
+}
+
+
+/* Texto descriptivo bajo el número */
+
+.stat-card > p {
+
+    margin-top: 10px;
+
+    font-family: "Hanken Grotesk", sans-serif;
+
+    font-size: 12px;
+
+    letter-spacing: 0;
+
+    color: #55606c;
+}
+
+
+.metric-card h4 {
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    color: #191c1e;
+}
+
+
+/* Chips de icono idénticos (círculo suave) */
+
+.stat-icon,
+.metric-icon,
+.admin-stat-icon {
+
+    width: 38px !important;
+
+    height: 38px !important;
+
+    min-width: 38px;
+
+    border-radius: 50% !important;
+
+    display: inline-flex !important;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+.stat-icon .material-symbols-outlined,
+
+.metric-icon .material-symbols-outlined,
+
+.admin-stat-icon .material-symbols-outlined {
+
+    font-size: 21px;
+}
+
+
+/* ------------------------------------------
+   ENCABEZADOS DE PANEL / SECCIÓN
+------------------------------------------ */
+
+.panel-header h3,
+.welcome-section h2,
+.topbar-title h2 {
+
+    color: #131b2e;
+
+    font-weight: 800;
+
+    letter-spacing: -0.01em;
+}
+
+
+.panel-header p {
+
+    color: #55606c;
+
+    font-size: 12.5px;
+}
+
+
+/* ------------------------------------------
+   BOTONES COMPARTIDOS
+------------------------------------------ */
+
+.primary-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 10px 18px;
+
+    border-radius: 10px;
+
+    border: none;
+
+    background: linear-gradient(135deg, #131b2e, #1d2942);
+
+    color: #ffffff;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    box-shadow: 0 4px 12px rgba(19, 27, 46, 0.22);
+
+    transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease,
+        filter 0.18s ease;
+}
+
+
+.primary-button:hover {
+
+    filter: brightness(1.25);
+
+    box-shadow: 0 6px 16px rgba(19, 27, 46, 0.30);
+
+    transform: translateY(-1px);
+}
+
+
+.secondary-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 10px 18px;
+
+    border-radius: 10px;
+
+    border: 1px solid #d7dde3;
+
+    background: #ffffff;
+
+    color: #33404e;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    transition:
+        background 0.18s ease,
+        border-color 0.18s ease,
+        transform 0.18s ease;
+}
+
+
+.secondary-button:hover {
+
+    background: #f4f6f8;
+
+    border-color: #b9c3cd;
+
+    transform: translateY(-1px);
+}
+
+
+.text-button {
+
+    color: #085ac0;
+
+    font-weight: 700;
+}
+
+
+.text-button:hover {
+
+    text-decoration: underline;
+}
+
+
+.primary-button:focus-visible,
+.secondary-button:focus-visible,
+.text-button:focus-visible {
+
+    outline: 2px solid #5b94fd;
+
+    outline-offset: 2px;
+}
+
+
+/* ------------------------------------------
+   BOTÓN CERRAR SESIÓN EN SIDEBAR (Empresa)
+   Gana al estilo base .menu-item del aside.
+------------------------------------------ */
+
+.sidebar-footer a.zof-logout {
+
+    align-self: flex-start;
+
+    background: linear-gradient(180deg, #ffffff, #fdf5f4);
+
+    border: 1px solid rgba(186, 26, 26, 0.18);
+
+    border-radius: 999px;
+
+    color: #ba1a1a;
+
+    padding: 7px 16px 7px 8px;
+
+    gap: 9px;
+
+    box-shadow:
+        0 1px 2px rgba(19, 27, 46, 0.06),
+        inset 0 1px 0 #ffffff;
+}
+
+
+.sidebar-footer a.zof-logout:hover {
+
+    background: linear-gradient(135deg, #ba1a1a, #d32f2f);
+
+    border-color: transparent;
+
+    color: #ffffff;
+
+    box-shadow: 0 8px 20px rgba(186, 26, 26, 0.30);
+
+    transform: translateY(-1px);
+}
+
+
+.sidebar-footer a.zof-logout .material-symbols-outlined {
+
+    width: 26px;
+
+    height: 26px;
+
+    border-radius: 50%;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: rgba(186, 26, 26, 0.10);
+
+    color: #ba1a1a;
+
+    font-size: 16px;
+}
+
+
+.sidebar-footer a.zof-logout:hover .material-symbols-outlined {
+
+    background: rgba(255, 255, 255, 0.22);
+
+    color: #ffffff;
+
+    transform: translateX(2px);
+}
+
+
+/* ------------------------------------------
+   FONDOS Y DETALLES GLOBALES
+------------------------------------------ */
+
+body {
+
+    background: #f7f9fb;
+}
+
+
+::-webkit-scrollbar {
+
+    width: 10px;
+
+    height: 10px;
+}
+
+
+::-webkit-scrollbar-track {
+
+    background: transparent;
+}
+
+
+::-webkit-scrollbar-thumb {
+
+    background: #c9d1d9;
+
+    border-radius: 999px;
+
+    border: 2px solid #f7f9fb;
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+
+    background: #aab5bf;
+}

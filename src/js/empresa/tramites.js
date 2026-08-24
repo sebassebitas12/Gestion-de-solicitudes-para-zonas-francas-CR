@@ -1,5 +1,5 @@
 // ==========================================
-// ZoFranca CR - PANEL DE TRÁMITES
+// Procomer - PANEL DE TRÁMITES
 // (Módulo Empresa)
 // ==========================================
 

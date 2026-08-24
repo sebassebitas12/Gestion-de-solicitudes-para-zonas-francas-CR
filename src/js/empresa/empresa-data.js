@@ -1,5 +1,5 @@
 // ==========================================
-// ZoFranca CR - CAPA DE DATOS DEL MÓDULO EMPRESA
+// Procomer - CAPA DE DATOS DEL MÓDULO EMPRESA
 // API real donde existe (solicitudes, alertas,
 // historial, reportes) y datos derivados/mock
 // preparados para conectar a una API futura.
@@ -571,7 +571,7 @@ export function getTiposDocumento() {
 export function descargarDocumento(documento) {
 
     const contenido = [
-        'ZoFranca CR - Documento',
+        'Procomer - Documento',
         '========================',
         `Nombre: ${documento.nombre}`,
         `Tipo: ${documento.tipo}`,

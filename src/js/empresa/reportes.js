@@ -1,5 +1,5 @@
 // ==========================================
-// ZoFranca CR - PANEL DE REPORTES
+// Procomer - PANEL DE REPORTES
 // (Módulo Empresa)
 // ==========================================
 
@@ -711,7 +711,7 @@ function construirCSV(reporte) {
 
 
     return [
-        `ZoFranca CR - Reporte: ${reporte.nombre}`,
+        `Procomer - Reporte: ${reporte.nombre}`,
         `Empresa: ${sesionActual.nombre || ''} (${sesionActual.empresaId})`,
         `Generado: ${formatearFecha(reporte.fecha)}`,
         '',

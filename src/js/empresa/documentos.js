@@ -1,5 +1,5 @@
 // ==========================================
-// ZoFranca CR - PANEL DE DOCUMENTOS
+// Procomer - PANEL DE DOCUMENTOS
 // (Módulo Empresa)
 // ==========================================
 

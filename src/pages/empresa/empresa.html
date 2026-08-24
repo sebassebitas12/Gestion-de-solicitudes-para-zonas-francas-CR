@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Dashboard - ZoFranca CR</title>
+    <title>Dashboard - Procomer</title>
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="../../css/empresa/empresa.css">
     <link rel="stylesheet" href="../../css/empresa/paneles.css">
     <link rel="stylesheet" href="../../css/decor.css">
+    <link rel="stylesheet" href="../../css/shared/unificado.css">
 </head>
 
 <body>
@@ -43,7 +44,7 @@
     <aside class="sidebar">
 
         <div class="sidebar-header">
-            <h1>ZoFranca CR</h1>
+            <h1>Procomer</h1>
             <p>Enterprise Core</p>
         </div>
 
@@ -67,6 +68,10 @@
             <a href="documentos.html" class="menu-item">
                 <span class="material-symbols-outlined">description</span>
                 <span>Documentos</span>
+            </a>
+            <a href="cumplimientos.html" class="menu-item">
+                <span class="material-symbols-outlined">verified</span>
+                <span>Cumplimientos</span>
             </a>
 
             <a href="reportes.html" class="menu-item">
@@ -204,6 +209,44 @@
                 Nueva solicitud
 
             </button>
+
+        </section>
+
+
+        <!-- =========================
+             CUMPLIMIENTOS
+        ========================== -->
+        <section
+            class="compliance-section"
+            id="seccionCumplimientos"
+            aria-label="Cumplimientos de la empresa"
+        >
+
+            <div class="panel-header">
+
+                <div>
+                    <h3>
+                        Cumplimientos de la empresa
+                    </h3>
+
+                    <p>
+                        Estado de sus obligaciones documentales y de trámites
+                    </p>
+                </div>
+
+                <button class="primary-button" id="btnVerCumplimientos">
+
+                    <span class="material-symbols-outlined">
+                        verified
+                    </span>
+
+                    Ver cumplimientos
+
+                </button>
+
+            </div>
+
+            <div id="contenedorCumplimientos"></div>
 
         </section>
 
@@ -581,7 +624,7 @@
     <footer class="footer">
 
         <p>
-            ZoFranca CR | v2.4.1 | Sistema Seguro • ISO 27001
+            Procomer | v2.4.1 | Sistema Seguro • ISO 27001
         </p>
 
         <div class="footer-links">

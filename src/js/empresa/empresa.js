@@ -27,6 +27,11 @@ import {
     encolarNotificacion
 } from '../shared/ui.js';
 
+import {
+    calcularCumplimientos,
+    renderizarPanelCumplimiento
+} from '../shared/cumplimientos.js';
+
 
 // ==========================================
 // ESTADO DEL DASHBOARD
@@ -105,6 +110,8 @@ async function iniciarDashboard() {
     cargarResumenTramites();
     await cargarEstadoGeneral();
 
+    await cargarPanelCumplimientos();
+
     // --------------------------------------
     // 5. Eventos
     // --------------------------------------
@@ -150,6 +157,7 @@ function configurarEventos() {
   navegarA('qaSubirDocumento', 'documentos.html');
   navegarA('qaVerNotificaciones', 'notificaciones.html');
   navegarA('qaGenerarReporte', 'reportes.html');
+  navegarA('btnVerCumplimientos', 'cumplimientos.html');
 
 
   // Campana de la barra superior
@@ -163,6 +171,49 @@ function configurarEventos() {
         window.location.href =
           'notificaciones.html';
       }
+    );
+  }
+}
+
+
+// ==========================================
+// CUMPLIMIENTOS DE LA EMPRESA (resumen)
+// Usa el motor global shared/cumplimientos.js
+// ==========================================
+
+async function cargarPanelCumplimientos() {
+
+  try {
+
+    const resumen =
+      await calcularCumplimientos(
+        usuarioActual.empresaId
+      );
+
+    const contenedor =
+      document.getElementById(
+        'contenedorCumplimientos'
+      );
+
+    if (!contenedor) {
+      return;
+    }
+
+    contenedor.innerHTML = '';
+
+    contenedor.appendChild(
+      renderizarPanelCumplimiento(resumen, {
+        titulo: `Cumplimiento de ${
+          usuarioActual.organizacion || 'la empresa'
+        }`
+      })
+    );
+
+  } catch (error) {
+
+    console.error(
+      'Error calculando cumplimientos:',
+      error
     );
   }
 }
@@ -213,7 +264,7 @@ function configurarMenu() {
 
           showNotification({
             type: 'info',
-            title: 'Próximamente',
+            title: 'Funcionalidad próximamente',
             message: 'Esta sección estará disponible próximamente.'
           });
         }
@@ -242,7 +293,7 @@ function configurarMenu() {
           if (!item.classList.contains('active')) {
             showNotification({
               type: 'info',
-              title: 'Próximamente',
+              title: 'Funcionalidad próximamente',
               message: 'Esta sección estará disponible próximamente.'
             });
           }

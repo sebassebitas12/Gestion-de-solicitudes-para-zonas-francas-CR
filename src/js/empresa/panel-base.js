@@ -1,5 +1,5 @@
 // ==========================================
-// ZoFranca CR - BASE COMPARTIDA DE LOS
+// Procomer - BASE COMPARTIDA DE LOS
 // PANELES DEL MÓDULO EMPRESA
 // ==========================================
 
@@ -93,7 +93,7 @@ export function iniciarPanelBase(sesion) {
             () => showNotification({
                 type: 'info',
                 title: 'Ayuda',
-                message: 'Centro de ayuda de ZoFranca CR.'
+                message: 'Centro de ayuda de Procomer.'
             })
         );
     }
@@ -112,7 +112,7 @@ export function iniciarPanelBase(sesion) {
 
                 showNotification({
                     type: 'info',
-                    title: 'Próximamente',
+                    title: 'Funcionalidad próximamente',
                     message: 'Esta sección estará disponible próximamente.'
                 });
             }

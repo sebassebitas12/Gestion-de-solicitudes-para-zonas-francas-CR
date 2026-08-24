@@ -1,5 +1,5 @@
 // ==========================================
-// ZoFranca CR - LOGOUT COMPARTIDO
+// Procomer - LOGOUT COMPARTIDO
 // Cierre de sesión con confirmación propia
 // de la aplicación (sin confirm() nativo) y
 // notificación visual no bloqueante.
@@ -9,7 +9,8 @@ import { logout } from '../../services/auth.service.js';
 
 import {
     encolarNotificacion,
-    mostrarConfirmacion
+    mostrarConfirmacion,
+    estilizarBotonLogout
 } from './ui.js';
 
 export const LOGIN_URL = '../login.html';
@@ -38,9 +39,9 @@ export async function solicitarCierreSesion() {
 
     const aceptar =
         await mostrarConfirmacion({
-            titulo: '¿Cerrar sesión?',
-            mensaje: 'Se cerrará tu sesión actual y volverás a la pantalla de inicio.',
-            textoConfirmar: 'Cerrar sesión',
+            titulo: 'Cerrar sesión',
+            mensaje: '¿Está seguro de que desea cerrar su sesión?',
+            textoConfirmar: 'Confirmar',
             textoCancelar: 'Cancelar'
         });
 
@@ -76,6 +77,11 @@ export function configurarLogout(buttonId) {
     if (!button) {
         return;
     }
+
+    // Identidad visual única del botón en
+    // todos los roles (Administrador, Gerente,
+    // Analista y Empresa).
+    estilizarBotonLogout(button);
 
 
     button.addEventListener(

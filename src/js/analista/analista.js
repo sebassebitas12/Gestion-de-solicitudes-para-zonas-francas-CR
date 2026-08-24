@@ -1,5 +1,5 @@
 // ==========================================
-// ZoFranca CR - PANEL DEL ANALISTA
+// Procomer - PANEL DEL ANALISTA
 // ==========================================
 
 import { getSesion, logout } from '../../services/auth.service.js';
@@ -9,6 +9,11 @@ import {
     showNotification,
     encolarNotificacion
 } from '../shared/ui.js';
+
+import {
+    calcularResumenEmpresas,
+    renderizarResumenEmpresas
+} from '../shared/cumplimientos.js';
 
 
 // ==========================================
@@ -1222,7 +1227,7 @@ function configurarNavegacion() {
 
                     showNotification({
                         type: 'info',
-                        title: 'Próximamente',
+                        title: 'Funcionalidad próximamente',
                         message: `El módulo "${texto || 'seleccionado'}" estará disponible próximamente.`
                     });
 
@@ -1304,6 +1309,51 @@ function configurarModal() {
 // INICIALIZACIÓN
 // ==========================================
 
+// ==========================================
+// CUMPLIMIENTOS (Analista)
+// Usa el motor global shared/cumplimientos.js
+// con el endpoint real de empresas.
+// ==========================================
+
+async function cargarCumplimientosAnalista() {
+
+    try {
+
+        const { agregado, detalles } =
+            await calcularResumenEmpresas();
+
+        const contenedor =
+            document.getElementById(
+                'contenedorCumplimientoAnalista'
+            );
+
+        if (!contenedor) {
+            return;
+        }
+
+        contenedor.innerHTML = '';
+
+        contenedor.appendChild(
+            renderizarResumenEmpresas(
+                agregado,
+                detalles,
+                {
+                    titulo:
+                        'Cumplimientos de las empresas analizadas'
+                }
+            )
+        );
+
+    } catch (error) {
+
+        console.error(
+            'Error calculando cumplimientos:',
+            error
+        );
+    }
+}
+
+
 async function inicializar() {
 
     cargarUsuario();
@@ -1326,6 +1376,8 @@ async function inicializar() {
         cargarHistorial()
 
     ]);
+
+    await cargarCumplimientosAnalista();
 
 }
 

@@ -1,6 +1,6 @@
 /*
  * ============================================================
- * ZoFranca CR
+ * Procomer
  * Panel del Administrador
  * ============================================================
  */
@@ -13,6 +13,11 @@ import {
     showNotification,
     encolarNotificacion
 } from '../shared/ui.js';
+
+import {
+    calcularResumenEmpresas,
+    renderizarResumenEmpresas
+} from '../shared/cumplimientos.js';
 
 import {
     configurarLogout
@@ -170,7 +175,7 @@ function cargarPerfil() {
 
     const email =
         session.email ||
-        'admin@zofranca.cr';
+        'admin@procomer.cr';
 
     const initials =
         getInitials(nombre);
@@ -1185,7 +1190,7 @@ function configurarNavegacion() {
                     event.preventDefault();
 
                     showAlert(
-                        `Módulo "${text}" pendiente de conexión.`,
+                        'Esta sección estará disponible próximamente.',
                         'info'
                     );
                 }
@@ -1253,6 +1258,60 @@ function configurarBusqueda() {
    INICIALIZACIÓN
    ============================================================ */
 
+// ==========================================
+// CUMPLIMIENTO GLOBAL (Administrador)
+// Usa el motor global shared/cumplimientos.js
+// con el endpoint real de empresas.
+// ==========================================
+
+async function cargarCumplimientoGlobal() {
+
+    try {
+
+        const { agregado, detalles } =
+            await calcularResumenEmpresas();
+
+        const contenedor =
+            document.getElementById(
+                'contenedorCumplimientoAdmin'
+            );
+
+        if (contenedor) {
+
+            contenedor.innerHTML = '';
+
+            contenedor.appendChild(
+                renderizarResumenEmpresas(
+                    agregado,
+                    detalles,
+                    {
+                        titulo:
+                            'Cumplimientos de las empresas registradas'
+                    }
+                )
+            );
+        }
+
+        const valor =
+            document.getElementById(
+                'stat-cumplimiento-global'
+            );
+
+        if (valor) {
+            valor.textContent =
+                `${agregado.promedio}%`;
+        }
+
+    } catch (error) {
+
+        console.error(
+            'Error calculando cumplimiento global:',
+            error
+        );
+    }
+}
+
+
 async function inicializar() {
 
     cargarPerfil();
@@ -1281,6 +1340,8 @@ async function inicializar() {
         cargarActividad()
 
     ]);
+
+    await cargarCumplimientoGlobal();
 }
 
 

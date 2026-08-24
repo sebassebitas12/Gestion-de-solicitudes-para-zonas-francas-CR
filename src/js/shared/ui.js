@@ -1,5 +1,5 @@
 // ==========================================
-// ZoFranca CR - UI COMPARTIDA GLOBAL
+// Procomer - UI COMPARTIDA GLOBAL
 // Sistema unificado de notificaciones web
 // (toasts) y diálogos de confirmación.
 //
@@ -508,6 +508,125 @@ const ESTILOS_UI = `
 }
 
 
+/* Botón "Cerrar sesión" unificado para todos los roles */
+
+.zof-logout {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 7px 16px 7px 8px;
+
+    border-radius: 999px;
+
+    border: 1px solid rgba(186, 26, 26, 0.18);
+
+    background: linear-gradient(180deg, #ffffff, #fdf5f4);
+
+    font-family: "Hanken Grotesk", sans-serif;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.01em;
+
+    color: #ba1a1a;
+
+    cursor: pointer;
+
+    text-decoration: none;
+
+    box-shadow:
+        0 1px 2px rgba(19, 27, 46, 0.06),
+        inset 0 1px 0 #ffffff;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.zof-logout .material-symbols-outlined {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 26px;
+
+    height: 26px;
+
+    border-radius: 50%;
+
+    background: rgba(186, 26, 26, 0.10);
+
+    color: #ba1a1a;
+
+    font-size: 16px;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.25s ease;
+}
+
+
+.zof-logout .zof-label {
+
+    line-height: 1;
+}
+
+
+.zof-logout:hover {
+
+    background: linear-gradient(135deg, #ba1a1a, #d32f2f);
+
+    border-color: transparent;
+
+    color: #ffffff;
+
+    box-shadow:
+        0 8px 20px rgba(186, 26, 26, 0.30);
+
+    transform: translateY(-1px);
+}
+
+
+.zof-logout:hover .material-symbols-outlined {
+
+    background: rgba(255, 255, 255, 0.22);
+
+    color: #ffffff;
+
+    transform: translateX(2px);
+}
+
+
+.zof-logout:focus-visible {
+
+    outline: none;
+
+    box-shadow:
+        0 0 0 3px rgba(186, 26, 26, 0.28),
+        0 1px 2px rgba(19, 27, 46, 0.06);
+}
+
+
+.zof-logout:active {
+
+    transform: translateY(0);
+}
+
+
 @media (max-width: 650px) {
 
     .zofranca-toast-container {
@@ -842,6 +961,72 @@ export function mostrarToast(mensaje, tipo = 'info', duracionMs) {
 
 
 // ==========================================
+// BOTÓN "CERRAR SESIÓN" UNIFICADO
+// Todos los roles comparten exactamente el
+// mismo diseño, icono y comportamiento.
+// ==========================================
+
+export function estilizarBotonLogout(boton) {
+
+    if (!boton) {
+        return;
+    }
+
+    boton.classList.add('zof-logout');
+
+    boton.setAttribute('type', 'button');
+
+    // La etiqueta visible ya es el nombre accesible:
+    // no se añade tooltip ni aria-label repetido.
+    boton.removeAttribute('title');
+
+    boton.removeAttribute('aria-label');
+
+
+    // Icono estándar.
+    let icono =
+        boton.querySelector('.material-symbols-outlined');
+
+    if (!icono) {
+
+        icono = document.createElement('span');
+
+        boton.prepend(icono);
+    }
+
+    icono.className = 'material-symbols-outlined';
+
+    icono.textContent = 'logout';
+
+    icono.setAttribute('aria-hidden', 'true');
+
+
+    // Elimina TODO el contenido previo excepto el
+    // icono (textos y spans antiguos): así la
+    // palabra nunca aparece duplicada.
+    Array.from(boton.childNodes)
+        .forEach(nodo => {
+
+            if (nodo !== icono) {
+                nodo.remove();
+            }
+        });
+
+
+    // Etiqueta única visible.
+    const etiqueta =
+        document.createElement('span');
+
+    etiqueta.className = 'zof-label';
+
+    etiqueta.textContent =
+        'Cerrar sesión';
+
+    boton.appendChild(etiqueta);
+}
+
+
+// ==========================================
 // CONFIRMACIÓN SIN BLOQUEAR
 // Reemplazo propio de confirm() nativo.
 // Devuelve Promise<boolean>.
@@ -877,12 +1062,12 @@ export function mostrarConfirmacion(opciones = {}) {
         const titulo =
             opciones.titulo ||
             opciones.title ||
-            '¿Confirmar acción?';
+            'Confirmar acción';
 
         const descripcion =
             opciones.mensaje ||
             opciones.message ||
-            'Esta acción se aplicará de inmediato.';
+            '¿Está seguro de que desea continuar?';
 
         const textoConfirmar =
             opciones.textoConfirmar || 'Confirmar';

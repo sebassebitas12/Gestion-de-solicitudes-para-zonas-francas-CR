@@ -6,6 +6,11 @@ import {
     encolarNotificacion
 } from "../shared/ui.js";
 
+import {
+    calcularResumenEmpresas,
+    renderizarResumenEmpresas
+} from "../shared/cumplimientos.js";
+
 
 /* ==========================================
    SESIÓN
@@ -865,7 +870,7 @@ function configurarNavegacion() {
 
                     showNotification({
                         type: 'info',
-                        title: 'Próximamente',
+                        title: 'Funcionalidad próximamente',
                         message: `El módulo "${texto}" estará disponible próximamente.`
                     });
 
@@ -1001,7 +1006,7 @@ function configurarBotones() {
 
                 showNotification({
                     type: 'info',
-                    title: 'Próximamente',
+                    title: 'Funcionalidad próximamente',
                     message: "La pantalla de Nueva Solicitud se conectará próximamente."
                 });
             }
@@ -1016,7 +1021,7 @@ function configurarBotones() {
 
                 showNotification({
                     type: 'info',
-                    title: 'Próximamente',
+                    title: 'Funcionalidad próximamente',
                     message: "La sección de Trámites se conectará próximamente."
                 });
             }
@@ -1031,7 +1036,7 @@ function configurarBotones() {
 
                 showNotification({
                     type: 'info',
-                    title: 'Próximamente',
+                    title: 'Funcionalidad próximamente',
                     message: "La sección de Empresas se conectará próximamente."
                 });
             }
@@ -1046,7 +1051,7 @@ function configurarBotones() {
 
                 showNotification({
                     type: 'info',
-                    title: 'Próximamente',
+                    title: 'Funcionalidad próximamente',
                     message: "El módulo de Reportes se conectará próximamente."
                 });
             }
@@ -1078,6 +1083,48 @@ function configurarBotones() {
 /* ==========================================
    HELPERS
 ========================================== */
+
+// ------------------------------------------
+// CUMPLIMIENTO DE EMPRESAS (Gerente)
+// Usa el motor global shared/cumplimientos.js
+// con el endpoint real de empresas.
+// ------------------------------------------
+
+async function cargarCumplimientosGerente() {
+
+    try {
+
+        const { agregado, detalles } =
+            await calcularResumenEmpresas();
+
+        const contenedor =
+            document.getElementById(
+                "contenedorCumplimientoGerente"
+            );
+
+        if (!contenedor) {
+            return;
+        }
+
+        contenedor.innerHTML = "";
+
+        contenedor.appendChild(
+            renderizarResumenEmpresas(
+                agregado,
+                detalles,
+                { titulo: "Cumplimiento de empresas bajo gestión" }
+            )
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Error calculando cumplimiento de empresas:",
+            error
+        );
+    }
+}
+
 
 function obtenerIniciales(nombre) {
 
@@ -1263,6 +1310,8 @@ document.addEventListener(
         cargarIndicadores();
 
         await cargarActividad();
+
+        await cargarCumplimientosGerente();
 
     }
 );

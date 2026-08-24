@@ -1,5 +1,5 @@
 // ==========================================
-// ZoFranca CR - PANEL DE SOLICITUDES
+// Procomer - PANEL DE SOLICITUDES
 // (Módulo Empresa)
 // ==========================================
 

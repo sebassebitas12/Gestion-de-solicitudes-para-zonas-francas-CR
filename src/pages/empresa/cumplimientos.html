@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Notificaciones - Procomer</title>
+    <title>Cumplimientos - Procomer</title>
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
@@ -69,7 +69,8 @@
                 <span class="material-symbols-outlined">description</span>
                 <span>Documentos</span>
             </a>
-            <a href="cumplimientos.html" class="menu-item">
+
+            <a href="cumplimientos.html" class="menu-item active">
                 <span class="material-symbols-outlined">verified</span>
                 <span>Cumplimientos</span>
             </a>
@@ -79,7 +80,7 @@
                 <span>Reportes</span>
             </a>
 
-            <a href="notificaciones.html" class="menu-item active">
+            <a href="notificaciones.html" class="menu-item">
                 <span class="material-symbols-outlined">notifications</span>
                 <span>Notificaciones</span>
                 <span class="menu-badge" id="badgeNotificaciones" hidden></span>
@@ -113,7 +114,7 @@
                 <span>Ajustes</span>
             </a>
 
-            <a href="#" class="menu-item logout" id="btnCerrarSesion">
+            <a href="#" class="menu-item logout zof-logout-sidebar" id="btnCerrarSesion">
                 <span class="material-symbols-outlined">logout</span>
                 <span>Cerrar Sesión</span>
             </a>
@@ -130,35 +131,39 @@
 
         <div class="topbar-title">
 
-            <h2>Notificaciones</h2>
+            <h2>Cumplimientos</h2>
 
             <p>
-                Alertas y movimientos recientes de su expediente
+                Estado de las obligaciones documentales y de trámites de su empresa
             </p>
 
         </div>
 
         <div class="topbar-actions">
 
-            <button class="icon-button notification-button" title="Notificaciones" aria-label="Ver notificaciones">
-
-                <span class="material-symbols-outlined">
-                    notifications
-                </span>
-
-                <span class="notification-dot"></span>
-
-            </button>
-
             <button class="icon-button" title="Ayuda" aria-label="Ayuda">
-                <span class="material-symbols-outlined">
-                    help_outline
-                </span>
+                <span class="material-symbols-outlined">help</span>
             </button>
 
-            <div class="topbar-avatar" id="avatarEmpresaTop">
-                A
-            </div>
+            <button
+                class="icon-button notification-button"
+                title="Notificaciones"
+                aria-label="Ver notificaciones"
+            >
+                <span class="material-symbols-outlined">notifications</span>
+            </button>
+
+            <button class="user-chip" type="button">
+
+                <span class="user-avatar-small" id="avatarTopbar">
+                    A
+                </span>
+
+                <span id="nombreTopbar">
+                    Empresa ABC S.A.
+                </span>
+
+            </button>
 
         </div>
 
@@ -166,78 +171,122 @@
 
 
     <!-- =========================
-         CONTENIDO PRINCIPAL
+         CONTENIDO
     ========================== -->
     <main class="main-content">
 
-        <section class="page-head">
+        <div class="page-head zof-comp-hero">
 
-            <div>
-
-                <h2>Bandeja de notificaciones</h2>
+            <div class="zof-comp-hero-texto">
+                <h2>
+                    <span class="material-symbols-outlined" aria-hidden="true">workspace_premium</span>
+                    Cumplimientos de la empresa
+                </h2>
 
                 <p>
-                  Haga clic sobre una notificación para marcarla como leída.
+                    Conozca qué está cumplido, qué está pendiente y qué debe regularizar.
                 </p>
-
             </div>
 
             <div class="page-head-actions">
 
-                <button class="secondary-button" id="btnMarcarTodas">
+                <button class="secondary-button" id="btnActualizarCumplimientos">
 
                     <span class="material-symbols-outlined">
-                        done_all
+                        refresh
                     </span>
 
-                    Marcar todas como leídas
+                    Actualizar
 
                 </button>
 
             </div>
 
-        </section>
+        </div>
 
 
-        <!-- Pestañas de filtro -->
-        <section class="tab-row no-print" id="tabsNotificaciones">
+        <!-- Resumen general -->
+        <section
+            id="panelCumplimientoResumen"
+            aria-label="Resumen de cumplimiento"
+        >
 
-            <button class="tab active" data-filtro="">
-                Todas
-            </button>
+            <div class="empty-state">
 
-            <button class="tab" data-filtro="no_leidas">
-                No leídas
-            </button>
+                <span class="material-symbols-outlined">
+                    verified_user
+                </span>
 
-            <button class="tab" data-filtro="Alerta">
-                Alertas
-            </button>
+                <h3>
+                    Calculando cumplimiento...
+                </h3>
 
-            <button class="tab" data-filtro="Solicitud">
-                Solicitudes
-            </button>
+                <p>
+                    Estamos evaluando sus documentos y trámites.
+                </p>
 
-            <button class="tab" data-filtro="Documento">
-                Documentos
-            </button>
-
-            <button class="tab" data-filtro="Sistema">
-                Sistema
-            </button>
+            </div>
 
         </section>
 
 
-        <!-- Contador -->
-        <p class="filter-count" style="margin-bottom: 14px;" id="contadorNoLeidas"></p>
+        <!-- Filtros por estado -->
+        <section
+            class="filter-bar"
+            id="filtrosCumplimientos"
+            role="group"
+            aria-label="Filtrar por estado"
+        >
+
+            <button
+                class="filter-chip active"
+                type="button"
+                data-filtro="todos"
+            >
+                Todos
+            </button>
+
+            <button
+                class="filter-chip"
+                type="button"
+                data-filtro="cumplido"
+            >
+                Cumplidos
+            </button>
+
+            <button
+                class="filter-chip"
+                type="button"
+                data-filtro="pendiente"
+            >
+                Pendientes
+            </button>
+
+            <button
+                class="filter-chip"
+                type="button"
+                data-filtro="proximo"
+            >
+                Próximos a vencer
+            </button>
+
+            <button
+                class="filter-chip"
+                type="button"
+                data-filtro="vencido"
+            >
+                Vencidos
+            </button>
+
+        </section>
 
 
-        <!-- Lista -->
-        <section class="notif-list" id="contenedorNotificaciones">
-
-            <!-- JavaScript cargará las notificaciones -->
-
+        <!-- Detalle de items -->
+        <section
+            id="detalleCumplimientos"
+            aria-label="Detalle de cumplimientos"
+            style="margin-top: 16px;"
+        >
         </section>
 
     </main>
@@ -249,31 +298,15 @@
     <footer class="footer">
 
         <p>
-            Procomer | v2.4.1 | Sistema Seguro • ISO 27001
+            Procomer | v2.4.1 | Sistema Seguro ISO 27001
         </p>
-
-        <div class="footer-links">
-
-            <a href="#">
-                Certificaciones de Seguridad
-            </a>
-
-            <a href="#">
-                Términos de Servicio
-            </a>
-
-            <a href="#">
-                Privacidad
-            </a>
-
-        </div>
 
     </footer>
 
 
-    <!-- JavaScript -->
-    <script type="module" src="../../js/empresa/notificaciones.js"></script>
+    <script type="module" src="../../js/empresa/cumplimientos.js"></script>
 
     <script type="module" src="../../js/shared/ui.js"></script>
+
 </body>
 </html>

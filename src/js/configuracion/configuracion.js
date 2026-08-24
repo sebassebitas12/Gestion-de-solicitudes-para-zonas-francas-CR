@@ -1,5 +1,5 @@
 // ==========================================
-// ZoFranca CR - CONFIGURACIÓN
+// Procomer - CONFIGURACIÓN
 // Página compartida por todos los roles.
 // ==========================================
 
@@ -420,7 +420,7 @@ function configurarEventos() {
         ?.addEventListener(
             'click',
             () => mostrarToast(
-                'Centro de ayuda de ZoFranca CR.',
+                'Centro de ayuda de Procomer.',
                 'info'
             )
         );

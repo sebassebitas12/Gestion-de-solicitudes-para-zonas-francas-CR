@@ -1,5 +1,5 @@
 // ==========================================
-// ZoFranca CR - PANEL DE NOTIFICACIONES
+// Procomer - PANEL DE NOTIFICACIONES
 // (Módulo Empresa)
 // ==========================================
 

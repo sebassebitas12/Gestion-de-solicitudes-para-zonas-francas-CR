@@ -1,5 +1,5 @@
 // ==========================================
-// ZoFranca CR - ACCIONES DE TOPBAR
+// Procomer - ACCIONES DE TOPBAR
 // Enlaza campana, ayuda y menú contextual en
 // los paneles existentes. Autoejecutado al
 // importarse (los módulos cargan tras el DOM).
@@ -212,7 +212,7 @@ export function configurarAccionesTopbar() {
         () => {
 
             mostrarToast(
-                'Centro de ayuda de ZoFranca CR.',
+                'Centro de ayuda de Procomer.',
                 'info'
             );
         }
