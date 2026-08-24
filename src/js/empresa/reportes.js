@@ -17,7 +17,10 @@ import {
     iniciarPanelBase
 } from './panel-base.js';
 
-import { mostrarToast } from '../shared/ui.js';
+import {
+    mostrarToast,
+    showNotification
+} from '../shared/ui.js';
 
 
 let sesionActual = null;
@@ -640,9 +643,11 @@ function generarReporte() {
 
     if (filtradas.length === 0) {
 
-        alert(
-            'No hay solicitudes que coincidan con los filtros aplicados.'
-        );
+        showNotification({
+            type: 'warning',
+            title: 'Sin datos',
+            message: 'No hay solicitudes que coincidan con los filtros aplicados.'
+        });
 
         return;
     }

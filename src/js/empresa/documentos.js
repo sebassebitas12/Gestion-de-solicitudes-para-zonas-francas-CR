@@ -19,6 +19,11 @@ import {
     iniciarPanelBase
 } from './panel-base.js';
 
+import {
+    showNotification,
+    mostrarConfirmacion
+} from '../shared/ui.js';
+
 
 let sesionActual = null;
 
@@ -480,9 +485,16 @@ function renderizarDocumentos() {
                         return;
                     }
 
-                    if (
-                        !confirm(`¿Eliminar "${documento.nombre}"? Esta acción no se puede deshacer.`)
-                    ) {
+                    const aceptar =
+                        await mostrarConfirmacion({
+                            titulo: 'Eliminar documento',
+                            mensaje: `¿Eliminar "${documento.nombre}"? Esta acción no se puede deshacer.`,
+                            textoConfirmar: 'Sí, eliminar',
+                            textoCancelar: 'Cancelar',
+                            peligro: true
+                        });
+
+                    if (!aceptar) {
                         return;
                     }
 
@@ -525,7 +537,11 @@ function subirArchivo(evento) {
 
 
     cargarDatos().then(() => {
-        alert(`Documento "${archivo.name}" registrado. Queda en estado "En revisión".`);
+        showNotification({
+            type: 'success',
+            title: 'Documento registrado',
+            message: `"${archivo.name}" quedó en estado "En revisión".`
+        });
     });
 }
 

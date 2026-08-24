@@ -22,6 +22,11 @@ import {
     actualizarBadgeNotificaciones
 } from './panel-base.js';
 
+import {
+    showNotification,
+    encolarNotificacion
+} from '../shared/ui.js';
+
 
 // ==========================================
 // ESTADO DEL DASHBOARD
@@ -60,7 +65,11 @@ async function iniciarDashboard() {
     // --------------------------------------
 
     if (usuarioActual.rol !== 'empresa') {
-      alert('No tienes permisos para acceder a esta página.');
+      encolarNotificacion({
+        type: 'error',
+        title: 'Acceso no autorizado',
+        message: 'No tienes permisos para acceder a esta página.'
+      });
       logout();
       window.location.href = '../login.html';
       return;
@@ -71,7 +80,11 @@ async function iniciarDashboard() {
     // --------------------------------------
 
     if (!usuarioActual.empresaId) {
-      alert('La sesión no tiene una empresa asociada.');
+      encolarNotificacion({
+        type: 'error',
+        title: 'Sesión incompleta',
+        message: 'La sesión no tiene una empresa asociada.'
+      });
       logout();
       window.location.href = '../login.html';
       return;
@@ -198,9 +211,11 @@ function configurarMenu() {
 
           event.preventDefault();
 
-          alert(
-            'Esta sección estará disponible próximamente.'
-          );
+          showNotification({
+            type: 'info',
+            title: 'Próximamente',
+            message: 'Esta sección estará disponible próximamente.'
+          });
         }
       );
 
@@ -225,9 +240,11 @@ function configurarMenu() {
           event.preventDefault();
 
           if (!item.classList.contains('active')) {
-            alert(
-              'Esta sección estará disponible próximamente.'
-            );
+            showNotification({
+              type: 'info',
+              title: 'Próximamente',
+              message: 'Esta sección estará disponible próximamente.'
+            });
           }
         }
       }
@@ -735,7 +752,12 @@ function mostrarDetalleSolicitud(solicitud) {
   }
 
 
-  alert(mensaje);
+  showNotification({
+    type: 'info',
+    title: `Detalle de la solicitud ${solicitud.id}`,
+    message: mensaje,
+    duration: 8000
+  });
 }
 
 
@@ -1352,5 +1374,9 @@ function mostrarError(mensaje) {
 
   console.error(mensaje);
 
-  alert(mensaje);
+  showNotification({
+    type: 'error',
+    title: 'Ocurrió un problema',
+    message: mensaje
+  });
 }

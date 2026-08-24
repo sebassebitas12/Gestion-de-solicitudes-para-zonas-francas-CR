@@ -2,6 +2,9 @@ import { fetchAPI } from '../../services/api.js';
 import {
     getSesion
 } from '../../services/auth.service.js';
+import {
+    encolarNotificacion
+} from '../shared/ui.js';
 
 
 // ==========================================
@@ -51,9 +54,11 @@ async function iniciarPagina() {
             'empresa'
         ) {
 
-            alert(
-                'No tienes permisos para crear solicitudes.'
-            );
+            encolarNotificacion({
+                type: 'error',
+                title: 'Acceso no autorizado',
+                message: 'No tienes permisos para crear solicitudes.'
+            });
 
             window.location.href =
                 '../login.html';

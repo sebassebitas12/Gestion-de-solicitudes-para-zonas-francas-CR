@@ -5,6 +5,10 @@
 import { getSesion, logout } from '../../services/auth.service.js';
 import { configurarLogout } from '../shared/logout.js';
 import { fetchAPI } from '../../services/api.js';
+import {
+    showNotification,
+    encolarNotificacion
+} from '../shared/ui.js';
 
 
 // ==========================================
@@ -20,6 +24,12 @@ const sesion = getSesion();
 
 if (!sesion) {
 
+    encolarNotificacion({
+        type: 'error',
+        title: 'Acceso no autorizado',
+        message: 'Debes iniciar sesión para acceder a este panel.'
+    });
+
     window.location.href = '../login.html';
 
     throw new Error('Sesión no válida. Redirigiendo al login.');
@@ -27,6 +37,12 @@ if (!sesion) {
 }
 
 if (sesion && sesion.rol !== 'analista') {
+
+    encolarNotificacion({
+        type: 'error',
+        title: 'Acceso no autorizado',
+        message: 'Esta área está restringida al rol analista.'
+    });
 
     logout();
 
@@ -1204,9 +1220,11 @@ function configurarNavegacion() {
                             ?.textContent
                             ?.trim();
 
-                    alert(
-                        `El módulo "${texto || 'seleccionado'}" estará disponible próximamente.`
-                    );
+                    showNotification({
+                        type: 'info',
+                        title: 'Próximamente',
+                        message: `El módulo "${texto || 'seleccionado'}" estará disponible próximamente.`
+                    });
 
                 }
             );
@@ -1322,7 +1340,7 @@ document.addEventListener(
 );
 
 // ==========================================
-// CONFIGURACI�N
+// CONFIGURACI�N
 // ==========================================
 
 document

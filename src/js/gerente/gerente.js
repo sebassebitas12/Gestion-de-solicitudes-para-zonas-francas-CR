@@ -1,6 +1,10 @@
 import { getSesion, logout } from "../../services/auth.service.js";
 import { configurarLogout } from "../shared/logout.js";
 import { fetchAPI } from "../../services/api.js";
+import {
+    showNotification,
+    encolarNotificacion
+} from "../shared/ui.js";
 
 
 /* ==========================================
@@ -13,6 +17,13 @@ const sesion = getSesion();
 // Protección básica de la página
 
 if (!sesion) {
+
+    encolarNotificacion({
+        type: 'error',
+        title: 'Acceso no autorizado',
+        message: 'Debes iniciar sesión para acceder a este panel.'
+    });
+
     window.location.href = "../login.html";
 
     throw new Error(
@@ -28,6 +39,12 @@ if (
     sesion.rol &&
     sesion.rol.toLowerCase() !== "gerente"
 ) {
+    encolarNotificacion({
+        type: 'error',
+        title: 'Acceso no autorizado',
+        message: 'Esta área está restringida al rol gerente.'
+    });
+
     logout();
 
     window.location.href = "../login.html";
@@ -846,9 +863,11 @@ function configurarNavegacion() {
                     }
 
 
-                    alert(
-                        `El módulo "${texto}" estará disponible próximamente.`
-                    );
+                    showNotification({
+                        type: 'info',
+                        title: 'Próximamente',
+                        message: `El módulo "${texto}" estará disponible próximamente.`
+                    });
 
                 }
             );
@@ -980,9 +999,11 @@ function configurarBotones() {
             "click",
             () => {
 
-                alert(
-                    "La pantalla de Nueva Solicitud se conectará próximamente."
-                );
+                showNotification({
+                    type: 'info',
+                    title: 'Próximamente',
+                    message: "La pantalla de Nueva Solicitud se conectará próximamente."
+                });
             }
         );
 
@@ -993,9 +1014,11 @@ function configurarBotones() {
             "click",
             () => {
 
-                alert(
-                    "La sección de Trámites se conectará próximamente."
-                );
+                showNotification({
+                    type: 'info',
+                    title: 'Próximamente',
+                    message: "La sección de Trámites se conectará próximamente."
+                });
             }
         );
 
@@ -1006,9 +1029,11 @@ function configurarBotones() {
             "click",
             () => {
 
-                alert(
-                    "La sección de Empresas se conectará próximamente."
-                );
+                showNotification({
+                    type: 'info',
+                    title: 'Próximamente',
+                    message: "La sección de Empresas se conectará próximamente."
+                });
             }
         );
 
@@ -1019,9 +1044,11 @@ function configurarBotones() {
             "click",
             () => {
 
-                alert(
-                    "El módulo de Reportes se conectará próximamente."
-                );
+                showNotification({
+                    type: 'info',
+                    title: 'Próximamente',
+                    message: "El módulo de Reportes se conectará próximamente."
+                });
             }
         );
 
@@ -1043,30 +1070,8 @@ function configurarBotones() {
         );
 
 
-    document
-        .getElementById("btnNotifications")
-        ?.addEventListener(
-            "click",
-            () => {
-
-                alert(
-                    "Aquí se mostrarán las notificaciones del Gerente."
-                );
-            }
-        );
-
-
-    document
-        .getElementById("btnHelp")
-        ?.addEventListener(
-            "click",
-            () => {
-
-                alert(
-                    "Centro de ayuda de ZoFranca CR."
-                );
-            }
-        );
+    // Notificaciones y Ayuda del topbar las maneja
+    // el módulo compartido topbar-actions.js.
 }
 
 

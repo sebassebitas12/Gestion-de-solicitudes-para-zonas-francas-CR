@@ -1,4 +1,5 @@
 import { login, getSesion } from '../services/auth.service.js';
+import { showNotification } from './shared/ui.js';
 
 
 // ==========================================
@@ -71,13 +72,18 @@ function mostrarAlerta(
     tipo = 'error'
 ) {
 
+    // Notificación web no bloqueante (siempre).
+
+    showNotification({
+        type: tipo === 'success' ? 'success' : 'error',
+        title: tipo === 'success' ? 'Bienvenido' : 'No fue posible continuar',
+        message: mensaje
+    });
+
     const alerta =
         document.getElementById('alert-message');
 
     if (!alerta) {
-
-        alert(mensaje);
-
         return;
     }
 

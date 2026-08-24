@@ -6,7 +6,9 @@
 // ==========================================
 
 import { fetchAPI } from '../../services/api.js';
-import { logout } from '../../services/auth.service.js';
+
+import { solicitarCierreSesion } from './logout.js';
+
 import { mostrarToast } from './ui.js';
 
 
@@ -145,17 +147,7 @@ function crearMenuContextual(ancla) {
 
             menu.remove();
 
-            if (
-                !confirm('¿Está seguro de que desea cerrar sesión?')
-            ) {
-                return;
-            }
-
-            logout();
-
-            sessionStorage.clear();
-
-            window.location.replace('../login.html');
+            solicitarCierreSesion();
         });
 
 
@@ -191,21 +183,40 @@ function crearMenuContextual(ancla) {
 
 export function configurarAccionesTopbar() {
 
+    // Guarda anti-duplicado: si otro módulo ya enlazó
+    // el mismo botón, no se vuelve a enlazar.
 
-    document
-        .querySelector('[title="Notificaciones"]')
-        ?.addEventListener('click', mostrarAlertasActivas);
+    function enlazarUnaVez(selector, manejador) {
+
+        const elemento =
+            document.querySelector(selector);
+
+        if (!elemento || elemento.dataset.zofTopbar === '1') {
+            return;
+        }
+
+        elemento.dataset.zofTopbar = '1';
+
+        elemento.addEventListener('click', manejador);
+    }
 
 
-    document
-        .querySelector('[title="Ayuda"]')
-        ?.addEventListener('click', () => {
+    enlazarUnaVez(
+        '[title="Notificaciones"]',
+        mostrarAlertasActivas
+    );
+
+
+    enlazarUnaVez(
+        '[title="Ayuda"]',
+        () => {
 
             mostrarToast(
                 'Centro de ayuda de ZoFranca CR.',
                 'info'
             );
-        });
+        }
+    );
 
 
     const botonMenu =

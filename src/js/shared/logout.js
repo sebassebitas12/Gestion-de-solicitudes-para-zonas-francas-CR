@@ -1,8 +1,16 @@
 // ==========================================
 // ZoFranca CR - LOGOUT COMPARTIDO
+// Cierre de sesión con confirmación propia
+// de la aplicación (sin confirm() nativo) y
+// notificación visual no bloqueante.
 // ==========================================
 
 import { logout } from '../../services/auth.service.js';
+
+import {
+    encolarNotificacion,
+    mostrarConfirmacion
+} from './ui.js';
 
 export const LOGIN_URL = '../login.html';
 
@@ -15,6 +23,48 @@ export function irALogin() {
 
     window.location.replace(LOGIN_URL);
 
+}
+
+
+// ------------------------------------------
+// Flujo completo de cierre de sesión.
+// 1) Confirmación con diálogo propio.
+// 2) Limpieza de sesión.
+// 3) Notificación "Sesión cerrada correctamente"
+//    (se muestra en el login tras redirigir).
+// ------------------------------------------
+
+export async function solicitarCierreSesion() {
+
+    const aceptar =
+        await mostrarConfirmacion({
+            titulo: '¿Cerrar sesión?',
+            mensaje: 'Se cerrará tu sesión actual y volverás a la pantalla de inicio.',
+            textoConfirmar: 'Cerrar sesión',
+            textoCancelar: 'Cancelar'
+        });
+
+    if (!aceptar) {
+        return;
+    }
+
+
+    logout();
+
+    // Limpieza adicional de datos temporales de
+    // autenticación (la sesión es el único dato
+    // sensible almacenado del lado del cliente).
+    sessionStorage.clear();
+
+
+    encolarNotificacion({
+        type: 'success',
+        title: 'Sesión cerrada',
+        message: 'Sesión cerrada correctamente.'
+    });
+
+
+    irALogin();
 }
 
 
@@ -36,24 +86,7 @@ export function configurarLogout(buttonId) {
                 event.preventDefault();
             }
 
-            const confirmar =
-                window.confirm(
-                    '¿Está seguro de que desea cerrar sesión?'
-                );
-
-            if (!confirmar) {
-                return;
-            }
-
-            logout();
-
-            // Limpieza adicional de datos temporales de
-            // autenticación (la sesión es el único dato
-            // sensible almacenado del lado del cliente).
-            sessionStorage.clear();
-
-            irALogin();
-
+            solicitarCierreSesion();
         }
     );
 

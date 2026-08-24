@@ -10,6 +10,11 @@ import {
 } from '../../services/auth.service.js';
 
 import {
+    showNotification,
+    encolarNotificacion
+} from '../shared/ui.js';
+
+import {
     configurarLogout
 } from '../shared/logout.js';
 
@@ -29,6 +34,14 @@ const session = getSesion();
 // Solamente puede entrar un usuario con rol administrador.
 
 if (!session || session.rol !== 'administrador') {
+
+    encolarNotificacion({
+        type: 'error',
+        title: 'Acceso no autorizado',
+        message: !session
+            ? 'Debes iniciar sesión para acceder a este panel.'
+            : 'Esta área está restringida al rol administrador.'
+    });
 
     window.location.href = '../login.html';
 
@@ -87,25 +100,21 @@ function showAlert(
     type = 'success'
 ) {
 
-    const alert =
-        document.getElementById(
-            'alert-message'
-        );
+    // Delegado al sistema global de notificaciones
+    // web (ui.js). Se mantiene el nombre y la firma
+    // para no alterar los llamadores existentes.
 
-    if (!alert) {
-        return;
-    }
+    const mapaTipos = {
+        success: 'success',
+        error: 'error',
+        warning: 'warning',
+        info: 'info'
+    };
 
-    alert.textContent = message;
-
-    alert.className =
-        `admin-alert ${type}`;
-
-    setTimeout(() => {
-
-        alert.classList.add('hidden');
-
-    }, 4000);
+    showNotification({
+        type: mapaTipos[type] || 'success',
+        message
+    });
 }
 
 
@@ -1177,7 +1186,7 @@ function configurarNavegacion() {
 
                     showAlert(
                         `Módulo "${text}" pendiente de conexión.`,
-                        'success'
+                        'info'
                     );
                 }
 

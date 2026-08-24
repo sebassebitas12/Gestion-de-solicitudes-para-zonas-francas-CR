@@ -6,6 +6,10 @@
 import { getSesion } from '../../services/auth.service.js';
 import { configurarLogout } from '../shared/logout.js';
 import { getNotificaciones } from './empresa-data.js';
+import {
+    showNotification,
+    encolarNotificacion
+} from '../shared/ui.js';
 
 
 export function protegerPanelEmpresa() {
@@ -17,6 +21,14 @@ export function protegerPanelEmpresa() {
         sesion.rol !== 'empresa' ||
         !sesion.empresaId
     ) {
+
+        encolarNotificacion({
+            type: 'error',
+            title: 'Acceso no autorizado',
+            message: !sesion
+                ? 'Debes iniciar sesión para acceder a este panel.'
+                : 'No tienes permisos de empresa para esta pantalla.'
+        });
 
         window.location.href = '../login.html';
 
@@ -78,7 +90,11 @@ export function iniciarPanelBase(sesion) {
 
         btnAyuda.addEventListener(
             'click',
-            () => alert('Centro de ayuda de ZoFranca CR.')
+            () => showNotification({
+                type: 'info',
+                title: 'Ayuda',
+                message: 'Centro de ayuda de ZoFranca CR.'
+            })
         );
     }
 
@@ -94,7 +110,11 @@ export function iniciarPanelBase(sesion) {
 
                 evento.preventDefault();
 
-                alert('Esta sección estará disponible próximamente.');
+                showNotification({
+                    type: 'info',
+                    title: 'Próximamente',
+                    message: 'Esta sección estará disponible próximamente.'
+                });
             }
         );
     }
