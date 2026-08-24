@@ -62,9 +62,7 @@ if (selectorRol) {
 }
 
 
-// ==========================================
-// ALERTA
-// ==========================================
+import { mostrarToast } from './shared/ui.js';
 
 function mostrarAlerta(
     mensaje,
@@ -75,9 +73,7 @@ function mostrarAlerta(
         document.getElementById('alert-message');
 
     if (!alerta) {
-
-        alert(mensaje);
-
+        mostrarToast(mensaje, tipo === 'error' ? 'error' : 'exito');
         return;
     }
 

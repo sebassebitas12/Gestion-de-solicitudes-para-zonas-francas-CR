@@ -36,20 +36,10 @@ export function configurarLogout(buttonId) {
                 event.preventDefault();
             }
 
-            const confirmar =
-                window.confirm(
-                    '¿Está seguro de que desea cerrar sesión?'
-                );
-
-            if (!confirmar) {
-                return;
-            }
-
             logout();
 
             // Limpieza adicional de datos temporales de
-            // autenticación (la sesión es el único dato
-            // sensible almacenado del lado del cliente).
+            // autenticación
             sessionStorage.clear();
 
             irALogin();

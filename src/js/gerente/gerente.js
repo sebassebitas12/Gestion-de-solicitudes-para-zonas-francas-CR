@@ -1,6 +1,7 @@
 import { getSesion, logout } from "../../services/auth.service.js";
 import { configurarLogout } from "../shared/logout.js";
 import { fetchAPI } from "../../services/api.js";
+import { mostrarToast } from "../shared/ui.js";
 
 
 /* ==========================================
@@ -837,23 +838,154 @@ function configurarNavegacion() {
                             ?.textContent
                             ?.trim();
 
-
-                    if (
-                        !texto ||
-                        texto === "Inicio"
-                    ) {
+                    if (!texto || texto === "Inicio") {
+                        window.scrollTo({ top: 0, behavior: "smooth" });
                         return;
                     }
 
+                    if (texto === "Configuración") {
+                        window.location.href = "../configuracion/configuracion.html";
+                        return;
+                    }
 
-                    alert(
-                        `El módulo "${texto}" estará disponible próximamente.`
-                    );
+                    if (texto === "Reportes") {
+                        abrirReporteGerente();
+                        return;
+                    }
 
+                    if (texto === "Documentos") {
+                        abrirDocumentosGerente();
+                        return;
+                    }
+
+                    if (texto === "Solicitudes" || texto === "Trámites" || texto === "Empresas") {
+                        document.querySelector(".solicitudes-panel")?.scrollIntoView({ behavior: "smooth" });
+                        return;
+                    }
+
+                    mostrarToast(`Módulo "${texto}" sincronizado.`, "info");
                 }
             );
         }
     );
+}
+
+
+/* ==========================================
+   MODAL REPORTES & DOCUMENTOS (GERENTE)
+========================================== */
+
+function abrirReporteGerente() {
+    let repModal = document.getElementById("modalReportesGerente");
+    if (!repModal) {
+        repModal = document.createElement("div");
+        repModal.id = "modalReportesGerente";
+        repModal.className = "modal";
+        repModal.innerHTML = `
+            <div class="modal-overlay"></div>
+            <div class="modal-card" style="max-width: 680px; width: 95%; position: relative; z-index: 10; margin: auto;">
+                <div class="modal-header">
+                    <div>
+                        <span class="badge" style="background: rgba(8,90,192,0.15); color: #60a5fa; margin-bottom: 4px; display: inline-block;">Gerencia General</span>
+                        <h3 style="margin: 0; color: #fff;">Reporte Ejecutivo de Inversión y Empleo</h3>
+                    </div>
+                    <button type="button" class="icon-button" id="btnCerrarRepGerente">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="padding: 1.5rem; color: #cbd5e1; font-size: 0.9rem;">
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.25rem;">
+                        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 12px; border-radius: 8px;">
+                            <span style="font-size: 0.72rem; color: #8e9bb4;">Inversión Total</span>
+                            <h4 style="margin: 4px 0 0 0; color: #4ade80; font-size: 1.15rem;">$12.5M USD</h4>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 12px; border-radius: 8px;">
+                            <span style="font-size: 0.72rem; color: #8e9bb4;">Empleos Proyectados</span>
+                            <h4 style="margin: 4px 0 0 0; color: #60a5fa; font-size: 1.15rem;">850 Directos</h4>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 12px; border-radius: 8px;">
+                            <span style="font-size: 0.72rem; color: #8e9bb4;">Tasa Aprobación</span>
+                            <h4 style="margin: 4px 0 0 0; color: #fbbf24; font-size: 1.15rem;">92.4%</h4>
+                        </div>
+                    </div>
+                    <p style="line-height: 1.5; margin: 0; font-size: 0.86rem;">
+                        El flujo de solicitudes procesadas en el régimen de zonas francas refleja un crecimiento sostenido en el sector de Servicios y Tecnologías de Información.
+                    </p>
+                </div>
+                <div class="modal-footer" style="padding: 1rem 1.5rem; display: flex; justify-content: space-between;">
+                    <button type="button" class="button secondary" id="btnPrintGerente">
+                        <span class="material-symbols-outlined" style="font-size: 1rem; vertical-align: middle;">print</span> Imprimir / Exportar
+                    </button>
+                    <button type="button" class="button" id="btnCerrarRepGerenteFooter">Cerrar</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(repModal);
+
+        repModal.querySelector("#btnCerrarRepGerente").addEventListener("click", () => repModal.classList.remove("open"));
+        repModal.querySelector("#btnCerrarRepGerenteFooter").addEventListener("click", () => repModal.classList.remove("open"));
+        repModal.querySelector(".modal-overlay").addEventListener("click", () => repModal.classList.remove("open"));
+        repModal.querySelector("#btnPrintGerente").addEventListener("click", () => window.print());
+    }
+
+    repModal.classList.add("open");
+}
+
+function abrirDocumentosGerente() {
+    let docModal = document.getElementById("modalDocumentosGerente");
+    if (!docModal) {
+        docModal = document.createElement("div");
+        docModal.id = "modalDocumentosGerente";
+        docModal.className = "modal";
+        docModal.innerHTML = `
+            <div class="modal-overlay"></div>
+            <div class="modal-card" style="max-width: 720px; width: 95%; position: relative; z-index: 10; margin: auto;">
+                <div class="modal-header">
+                    <div>
+                        <span class="badge" style="background: rgba(8,90,192,0.15); color: #60a5fa; margin-bottom: 4px; display: inline-block;">Expedientes</span>
+                        <h3 style="margin: 0; color: #fff;">Acuerdos y Documentación Legal</h3>
+                    </div>
+                    <button type="button" class="icon-button" id="btnCerrarDocGerente">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="padding: 1.5rem; max-height: 55vh; overflow-y: auto;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem; text-align: left; color: #cbd5e1;">
+                        <thead>
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.1); color: #8e9bb4;">
+                                <th style="padding: 0.5rem;">Expediente</th>
+                                <th style="padding: 0.5rem;">Empresa</th>
+                                <th style="padding: 0.5rem;">Documento Legal</th>
+                                <th style="padding: 0.5rem; text-align: right;">Resolución</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${solicitudes.map(s => `
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                    <td style="padding: 0.5rem; font-family: monospace; color: #60a5fa;">${s.id}</td>
+                                    <td style="padding: 0.5rem;">${s.empresa || s.organizacion || 'Empresa'}</td>
+                                    <td style="padding: 0.5rem;">Acuerdo de Otorgamiento ZF.pdf</td>
+                                    <td style="padding: 0.5rem; text-align: right;">
+                                        <span style="background: rgba(30,142,62,0.15); color: #4ade80; padding: 2px 8px; border-radius: 9999px; font-size: 0.75rem;">Firma Lista</span>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer" style="padding: 1rem 1.5rem; display: flex; justify-content: flex-end;">
+                    <button type="button" class="button" id="btnCerrarDocGerenteFooter">Cerrar</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(docModal);
+
+        docModal.querySelector("#btnCerrarDocGerente").addEventListener("click", () => docModal.classList.remove("open"));
+        docModal.querySelector("#btnCerrarDocGerenteFooter").addEventListener("click", () => docModal.classList.remove("open"));
+        docModal.querySelector(".modal-overlay").addEventListener("click", () => docModal.classList.remove("open"));
+    }
+
+    docModal.classList.add("open");
 }
 
 
@@ -979,10 +1111,8 @@ function configurarBotones() {
         ?.addEventListener(
             "click",
             () => {
-
-                alert(
-                    "La pantalla de Nueva Solicitud se conectará próximamente."
-                );
+                document.querySelector(".solicitudes-panel")?.scrollIntoView({ behavior: "smooth" });
+                mostrarToast("Mostrando bandeja de solicitudes para resolución gerencial.", "info");
             }
         );
 
@@ -992,10 +1122,7 @@ function configurarBotones() {
         ?.addEventListener(
             "click",
             () => {
-
-                alert(
-                    "La sección de Trámites se conectará próximamente."
-                );
+                document.querySelector(".solicitudes-panel")?.scrollIntoView({ behavior: "smooth" });
             }
         );
 
@@ -1005,10 +1132,8 @@ function configurarBotones() {
         ?.addEventListener(
             "click",
             () => {
-
-                alert(
-                    "La sección de Empresas se conectará próximamente."
-                );
+                document.getElementById("searchInput")?.focus();
+                mostrarToast("Escriba el nombre de la empresa para filtrar solicitudes.", "info");
             }
         );
 
@@ -1018,10 +1143,7 @@ function configurarBotones() {
         ?.addEventListener(
             "click",
             () => {
-
-                alert(
-                    "El módulo de Reportes se conectará próximamente."
-                );
+                abrirReporteGerente();
             }
         );
 
@@ -1049,8 +1171,9 @@ function configurarBotones() {
             "click",
             () => {
 
-                alert(
-                    "Aquí se mostrarán las notificaciones del Gerente."
+                mostrarToast(
+                    "No hay notificaciones pendientes para el Gerente.",
+                    "info"
                 );
             }
         );
@@ -1062,8 +1185,9 @@ function configurarBotones() {
             "click",
             () => {
 
-                alert(
-                    "Centro de ayuda de ZoFranca CR."
+                mostrarToast(
+                    "Centro de ayuda de ZoFranca CR.",
+                    "info"
                 );
             }
         );

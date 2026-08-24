@@ -798,10 +798,60 @@
 
                 </div>
 
+                <div class="ia-justification">
+
+                    <div class="ia-title">
+
+                        <span class="material-symbols-outlined">
+                            fact_check
+                        </span>
+
+                        Decisión del analista
+
+                    </div>
+
+                    <label for="decisionComentario">
+                        Comentario de la decisión
+                    </label>
+
+                    <textarea
+                        id="decisionComentario"
+                        rows="3"
+                        placeholder="Explique brevemente la decisión final."
+                    ></textarea>
+
+                    <p id="decisionMessage" aria-live="polite"></p>
+
+                </div>
+
             </div>
 
 
             <div class="modal-footer">
+
+                <button
+                    id="btnRechazarSolicitud"
+                    class="modal-button secondary"
+                    type="button"
+                >
+                    Rechazar
+                </button>
+
+                <button
+                    id="btnRevisarSolicitud"
+                    class="modal-button secondary"
+                    type="button"
+                >
+                    Enviar a revisión
+                </button>
+
+                <button
+                    id="btnConfirmarSolicitud"
+                    class="modal-button"
+                    type="button"
+                >
+                    Confirmar decisión
+                </button>
 
                 <button
                     id="btnCloseModalFooter"

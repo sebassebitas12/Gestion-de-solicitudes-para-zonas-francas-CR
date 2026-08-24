@@ -6,6 +6,7 @@
 import { getSesion } from '../../services/auth.service.js';
 import { configurarLogout } from '../shared/logout.js';
 import { getNotificaciones } from './empresa-data.js';
+import { mostrarToast } from '../shared/ui.js';
 
 
 export function protegerPanelEmpresa() {
@@ -76,7 +77,7 @@ export function iniciarPanelBase(sesion) {
 
         btnAyuda.addEventListener(
             'click',
-            () => alert('Centro de ayuda de ZoFranca CR.')
+            () => mostrarToast('Centro de ayuda de ZoFranca CR.', 'info')
         );
     }
 
@@ -92,7 +93,7 @@ export function iniciarPanelBase(sesion) {
 
                 evento.preventDefault();
 
-                alert('Esta sección estará disponible próximamente.');
+                mostrarToast('Esta sección estará disponible próximamente.', 'info');
             }
         );
     }

@@ -19,6 +19,10 @@ import {
     iniciarPanelBase
 } from './panel-base.js';
 
+import {
+    mostrarToast
+} from '../shared/ui.js';
+
 
 let sesionActual = null;
 
@@ -476,21 +480,12 @@ function renderizarDocumentos() {
                     const documento =
                         obtenerFiltrados()[indice];
 
-                    if (!documento) {
-                        return;
-                    }
-
-                    if (
-                        !confirm(`¿Eliminar "${documento.nombre}"? Esta acción no se puede deshacer.`)
-                    ) {
-                        return;
-                    }
-
                     eliminarDocumento(
                         sesionActual.empresaId,
                         documento.id
                     );
 
+                    mostrarToast(`Documento "${documento.nombre}" eliminado.`, 'info');
                     await cargarDatos();
                 }
             );
@@ -525,7 +520,7 @@ function subirArchivo(evento) {
 
 
     cargarDatos().then(() => {
-        alert(`Documento "${archivo.name}" registrado. Queda en estado "En revisión".`);
+        mostrarToast(`Documento "${archivo.name}" registrado. Queda en estado "En revisión".`, 'exito');
     });
 }
 

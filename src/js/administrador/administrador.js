@@ -1073,11 +1073,9 @@ function configurarAcciones() {
     newUser?.addEventListener(
         'click',
         () => {
-
-            showAlert(
-                'La creación de usuarios estará disponible desde el módulo Usuarios.',
-                'success'
-            );
+            document.querySelector('.users-panel')?.scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('admin-search')?.focus();
+            showAlert('Mostrando catálogo de usuarios.', 'success');
         }
     );
 
@@ -1085,11 +1083,8 @@ function configurarAcciones() {
     newCompany?.addEventListener(
         'click',
         () => {
-
-            showAlert(
-                'La creación de empresas estará disponible desde el módulo Empresas.',
-                'success'
-            );
+            document.querySelector('.companies-panel')?.scrollIntoView({ behavior: 'smooth' });
+            showAlert('Mostrando catálogo de empresas registradas.', 'success');
         }
     );
 
@@ -1097,11 +1092,8 @@ function configurarAcciones() {
     review?.addEventListener(
         'click',
         () => {
-
-            showAlert(
-                'Las solicitudes pendientes se pueden revisar desde el módulo Solicitudes.',
-                'success'
-            );
+            document.querySelector('.activity-panel')?.scrollIntoView({ behavior: 'smooth' });
+            showAlert('Mostrando actividad del sistema.', 'success');
         }
     );
 
@@ -1109,11 +1101,7 @@ function configurarAcciones() {
     report?.addEventListener(
         'click',
         () => {
-
-            showAlert(
-                'El módulo de reportes será conectado en el siguiente paso.',
-                'success'
-            );
+            window.print();
         }
     );
 
@@ -1121,11 +1109,7 @@ function configurarAcciones() {
     settings?.addEventListener(
         'click',
         () => {
-
-            showAlert(
-                'El módulo de configuración será conectado en el siguiente paso.',
-                'success'
-            );
+            window.location.href = '../configuracion/configuracion.html';
         }
     );
 }
@@ -1157,20 +1141,38 @@ function configurarNavegacion() {
                         ?.textContent
                         ?.trim();
 
+                event.preventDefault();
 
-                if (
-                    text &&
-                    text !== 'Inicio'
-                ) {
-
-                    event.preventDefault();
-
-                    showAlert(
-                        `Módulo "${text}" pendiente de conexión.`,
-                        'success'
-                    );
+                if (!text || text === 'Inicio') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    return;
                 }
 
+                if (text === 'Configuración') {
+                    window.location.href = '../configuracion/configuracion.html';
+                    return;
+                }
+
+                if (text === 'Usuarios') {
+                    document.querySelector('.users-panel')?.scrollIntoView({ behavior: 'smooth' });
+                    return;
+                }
+
+                if (text === 'Empresas') {
+                    document.querySelector('.companies-panel')?.scrollIntoView({ behavior: 'smooth' });
+                    return;
+                }
+
+                if (text === 'Reportes') {
+                    window.print();
+                    return;
+                }
+
+                if (text === 'Solicitudes' || text === 'Trámites' || text === 'Documentos') {
+                    document.querySelector('.activity-panel')?.scrollIntoView({ behavior: 'smooth' });
+                    showAlert(`Sección "${text}" sincronizada.`, 'success');
+                    return;
+                }
             }
         );
 

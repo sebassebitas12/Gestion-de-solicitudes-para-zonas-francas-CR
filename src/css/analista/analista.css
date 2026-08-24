@@ -1595,6 +1595,43 @@ td:first-child {
     line-height: 20px;
 }
 
+.ia-justification label {
+
+    display: block;
+
+    margin: 14px 0 6px;
+
+    color: var(--on-surface-variant);
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+.ia-justification textarea {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    resize: vertical;
+
+    border: 1px solid var(--outline-variant);
+
+    border-radius: 7px;
+
+    padding: 10px;
+
+    font: inherit;
+}
+
+#decisionMessage {
+
+    margin-top: 8px;
+
+    font-size: 12px;
+}
+
 .modal-footer {
 
     padding: 16px 24px;
@@ -1602,6 +1639,10 @@ td:first-child {
     border-top: 1px solid var(--surface-variant);
 
     display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
 
     justify-content: flex-end;
 }

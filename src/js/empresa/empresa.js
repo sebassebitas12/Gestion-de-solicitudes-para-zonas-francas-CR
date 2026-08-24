@@ -22,6 +22,10 @@ import {
     actualizarBadgeNotificaciones
 } from './panel-base.js';
 
+import {
+    mostrarToast
+} from '../shared/ui.js';
+
 
 // ==========================================
 // ESTADO DEL DASHBOARD
@@ -60,7 +64,7 @@ async function iniciarDashboard() {
     // --------------------------------------
 
     if (usuarioActual.rol !== 'empresa') {
-      alert('No tienes permisos para acceder a esta página.');
+      mostrarToast('No tienes permisos para acceder a esta página.', 'error');
       logout();
       window.location.href = '../login.html';
       return;
@@ -71,7 +75,7 @@ async function iniciarDashboard() {
     // --------------------------------------
 
     if (!usuarioActual.empresaId) {
-      alert('La sesión no tiene una empresa asociada.');
+      mostrarToast('La sesión no tiene una empresa asociada.', 'error');
       logout();
       window.location.href = '../login.html';
       return;
@@ -198,8 +202,9 @@ function configurarMenu() {
 
           event.preventDefault();
 
-          alert(
-            'Esta sección estará disponible próximamente.'
+          mostrarToast(
+            'Esta sección estará disponible próximamente.',
+            'info'
           );
         }
       );
@@ -225,8 +230,9 @@ function configurarMenu() {
           event.preventDefault();
 
           if (!item.classList.contains('active')) {
-            alert(
-              'Esta sección estará disponible próximamente.'
+            mostrarToast(
+              'Esta sección estará disponible próximamente.',
+              'info'
             );
           }
         }
@@ -734,8 +740,8 @@ function mostrarDetalleSolicitud(solicitud) {
       }`;
   }
 
-
-  alert(mensaje);
+  // Redirigir a la vista de solicitudes donde se puede ver con detalle
+  window.location.href = 'solicitudes.html';
 }
 
 
@@ -1352,5 +1358,5 @@ function mostrarError(mensaje) {
 
   console.error(mensaje);
 
-  alert(mensaje);
+  mostrarToast(mensaje, 'error');
 }
