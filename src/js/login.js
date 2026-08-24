@@ -53,3 +53,44 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
     spinner.classList.add('hidden');
   }
 });
+// =========================================================
+// FUNCIONES VISUALES DEL LOGIN
+// =========================================================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const passwordInput =
+        document.getElementById("password");
+
+    const togglePassword =
+        document.getElementById("toggle-password");
+
+
+    if (passwordInput && togglePassword) {
+
+        togglePassword.addEventListener("click", () => {
+
+            const isPassword =
+                passwordInput.type === "password";
+
+
+            passwordInput.type =
+                isPassword ? "text" : "password";
+
+
+            togglePassword.textContent =
+                isPassword ? "○" : "◉";
+
+
+            togglePassword.setAttribute(
+                "aria-label",
+                isPassword
+                    ? "Ocultar contraseña"
+                    : "Mostrar contraseña"
+            );
+
+        });
+
+    }
+
+});
