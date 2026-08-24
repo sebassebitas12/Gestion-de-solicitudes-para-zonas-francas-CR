@@ -1122,10 +1122,8 @@ function configurarAcciones() {
         'click',
         () => {
 
-            showAlert(
-                'El módulo de configuración será conectado en el siguiente paso.',
-                'success'
-            );
+            window.location.href =
+                '../configuracion/configuracion.html';
         }
     );
 }
@@ -1148,6 +1146,18 @@ function configurarNavegacion() {
         item.addEventListener(
             'click',
             event => {
+
+                const destino =
+                    item.getAttribute('href');
+
+                // Enlaces reales (ej. Configuración)
+                // navegan con normalidad.
+                if (
+                    destino &&
+                    destino !== '#'
+                ) {
+                    return;
+                }
 
                 const text =
                     item
@@ -1269,3 +1279,4 @@ document.addEventListener(
     'DOMContentLoaded',
     inicializar
 );
+import { configurarAccionesTopbar } from '../shared/topbar-actions.js';

@@ -10,10 +10,14 @@ import {
     formatearFecha
 } from './empresa-data.js';
 
+import { fetchAPI } from '../../services/api.js';
+
 import {
     protegerPanelEmpresa,
     iniciarPanelBase
 } from './panel-base.js';
+
+import { mostrarToast } from '../shared/ui.js';
 
 
 let sesionActual = null;
@@ -116,6 +120,167 @@ function configurarEventos() {
     document
         .getElementById('btnImprimir')
         ?.addEventListener('click', () => window.print());
+
+
+    // --------------------------------------
+    // Declaración de cumplimiento
+    // --------------------------------------
+
+    document
+        .getElementById('btnDeclarar')
+        ?.addEventListener(
+            'click',
+            abrirModalDeclarar
+        );
+
+    document.querySelectorAll('[data-cerrar-modal]')
+        .forEach(elemento => {
+
+            elemento.addEventListener(
+                'click',
+                cerrarModalDeclarar
+            );
+        });
+
+    document.addEventListener(
+        'keydown',
+        evento => {
+
+            if (
+                evento.key === 'Escape' &&
+                !document
+                    .getElementById('modalDeclarar')
+                    ?.classList.contains('hidden')
+            ) {
+                cerrarModalDeclarar();
+            }
+        }
+    );
+
+    document
+        .getElementById('formDeclarar')
+        ?.addEventListener(
+            'submit',
+            enviarDeclaracion
+        );
+}
+
+
+// ==========================================
+// DECLARACIÓN DE CUMPLIMIENTO
+// ==========================================
+
+function abrirModalDeclarar() {
+
+    document
+        .getElementById('modalDeclarar')
+        ?.classList.remove('hidden');
+
+    document
+        .getElementById('declInversion')
+        ?.focus();
+}
+
+
+function cerrarModalDeclarar() {
+
+    document
+        .getElementById('modalDeclarar')
+        ?.classList.add('hidden');
+}
+
+
+async function enviarDeclaracion(evento) {
+
+    evento.preventDefault();
+
+    const inversion =
+        parseFloat(
+            document.getElementById('declInversion')?.value
+        );
+
+    const empleos =
+        parseInt(
+            document.getElementById('declEmpleos')?.value,
+            10
+        );
+
+    const exportaciones =
+        parseFloat(
+            document.getElementById('declExportaciones')?.value
+        );
+
+
+    if (
+        !Number.isFinite(inversion) ||
+        !Number.isFinite(empleos) ||
+        !Number.isFinite(exportaciones) ||
+        inversion < 0 ||
+        empleos < 0 ||
+        exportaciones < 0
+    ) {
+
+        mostrarToast(
+            'Complete todos los campos con valores válidos.',
+            'error'
+        );
+
+        return;
+    }
+
+
+    const boton =
+        document.getElementById('btnEnviarDeclaracion');
+
+    if (boton) {
+        boton.disabled = true;
+    }
+
+    try {
+
+        await fetchAPI('/reportes_cumplimiento', {
+            method: 'POST',
+            body: JSON.stringify({
+                empresaId: sesionActual.empresaId,
+                empresaNombre: sesionActual.nombre || '',
+                inversionEjecutada: inversion,
+                empleosReales: empleos,
+                exportacionesTotales: exportaciones,
+                fechaReporte: new Date().toISOString()
+            })
+        });
+
+
+        cerrarModalDeclarar();
+
+        document
+            .getElementById('formDeclarar')
+            ?.reset();
+
+        mostrarToast(
+            'Declaración enviada correctamente.',
+            'exito'
+        );
+
+    } catch (error) {
+
+        console.error(
+            'Error enviando declaración:',
+            error
+        );
+
+        mostrarToast(
+            'No se pudo enviar la declaración. Verifique que el servidor esté activo e intente nuevamente.',
+            'error',
+            4200
+        );
+
+    } finally {
+
+        if (boton) {
+            boton.disabled = false;
+        }
+    }
 }
 
 

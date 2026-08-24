@@ -135,13 +135,13 @@
 
         <div class="topbar-actions">
 
-            <button class="icon-button" title="Buscar">
+            <button class="icon-button" title="Buscar" aria-label="Buscar">
                 <span class="material-symbols-outlined">
                     search
                 </span>
             </button>
 
-            <button class="icon-button notification-button" title="Notificaciones">
+            <button class="icon-button notification-button" title="Notificaciones" aria-label="Ver notificaciones">
 
                 <span class="material-symbols-outlined">
                     notifications
@@ -151,7 +151,7 @@
 
             </button>
 
-            <button class="icon-button" title="Ayuda">
+            <button class="icon-button" title="Ayuda" aria-label="Ayuda">
                 <span class="material-symbols-outlined">
                     help_outline
                 </span>
@@ -316,7 +316,7 @@
     <!-- =========================
          MODAL DETALLE
     ========================== -->
-    <div class="modal hidden" id="modalTramite">
+    <div class="modal hidden" id="modalTramite" role="dialog" aria-modal="true" aria-labelledby="tituloModalTramite">
 
         <div class="modal-overlay" data-cerrar-modal></div>
 
@@ -328,7 +328,7 @@
 
             </button>
 
-            <h3 class="modal-title">
+            <h3 class="modal-title" id="tituloModalTramite">
                 Detalle del trámite
             </h3>
 

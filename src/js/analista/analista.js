@@ -1320,3 +1320,19 @@ document.addEventListener(
     'DOMContentLoaded',
     inicializar
 );
+
+// ==========================================
+// CONFIGURACIÓN
+// ==========================================
+
+document
+    .getElementById('btnConfiguracionAnalista')
+    ?.addEventListener(
+        'click',
+        () => {
+            window.location.href =
+                '../configuracion/configuracion.html';
+        }
+    );
+
+import { configurarAccionesTopbar } from '../shared/topbar-actions.js';

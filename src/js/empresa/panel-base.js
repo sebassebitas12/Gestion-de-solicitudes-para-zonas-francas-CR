@@ -33,6 +33,8 @@ export function iniciarPanelBase(sesion) {
 
     configurarLogout('btnCerrarSesion');
 
+    aplicarPreferenciasUsuario(sesion);
+
 
     const btnNotificaciones =
         document.querySelector('.notification-button');
@@ -98,6 +100,37 @@ export function iniciarPanelBase(sesion) {
     }
 
     return actualizarBadgeNotificaciones(sesion.empresaId);
+}
+
+
+// ==========================================
+// PREFERENCIAS LOCALES DEL USUARIO
+// ==========================================
+
+function aplicarPreferenciasUsuario(sesion) {
+
+    try {
+
+        const crudo =
+            localStorage.getItem(
+                'zofranca_preferencias_' + sesion.id
+            );
+
+        if (!crudo) {
+            return;
+        }
+
+        const preferencias =
+            JSON.parse(crudo);
+
+        document.documentElement.classList.toggle(
+            'anim-reducida',
+            Boolean(preferencias.animacionesReducidas)
+        );
+
+    } catch (error) {
+        /* Preferencias inválidas: se ignoran. */
+    }
 }
 
 
