@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard - ZoFranca CR</title>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Material Symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:FILL@0..1&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/empresa/empresa.css">
+    <link rel="stylesheet" href="../../css/empresa/paneles.css">
+    <link rel="stylesheet" href="../../css/decor.css">
+</head>
+
+<body>
+
+    <div class="bg-blobs" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+    <aside class="sidebar">
+
+        <div class="sidebar-header">
+            <h1>ZoFranca CR</h1>
+            <p>Enterprise Core</p>
+        </div>
+
+        <nav class="sidebar-menu">
+
+            <a href="#" class="menu-item active">
+                <span class="material-symbols-outlined">dashboard</span>
+                <span>Inicio</span>
+            </a>
+
+            <a href="solicitudes.html" class="menu-item">
+                <span class="material-symbols-outlined">assignment</span>
+                <span>Solicitudes</span>
+            </a>
+
+            <a href="tramites.html" class="menu-item">
+                <span class="material-symbols-outlined">account_tree</span>
+                <span>Trámites</span>
+            </a>
+
+            <a href="documentos.html" class="menu-item">
+                <span class="material-symbols-outlined">description</span>
+                <span>Documentos</span>
+            </a>
+
+            <a href="reportes.html" class="menu-item">
+                <span class="material-symbols-outlined">analytics</span>
+                <span>Reportes</span>
+            </a>
+
+            <a href="notificaciones.html" class="menu-item">
+                <span class="material-symbols-outlined">notifications</span>
+                <span>Notificaciones</span>
+                <span class="menu-badge" id="badgeNotificaciones" hidden></span>
+            </a>
+
+        </nav>
+
+        <!-- Usuario -->
+        <div class="sidebar-footer">
+
+            <div class="user-profile">
+
+                <div class="user-avatar" id="avatarEmpresaSidebar">
+                    A
+                </div>
+
+                <div class="user-info">
+                    <strong id="nombreEmpresa">
+                        Empresa ABC S.A.
+                    </strong>
+
+                    <span id="rolEmpresa">
+                        Empresa Solicitante
+                    </span>
+                </div>
+
+            </div>
+
+            <a href="../configuracion/configuracion.html" class="menu-item">
+                <span class="material-symbols-outlined">settings</span>
+                <span>Ajustes</span>
+            </a>
+
+            <a href="#" class="menu-item logout" id="btnCerrarSesion">
+                <span class="material-symbols-outlined">logout</span>
+                <span>Cerrar Sesión</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =========================
+         BARRA SUPERIOR
+    ========================== -->
+    <header class="topbar">
+
+        <div class="topbar-title">
+
+            <h2>Inicio</h2>
+
+            <p>
+                Resumen general de la gestión de su empresa
+            </p>
+
+        </div>
+
+        <div class="topbar-actions">
+
+            <button class="icon-button" title="Buscar">
+                <span class="material-symbols-outlined">
+                    search
+                </span>
+            </button>
+
+            <button class="icon-button notification-button" title="Notificaciones">
+
+                <span class="material-symbols-outlined">
+                    notifications
+                </span>
+
+                <span class="notification-dot"></span>
+
+            </button>
+
+            <button class="icon-button" title="Ayuda">
+                <span class="material-symbols-outlined">
+                    help_outline
+                </span>
+            </button>
+
+            <button class="icon-button" title="Aplicaciones">
+                <span class="material-symbols-outlined">
+                    apps
+                </span>
+            </button>
+
+            <div class="topbar-avatar" id="avatarEmpresaTop">
+                A
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         CONTENIDO PRINCIPAL
+    ========================== -->
+    <main class="main-content">
+
+        <!-- Encabezado -->
+        <section class="dashboard-header">
+
+            <div>
+
+                <h2>
+                    Buenos días,
+                    <span id="saludoEmpresa">
+                        Empresa ABC
+                    </span>
+                </h2>
+
+                <p>
+                    Aquí tienes un resumen de la gestión y actividad reciente de tu empresa.
+                </p>
+
+            </div>
+
+            <button class="primary-button" id="btnNuevaSolicitud">
+
+                <span class="material-symbols-outlined">
+                    add
+                </span>
+
+                Nueva solicitud
+
+            </button>
+
+        </section>
+
+
+        <!-- =========================
+             TARJETAS
+        ========================== -->
+        <section class="stats-grid stats-grid-panel">
+
+            <article class="stat-card">
+
+                <div class="stat-header">
+
+                    <h3>
+                        Solicitudes pendientes
+                    </h3>
+
+                    <span class="stat-icon blue">
+                        <span class="material-symbols-outlined">
+                            assignment
+                        </span>
+                    </span>
+
+                </div>
+
+                <strong id="solicitudesActivas">
+                    12
+                </strong>
+
+                <p>
+                    En proceso
+                </p>
+
+            </article>
+
+
+            <article class="stat-card">
+
+                <div class="stat-header">
+
+                    <h3>
+                        Trámites en proceso
+                    </h3>
+
+                    <span class="stat-icon red">
+                        <span class="material-symbols-outlined">
+                            autorenew
+                        </span>
+                    </span>
+
+                </div>
+
+                <strong id="tramitesEnProceso">
+                    3
+                </strong>
+
+                <p>
+                    Avanzando hacia aprobación
+                </p>
+
+            </article>
+
+
+            <article class="stat-card">
+
+                <div class="stat-header">
+
+                    <h3>
+                        Documentos pendientes
+                    </h3>
+
+                    <span class="stat-icon red">
+                        <span class="material-symbols-outlined">
+                            schedule
+                        </span>
+                    </span>
+
+                </div>
+
+                <strong id="documentosPendientes">
+                    2
+                </strong>
+
+                <p class="danger-text">
+                    Por vencer o en revisión
+                </p>
+
+            </article>
+
+
+            <article class="stat-card">
+
+                <div class="stat-header">
+
+                    <h3>
+                        Documentos vigentes
+                    </h3>
+
+                    <span class="stat-icon green">
+                        <span class="material-symbols-outlined">
+                            verified
+                        </span>
+                    </span>
+
+                </div>
+
+                <strong id="documentosVigentes">
+                    16
+                </strong>
+
+                <p>
+                    Al día
+                </p>
+
+            </article>
+
+
+            <article class="stat-card">
+
+                <div class="stat-header">
+
+                    <h3>
+                        Notificaciones nuevas
+                    </h3>
+
+                    <span class="stat-icon blue">
+                        <span class="material-symbols-outlined">
+                            notifications
+                        </span>
+                    </span>
+
+                </div>
+
+                <strong id="notificacionesPendientes">
+                    5
+                </strong>
+
+                <p>
+                    Sin leer
+                </p>
+
+            </article>
+
+        </section>
+
+
+        <!-- =========================
+             CONTENIDO INFERIOR
+        ========================== -->
+        <section class="dashboard-grid">
+
+            <!-- Solicitudes -->
+            <div class="requests-card">
+
+                <div class="card-header">
+
+                    <h3>
+                        Solicitudes recientes
+                    </h3>
+
+                    <button class="text-button" id="btnVerTodas">
+                        Ver todas
+                    </button>
+
+                </div>
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Solicitud</th>
+                                <th>Tipo</th>
+                                <th>Fecha</th>
+                                <th>Estado</th>
+                                <th>Acción</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="tablaSolicitudes">
+
+                            <!-- JavaScript cargará las solicitudes -->
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <!-- Columna derecha -->
+            <div class="right-column">
+
+                <!-- Acciones rápidas -->
+                <div class="documents-card">
+
+                    <div class="card-header">
+
+                        <h3>
+                            Acciones rápidas
+                        </h3>
+
+                    </div>
+
+                    <div class="quick-actions">
+
+                        <button class="quick-action" id="qaNuevaSolicitud">
+                            <span class="material-symbols-outlined">add_circle</span>
+                            Nueva solicitud
+                        </button>
+
+                        <button class="quick-action" id="qaSubirDocumento">
+                            <span class="material-symbols-outlined">upload_file</span>
+                            Subir documento
+                        </button>
+
+                        <button class="quick-action" id="qaVerNotificaciones">
+                            <span class="material-symbols-outlined">notifications</span>
+                            Ver notificaciones
+                        </button>
+
+                        <button class="quick-action" id="qaGenerarReporte">
+                            <span class="material-symbols-outlined">summarize</span>
+                            Generar reporte
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Resumen de trámites -->
+                <div class="documents-card">
+
+                    <div class="card-header">
+
+                        <h3>
+                            Resumen de trámites
+                        </h3>
+
+                        <button class="text-button" id="btnVerTramites">
+                            Ver todos
+                        </button>
+
+                    </div>
+
+                    <div class="tramites-resumen" id="resumenTramites">
+
+                        <!-- JavaScript cargará el resumen -->
+
+                    </div>
+
+                </div>
+
+
+                <!-- Estado general de la empresa -->
+                <div class="documents-card">
+
+                    <div class="card-header">
+
+                        <h3>
+                            Estado general
+                        </h3>
+
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 16px; padding: 4px 2px;" id="estadoGeneral">
+
+                        <div>
+
+                            <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                                <strong style="font-size: 13px;">Cumplimiento de compromisos</strong>
+                                <span class="progress-value" id="textoCumplimiento">—</span>
+                            </div>
+
+                            <div class="progress-track">
+                                <div class="progress-fill green" id="barraCumplimiento" style="width:0%"></div>
+                            </div>
+
+                        </div>
+
+                        <div>
+
+                            <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                                <strong style="font-size: 13px;">Documentos vigentes</strong>
+                                <span class="progress-value" id="textoDocsVigentes">—</span>
+                            </div>
+
+                            <div class="progress-track">
+                                <div class="progress-fill" id="barraDocsVigentes" style="width:0%"></div>
+                            </div>
+
+                        </div>
+
+                        <div>
+
+                            <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                                <strong style="font-size: 13px;">Solicitudes aprobadas</strong>
+                                <span class="progress-value" id="textoSolicitudesAprobadas">—</span>
+                            </div>
+
+                            <div class="progress-track">
+                                <div class="progress-fill green" id="barraSolicitudesAprobadas" style="width:0%"></div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Documentos -->
+                <div class="documents-card">
+
+                    <div class="card-header">
+
+                        <div class="card-title">
+
+                            <span class="material-symbols-outlined danger-icon">
+                                folder_open
+                            </span>
+
+                            <h3>
+                                Documentos registrados
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+                    <div class="documents-list" id="listaDocumentos">
+
+                        <!-- JavaScript cargará documentos -->
+
+                    </div>
+
+                </div>
+
+
+                <!-- Actividad -->
+                <div class="activity-card">
+
+                    <div class="card-header">
+
+                        <h3>
+                            Actividad reciente
+                        </h3>
+
+                    </div>
+
+                    <div class="activity-list" id="listaActividad">
+
+                        <!-- JavaScript cargará actividades -->
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+    <footer class="footer">
+
+        <p>
+            ZoFranca CR | v2.4.1 | Sistema Seguro • ISO 27001
+        </p>
+
+        <div class="footer-links">
+
+            <a href="#">
+                Certificaciones de Seguridad
+            </a>
+
+            <a href="#">
+                Términos de Servicio
+            </a>
+
+            <a href="#">
+                Privacidad
+            </a>
+
+        </div>
+
+    </footer>
+
+
+    <!-- JavaScript -->
+   <script type="module" src="../../js/empresa/empresa.js"></script>
+
+</body>
+</html>

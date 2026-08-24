@@ -1,0 +1,635 @@
+/* ==========================================
+   VARIABLES
+========================================== */
+
+:root {
+    --primary: #1769e0;
+    --primary-dark: #0d54bd;
+
+    --text: #172033;
+    --text-secondary: #667085;
+
+    --border: #d9dee8;
+    --background: #f6f8fb;
+    --white: #ffffff;
+
+    --success: #168a52;
+    --danger: #c62828;
+
+    --radius: 12px;
+}
+
+
+/* ==========================================
+   RESET
+========================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+    margin: 0;
+
+    min-height: 100vh;
+
+    background: var(--background);
+
+    color: var(--text);
+
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+
+/* ==========================================
+   CONTENEDOR
+========================================== */
+
+.page-container {
+    width: min(1100px, calc(100% - 40px));
+
+    margin: 0 auto;
+
+    padding: 40px 0 60px;
+}
+
+
+/* ==========================================
+   HEADER
+========================================== */
+
+.page-header {
+    margin-bottom: 28px;
+}
+
+
+.header-left {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 16px;
+}
+
+
+.back-button {
+    width: 44px;
+    height: 44px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid var(--border);
+
+    background: var(--white);
+
+    border-radius: 10px;
+
+    color: var(--text);
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s,
+        border-color 0.2s;
+}
+
+
+.back-button:hover {
+    background: #f0f4fa;
+
+    border-color: #b9c3d3;
+}
+
+
+.breadcrumb {
+    margin: 0 0 6px;
+
+    color: var(--text-secondary);
+
+    font-size: 13px;
+}
+
+
+h1 {
+    margin: 0;
+
+    font-size: 30px;
+
+    line-height: 1.2;
+}
+
+
+.header-description {
+    margin: 8px 0 0;
+
+    color: var(--text-secondary);
+
+    font-size: 15px;
+}
+
+
+/* ==========================================
+   EMPRESA
+========================================== */
+
+.company-card {
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 18px 20px;
+
+    margin-bottom: 20px;
+
+    background: var(--white);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius);
+}
+
+
+.company-icon {
+    width: 46px;
+    height: 46px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #eaf2ff;
+
+    color: var(--primary);
+}
+
+
+.company-info {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+
+.company-label {
+    color: var(--text-secondary);
+
+    font-size: 12px;
+}
+
+
+.company-name {
+    font-size: 16px;
+}
+
+
+/* ==========================================
+   FORM CARD
+========================================== */
+
+.form-card {
+    padding: 30px;
+
+    background: var(--white);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius);
+
+    box-shadow:
+        0 2px 8px rgba(16, 24, 40, 0.03);
+}
+
+
+/* ==========================================
+   SECTION TITLE
+========================================== */
+
+.section-title {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 12px;
+
+    margin-bottom: 24px;
+}
+
+
+.section-title > .material-symbols-outlined {
+    margin-top: 2px;
+
+    color: var(--primary);
+
+    font-size: 25px;
+}
+
+
+.section-title h2 {
+    margin: 0;
+
+    font-size: 18px;
+}
+
+
+.section-title p {
+    margin: 5px 0 0;
+
+    color: var(--text-secondary);
+
+    font-size: 13px;
+}
+
+
+.documents-title {
+    margin-top: 35px;
+}
+
+
+/* ==========================================
+   FORM GRID
+========================================== */
+
+.form-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 20px;
+}
+
+
+.form-group {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+
+.full-width {
+    margin-top: 20px;
+}
+
+
+label {
+    color: var(--text);
+
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+
+.required {
+    color: var(--danger);
+}
+
+
+/* ==========================================
+   INPUTS
+========================================== */
+
+input,
+select,
+textarea {
+    width: 100%;
+
+    border: 1px solid var(--border);
+
+    border-radius: 8px;
+
+    background: var(--white);
+
+    color: var(--text);
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s;
+}
+
+
+input,
+select {
+    height: 46px;
+
+    padding: 0 13px;
+}
+
+
+textarea {
+    min-height: 110px;
+
+    padding: 12px 13px;
+
+    resize: vertical;
+}
+
+
+input::placeholder,
+textarea::placeholder {
+    color: #98a2b3;
+}
+
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--primary);
+
+    box-shadow:
+        0 0 0 3px rgba(23, 105, 224, 0.10);
+}
+
+
+input:invalid:not(:placeholder-shown),
+select:invalid,
+textarea:invalid:not(:placeholder-shown) {
+    border-color: var(--border);
+}
+
+
+/* ==========================================
+   INPUT CON ICONO
+========================================== */
+
+.input-with-icon {
+    position: relative;
+}
+
+
+.input-prefix {
+    position: absolute;
+
+    left: 13px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: var(--text-secondary);
+
+    font-size: 14px;
+}
+
+
+.input-with-icon input {
+    padding-left: 30px;
+}
+
+
+/* ==========================================
+   AYUDA
+========================================== */
+
+.field-help {
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin: 0;
+
+    color: var(--text-secondary);
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+/* ==========================================
+   INFO BOX
+========================================== */
+
+.info-box {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 12px;
+
+    margin-top: 28px;
+
+    padding: 16px;
+
+    background: #f0f6ff;
+
+    border: 1px solid #d6e6ff;
+
+    border-radius: 10px;
+
+    color: #24446f;
+}
+
+
+.info-box > .material-symbols-outlined {
+    color: var(--primary);
+
+    font-size: 22px;
+}
+
+
+.info-box strong {
+    font-size: 14px;
+}
+
+
+.info-box p {
+    margin: 4px 0 0;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+
+/* ==========================================
+   BOTONES
+========================================== */
+
+.form-actions {
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 12px;
+
+    margin-top: 30px;
+
+    padding-top: 22px;
+
+    border-top: 1px solid var(--border);
+}
+
+
+.button {
+    min-height: 44px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 0 18px;
+
+    border-radius: 8px;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s,
+        border-color 0.2s,
+        opacity 0.2s;
+}
+
+
+.button:disabled {
+    opacity: 0.65;
+
+    cursor: not-allowed;
+}
+
+
+.button.primary {
+    border: 1px solid var(--primary);
+
+    background: var(--primary);
+
+    color: white;
+}
+
+
+.button.primary:hover:not(:disabled) {
+    background: var(--primary-dark);
+
+    border-color: var(--primary-dark);
+}
+
+
+.button.secondary {
+    border: 1px solid var(--border);
+
+    background: white;
+
+    color: var(--text);
+}
+
+
+.button.secondary:hover {
+    background: #f4f6f9;
+}
+
+
+/* ==========================================
+   MENSAJES
+========================================== */
+
+.message {
+    margin-bottom: 20px;
+
+    padding: 14px 16px;
+
+    border-radius: 9px;
+
+    font-size: 14px;
+}
+
+
+.message.success {
+    background: #eaf8f0;
+
+    border: 1px solid #bce7cd;
+
+    color: var(--success);
+}
+
+
+.message.error {
+    background: #fff0f0;
+
+    border: 1px solid #f2c5c5;
+
+    color: var(--danger);
+}
+
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 700px) {
+
+    .page-container {
+        width: min(
+            100% - 24px,
+            1100px
+        );
+
+        padding-top: 24px;
+    }
+
+
+    .form-card {
+        padding: 20px;
+    }
+
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .full-width {
+        margin-top: 20px;
+    }
+
+
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+
+
+    .button {
+        width: 100%;
+    }
+
+
+    h1 {
+        font-size: 25px;
+    }
+
+}

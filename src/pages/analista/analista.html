@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ZoFranca CR - Panel del Analista</title>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+    <!-- Tipografía Stitch -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Material Symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- CSS global -->
+    <link rel="stylesheet" href="../../css/styles.css">
+
+    <!-- CSS específico del analista -->
+    <link rel="stylesheet" href="../../css/analista/analista.css">
+    <link rel="stylesheet" href="../../css/decor.css">
+</head>
+
+<body>
+
+    <div class="bg-blobs" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <!-- ==========================================
+         SIDEBAR
+    =========================================== -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+
+            <div class="brand-icon">
+                Z
+            </div>
+
+            <div>
+                <h1>ZoFranca CR</h1>
+                <span>Enterprise Analyst</span>
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a href="#" class="nav-item active">
+                <span class="material-symbols-outlined">
+                    dashboard
+                </span>
+
+                <span>
+                    Inicio
+                </span>
+            </a>
+
+
+            <a href="#" class="nav-item" id="navSolicitudes">
+                <span class="material-symbols-outlined">
+                    assignment
+                </span>
+
+                <span>
+                    Solicitudes
+                </span>
+            </a>
+
+
+            <a href="#" class="nav-item">
+                <span class="material-symbols-outlined">
+                    description
+                </span>
+
+                <span>
+                    Documentos
+                </span>
+            </a>
+
+
+            <a href="#" class="nav-item">
+                <span class="material-symbols-outlined">
+                    analytics
+                </span>
+
+                <span>
+                    Reportes
+                </span>
+            </a>
+
+
+            <a href="#" class="nav-item">
+                <span class="material-symbols-outlined">
+                    history
+                </span>
+
+                <span>
+                    Historial
+                </span>
+            </a>
+
+        </nav>
+
+
+        <!-- PERFIL -->
+
+        <div class="sidebar-profile">
+
+            <div class="profile-info">
+
+                <div
+                    class="profile-avatar"
+                    id="sidebarAvatar"
+                >
+                    AC
+                </div>
+
+                <div class="profile-text">
+
+                    <p id="sidebarNombre">
+                        Ana Chaves
+                    </p>
+
+                    <span id="sidebarRol">
+                        Analista
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <button
+                id="btnLogout"
+                class="logout-button"
+                type="button"
+            >
+
+                <span class="material-symbols-outlined">
+                    logout
+                </span>
+
+                Cerrar sesión
+
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ==========================================
+         CONTENIDO PRINCIPAL
+    =========================================== -->
+
+    <div class="main-wrapper">
+
+
+        <!-- ======================================
+             TOPBAR
+        ======================================= -->
+
+        <header class="topbar">
+
+            <div class="topbar-title">
+
+                <h2>
+                    Panel principal
+                </h2>
+
+                <p>
+                    Resumen de actividad y solicitudes pendientes
+                </p>
+
+            </div>
+
+
+            <div class="topbar-actions">
+
+                <!-- Buscador -->
+
+                <div class="top-search">
+
+                    <span class="material-symbols-outlined">
+                        search
+                    </span>
+
+                    <input
+                        type="text"
+                        id="searchGlobal"
+                        placeholder="Buscar..."
+                    >
+
+                </div>
+
+
+                <!-- Notificaciones -->
+
+                <button
+                    class="top-icon-button"
+                    type="button"
+                    title="Notificaciones"
+                >
+
+                    <span class="material-symbols-outlined">
+                        notifications
+                    </span>
+
+                    <span
+                        class="notification-dot"
+                        id="notificationDot"
+                    ></span>
+
+                </button>
+
+
+                <!-- Configuración -->
+
+                <button
+                    class="top-icon-button"
+                    type="button"
+                    title="Configuración"
+                >
+
+                    <span class="material-symbols-outlined">
+                        settings
+                    </span>
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- ======================================
+             MAIN
+        ======================================= -->
+
+        <main class="dashboard-content">
+
+
+            <!-- BIENVENIDA -->
+
+            <section class="welcome-section">
+
+                <h3 id="welcomeTitle">
+                    Buenos días, Ana
+                </h3>
+
+                <p>
+                    Aquí tienes el resumen de las solicitudes que requieren tu atención.
+                </p>
+
+            </section>
+
+
+            <!-- ==================================
+                 TARJETAS
+            =================================== -->
+
+            <section class="metrics-grid">
+
+
+                <!-- Pendientes -->
+
+                <article class="metric-card">
+
+                    <div class="metric-top">
+
+                        <div class="metric-icon">
+
+                            <span class="material-symbols-outlined">
+                                assignment_late
+                            </span>
+
+                        </div>
+
+                        <strong id="metricPendientes">
+                            0
+                        </strong>
+
+                    </div>
+
+                    <div>
+
+                        <h4>
+                            Solicitudes pendientes
+                        </h4>
+
+                        <p>
+                            Requieren revisión
+                        </p>
+
+                    </div>
+
+                </article>
+
+
+                <!-- En revisión -->
+
+                <article class="metric-card">
+
+                    <div class="metric-top">
+
+                        <div class="metric-icon">
+
+                            <span class="material-symbols-outlined">
+                                visibility
+                            </span>
+
+                        </div>
+
+                        <strong id="metricRevision">
+                            0
+                        </strong>
+
+                    </div>
+
+                    <div>
+
+                        <h4>
+                            En revisión
+                        </h4>
+
+                        <p>
+                            Solicitudes en proceso
+                        </p>
+
+                    </div>
+
+                </article>
+
+
+                <!-- Aprobadas -->
+
+                <article class="metric-card">
+
+                    <div class="metric-top">
+
+                        <div class="metric-icon metric-icon-success">
+
+                            <span class="material-symbols-outlined">
+                                check_circle
+                            </span>
+
+                        </div>
+
+                        <strong id="metricAprobadas">
+                            0
+                        </strong>
+
+                    </div>
+
+                    <div>
+
+                        <h4>
+                            Solicitudes aprobadas
+                        </h4>
+
+                        <p>
+                            Solicitudes procesadas
+                        </p>
+
+                    </div>
+
+                </article>
+
+
+                <!-- Atención -->
+
+                <article class="metric-card metric-card-alert">
+
+                    <div class="metric-top">
+
+                        <div class="metric-icon metric-icon-alert">
+
+                            <span class="material-symbols-outlined">
+                                priority_high
+                            </span>
+
+                        </div>
+
+                        <strong id="metricAtencion">
+                            0
+                        </strong>
+
+                    </div>
+
+                    <div>
+
+                        <h4>
+                            Requieren atención
+                        </h4>
+
+                        <p>
+                            Casos prioritarios
+                        </p>
+
+                    </div>
+
+                </article>
+
+            </section>
+
+
+            <!-- ==================================
+                 TABLA + ACTIVIDAD
+            =================================== -->
+
+            <section class="dashboard-columns">
+
+
+                <!-- TABLA -->
+
+                <div class="panel requests-panel">
+
+                    <div class="panel-header">
+
+                        <h3>
+                            Solicitudes que requieren atención
+                        </h3>
+
+                        <button
+                            id="btnVerSolicitudes"
+                            class="text-action"
+                            type="button"
+                        >
+
+                            Ver todas
+
+                            <span class="material-symbols-outlined">
+                                arrow_forward
+                            </span>
+
+                        </button>
+
+                    </div>
+
+
+                    <div class="table-wrapper">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        ID
+                                    </th>
+
+                                    <th>
+                                        Empresa
+                                    </th>
+
+                                    <th>
+                                        Sector
+                                    </th>
+
+                                    <th>
+                                        Puntaje IA
+                                    </th>
+
+                                    <th>
+                                        Fecha
+                                    </th>
+
+                                    <th>
+                                        Estado
+                                    </th>
+
+                                    <th>
+                                        Acción
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="tbodySolicitudes">
+
+                                <tr>
+
+                                    <td
+                                        colspan="7"
+                                        class="loading-cell"
+                                    >
+                                        Cargando solicitudes...
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ACTIVIDAD -->
+
+                <div class="panel activity-panel">
+
+                    <div class="panel-header">
+
+                        <h3>
+                            Actividad reciente
+                        </h3>
+
+                    </div>
+
+
+                    <div
+                        class="activity-list"
+                        id="activityList"
+                    >
+
+                        <div class="activity-loading">
+                            Cargando actividad...
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ==================================
+                 EMPRESAS + ACCIONES
+            =================================== -->
+
+            <section class="bottom-columns">
+
+
+                <!-- EMPRESAS -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <h3>
+                            Empresas con solicitudes pendientes
+                        </h3>
+
+                    </div>
+
+
+                    <div
+                        class="companies-list"
+                        id="companiesList"
+                    >
+
+                        <div class="activity-loading">
+                            Cargando empresas...
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ACCIONES RÁPIDAS -->
+
+                <div class="panel quick-panel">
+
+                    <div class="panel-header">
+
+                        <h3>
+                            Acciones rápidas
+                        </h3>
+
+                    </div>
+
+
+                    <div class="quick-actions">
+
+
+                        <button
+                            type="button"
+                            id="quickSolicitudes"
+                            class="quick-action"
+                        >
+
+                            <span class="material-symbols-outlined">
+                                assignment
+                            </span>
+
+                            <span>
+                                Ver solicitudes
+                            </span>
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="quick-action"
+                        >
+
+                            <span class="material-symbols-outlined">
+                                folder
+                            </span>
+
+                            <span>
+                                Revisar documentos
+                            </span>
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="quick-action"
+                        >
+
+                            <span class="material-symbols-outlined">
+                                bar_chart
+                            </span>
+
+                            <span>
+                                Generar reporte
+                            </span>
+
+                        </button>
+
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- ==========================================
+         MODAL DE SOLICITUD
+    =========================================== -->
+
+    <div
+        id="solicitudModal"
+        class="modal-overlay hidden"
+    >
+
+        <div class="modal">
+
+            <div class="modal-header">
+
+                <div>
+
+                    <span class="modal-label">
+                        SOLICITUD
+                    </span>
+
+                    <h3 id="modalSolicitudId">
+                        -
+                    </h3>
+
+                </div>
+
+                <button
+                    id="btnCloseModal"
+                    class="modal-close"
+                    type="button"
+                >
+
+                    <span class="material-symbols-outlined">
+                        close
+                    </span>
+
+                </button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <div class="detail-grid">
+
+                    <div class="detail-item">
+
+                        <span>
+                            Empresa
+                        </span>
+
+                        <strong id="modalEmpresa">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Sector
+                        </span>
+
+                        <strong id="modalSector">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Inversión
+                        </span>
+
+                        <strong id="modalInversion">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Empleos
+                        </span>
+
+                        <strong id="modalEmpleos">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Puntaje IA
+                        </span>
+
+                        <strong id="modalPuntaje">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Clasificación IA
+                        </span>
+
+                        <strong id="modalClasificacion">
+                            -
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="ia-justification">
+
+                    <div class="ia-title">
+
+                        <span class="material-symbols-outlined">
+                            auto_awesome
+                        </span>
+
+                        Análisis de IA
+
+                    </div>
+
+                    <p id="modalJustificacion">
+                        -
+                    </p>
+
+                </div>
+
+                <div class="ia-justification">
+
+                    <div class="ia-title">
+
+                        <span class="material-symbols-outlined">
+                            fact_check
+                        </span>
+
+                        Decisión del analista
+
+                    </div>
+
+                    <label for="decisionComentario">
+                        Comentario de la decisión
+                    </label>
+
+                    <textarea
+                        id="decisionComentario"
+                        rows="3"
+                        placeholder="Explique brevemente la decisión final."
+                    ></textarea>
+
+                    <p id="decisionMessage" aria-live="polite"></p>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    id="btnRechazarSolicitud"
+                    class="modal-button secondary"
+                    type="button"
+                >
+                    Rechazar
+                </button>
+
+                <button
+                    id="btnRevisarSolicitud"
+                    class="modal-button secondary"
+                    type="button"
+                >
+                    Enviar a revisión
+                </button>
+
+                <button
+                    id="btnConfirmarSolicitud"
+                    class="modal-button"
+                    type="button"
+                >
+                    Confirmar decisión
+                </button>
+
+                <button
+                    id="btnCloseModalFooter"
+                    class="modal-button secondary"
+                    type="button"
+                >
+                    Cerrar
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- JS -->
+    <script
+        type="module"
+        src="../../js/analista/analista.js"
+    ></script>
+
+</body>
+</html>

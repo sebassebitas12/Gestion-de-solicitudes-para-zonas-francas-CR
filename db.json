@@ -88,7 +88,6 @@
       "activo": true
     }
   ],
-
   "zonas_francas": [
     {
       "id": "ZF-001",
@@ -146,7 +145,6 @@
       "descripcion": "Zona franca de operación diversificada para empresas de servicios y manufactura."
     }
   ],
-
   "empresas": [
     {
       "id": "EMP-001",
@@ -227,7 +225,6 @@
       "solicitudId": "SOL-2024-006"
     }
   ],
-
   "solicitudes": [
     {
       "id": "SOL-2024-001",
@@ -256,33 +253,6 @@
       "fecha": "2024-11-03",
       "fechaEvaluacionIA": "2024-11-04",
       "fechaDecision": "2024-11-05"
-    },
-    {
-      "id": "SOL-2024-002",
-      "empresaId": "EMP-002",
-      "zonaFrancaId": "ZF-001",
-      "empresa": "Manufactura Global LATAM",
-      "sector": "Manufactura",
-      "pais": "México",
-      "descripcion": "Planta de ensamblaje de dispositivos electrónicos para exportación.",
-      "inversion": 890000,
-      "empleos": 145,
-      "exportaciones": 2500000,
-      "contactoNombre": "Jorge Hernández",
-      "contactoEmail": "j.hernandez@mfglobal.mx",
-      "documentos": [
-        "Estudio_Factibilidad.pdf",
-        "Certificados_Empresa.pdf"
-      ],
-      "puntajeIA": 62,
-      "clasificacionIA": "Revisar",
-      "justificacionIA": "La inversión proyectada está por encima del mínimo requerido, pero se recomienda revisar la sostenibilidad financiera, la cadena de suministro y la documentación ambiental.",
-      "estado": "pendiente",
-      "estadoHumano": null,
-      "analistaId": null,
-      "fecha": "2024-11-08",
-      "fechaEvaluacionIA": "2024-11-09",
-      "fechaDecision": null
     },
     {
       "id": "SOL-2024-003",
@@ -360,12 +330,12 @@
       "puntajeIA": 78,
       "clasificacionIA": "Recomendada",
       "justificacionIA": "Empresa con una propuesta tecnológica alineada con los sectores estratégicos de la zona y una inversión superior al mínimo configurado.",
-      "estado": "pendiente",
-      "estadoHumano": null,
-      "analistaId": null,
+      "estado": "aprobada",
+      "estadoHumano": "Aprobada",
+      "analistaId": "USR-001",
       "fecha": "2024-11-14",
       "fechaEvaluacionIA": "2024-11-15",
-      "fechaDecision": null
+      "fechaDecision": "2026-08-24T15:26:53.417Z"
     },
     {
       "id": "SOL-2024-006",
@@ -387,15 +357,73 @@
       "puntajeIA": 55,
       "clasificacionIA": "Revisar",
       "justificacionIA": "La generación de empleo es positiva, pero se recomienda revisar la sostenibilidad financiera y verificar los contratos de clientes presentados.",
-      "estado": "pendiente",
-      "estadoHumano": null,
-      "analistaId": null,
+      "estado": "rechazada",
+      "estadoHumano": "Rechazada",
+      "analistaId": "USR-001",
       "fecha": "2024-11-15",
       "fechaEvaluacionIA": "2024-11-16",
+      "fechaDecision": "2026-08-24T15:27:16.873Z"
+    },
+    {
+      "id": "f0bd",
+      "empresaId": "EMP-001",
+      "zonaFrancaId": "ZF-001",
+      "empresa": "TechNova Solutions CR",
+      "sector": "Tecnología",
+      "pais": "Costa Rica",
+      "descripcion": "Solicitud de prueba",
+      "inversion": 500000,
+      "empleos": 50,
+      "exportaciones": 1000000,
+      "contactoNombre": "Prueba",
+      "contactoEmail": "prueba@test.com",
+      "puntajeIA": 70,
+      "clasificacionIA": "Recomendada",
+      "justificacionIA": "Cumple con los requisitos mínimos de inversión y compatibilidad de sector tecnológico.",
+      "estado": "pendiente"
+    },
+    {
+      "id": "ccfb",
+      "empresaId": "EMP-001",
+      "zonaFrancaId": "ZF-001",
+      "empresa": "TechNova Solutions CR",
+      "sector": "Tecnología",
+      "inversion": 200000,
+      "empleos": 120,
+      "exportaciones": 0,
+      "documentos": [
+        "CV_Sebastian_Flores_DesarrolloWeb_IA.pdf"
+      ],
+      "puntajeIA": 100,
+      "clasificacionIA": "Recomendada",
+      "justificacionIA": "Cumple la inversión mínima de $150,000. Cumple los 100 empleos mínimos. El sector Tecnología está autorizado en Zona Franca Coyol.",
+      "estado": "pendiente",
+      "estadoHumano": "Pendiente",
+      "analistaId": null,
+      "fecha": "2026-08-21T20:08:25.221Z",
+      "fechaEvaluacionIA": "2026-08-21T20:08:25.221Z",
       "fechaDecision": null
+    },
+    {
+      "id": "SOL-2026-679730",
+      "empresaId": "EMP-001",
+      "empresa": "TechNova Solutions CR",
+      "sector": "Tecnología",
+      "pais": "Costa Rica",
+      "inversion": 500000,
+      "empleos": 250,
+      "exportaciones": 104000,
+      "zonaFrancaId": "ZF-001",
+      "descripcion": "Proyecto en tecnologia dedicado a el avance y la promocion de habilidades tecnicas para la creacion de equipo tecnico e inclusive su reparacion, administracion y mejora.",
+      "documentos": [
+        "documento.docx"
+      ],
+      "estado": "pendiente",
+      "puntajeIA": 0,
+      "clasificacionIA": "pendiente",
+      "fecha": "2026-08-24T16:07:59.730Z"
     }
   ],
-
   "decisiones": [
     {
       "id": "DEC-001",
@@ -432,9 +460,32 @@
       "comentario": "No cumple con el mínimo de empleos requerido y presenta documentación insuficiente.",
       "fecha": "2024-11-14",
       "tipo": "rechazo"
+    },
+    {
+      "id": "DEC-1787585213418",
+      "solicitudId": "SOL-2024-005",
+      "empresaId": "EMP-005",
+      "analistaId": "USR-001",
+      "clasificacionIA": "Recomendada",
+      "puntajeIA": 78,
+      "decisionFinal": "Recomendada",
+      "comentario": "no pasa",
+      "fecha": "2026-08-24T15:26:53.417Z",
+      "tipo": "confirmacion"
+    },
+    {
+      "id": "DEC-1787585236874",
+      "solicitudId": "SOL-2024-006",
+      "empresaId": "EMP-006",
+      "analistaId": "USR-001",
+      "clasificacionIA": "Revisar",
+      "puntajeIA": 55,
+      "decisionFinal": "Rechazada",
+      "comentario": "ewqeqe",
+      "fecha": "2026-08-24T15:27:16.873Z",
+      "tipo": "modificacion"
     }
   ],
-
   "reportes_cumplimiento": [
     {
       "id": "RPT-001",
@@ -522,7 +573,6 @@
       "fechaReporte": "2024-11-15"
     }
   ],
-
   "alertas": [
     {
       "id": "ALR-001",
@@ -600,7 +650,6 @@
       "fecha": "2024-11-15"
     }
   ],
-
   "historial": [
     {
       "id": "HIS-001",
@@ -660,9 +709,28 @@
       "accion": "Alerta generada",
       "descripcion": "Se detectó incumplimiento en empleo y exportaciones.",
       "fecha": "2024-11-17T15:30:00"
+    },
+    {
+      "id": "HIS-1787585213419",
+      "empresaId": "EMP-005",
+      "solicitudId": "SOL-2024-005",
+      "usuarioId": "USR-001",
+      "tipo": "decision",
+      "accion": "Solicitud aprobada",
+      "descripcion": "no pasa",
+      "fecha": "2026-08-24T15:26:53.417Z"
+    },
+    {
+      "id": "HIS-1787585236874",
+      "empresaId": "EMP-006",
+      "solicitudId": "SOL-2024-006",
+      "usuarioId": "USR-001",
+      "tipo": "decision",
+      "accion": "Solicitud rechazada",
+      "descripcion": "ewqeqe",
+      "fecha": "2026-08-24T15:27:16.873Z"
     }
   ],
-
   "metricas": [
     {
       "id": "MET-001",

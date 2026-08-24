@@ -1,0 +1,138 @@
+// ==========================================
+// ZoFranca CR - BASE COMPARTIDA DE LOS
+// PANELES DEL MÓDULO EMPRESA
+// ==========================================
+
+import { getSesion } from '../../services/auth.service.js';
+import { configurarLogout } from '../shared/logout.js';
+import { getNotificaciones } from './empresa-data.js';
+import { mostrarToast } from '../shared/ui.js';
+
+
+export function protegerPanelEmpresa() {
+
+    const sesion = getSesion();
+
+    if (
+        !sesion ||
+        sesion.rol !== 'empresa' ||
+        !sesion.empresaId
+    ) {
+
+        window.location.href = '../login.html';
+
+        throw new Error(
+            'Acceso no autorizado al panel de empresa.'
+        );
+    }
+
+    return sesion;
+}
+
+
+export function iniciarPanelBase(sesion) {
+
+    configurarLogout('btnCerrarSesion');
+
+
+    const btnNotificaciones =
+        document.querySelector('.notification-button');
+
+    if (btnNotificaciones) {
+
+        btnNotificaciones.addEventListener(
+            'click',
+            () => {
+                window.location.href =
+                    'notificaciones.html';
+            }
+        );
+    }
+
+
+    const btnBuscar =
+        document.querySelector('.icon-button[title="Buscar"]');
+
+    if (btnBuscar) {
+
+        btnBuscar.addEventListener(
+            'click',
+            () => {
+
+                const campoBusqueda =
+                    document.querySelector('.filter-search input');
+
+                if (campoBusqueda) {
+                    campoBusqueda.focus();
+                }
+            }
+        );
+    }
+
+
+    const btnAyuda =
+        document.querySelector('.icon-button[title="Ayuda"]');
+
+    if (btnAyuda) {
+
+        btnAyuda.addEventListener(
+            'click',
+            () => mostrarToast('Centro de ayuda de ZoFranca CR.', 'info')
+        );
+    }
+
+
+    const btnAjustes =
+        document.querySelector('[data-proximamente]');
+
+    if (btnAjustes) {
+
+        btnAjustes.addEventListener(
+            'click',
+            (evento) => {
+
+                evento.preventDefault();
+
+                mostrarToast('Esta sección estará disponible próximamente.', 'info');
+            }
+        );
+    }
+
+    return actualizarBadgeNotificaciones(sesion.empresaId);
+}
+
+
+export async function actualizarBadgeNotificaciones(empresaId) {
+
+    const badge =
+        document.getElementById('badgeNotificaciones');
+
+    if (!badge) {
+        return 0;
+    }
+
+    const notificaciones =
+        await getNotificaciones(empresaId);
+
+    const sinLeer = notificaciones.filter(
+        notificacion => !notificacion.leida
+    );
+
+    if (sinLeer.length === 0) {
+
+        badge.hidden = true;
+
+        badge.textContent = '';
+
+    } else {
+
+        badge.hidden = false;
+
+        badge.textContent =
+            sinLeer.length > 99
+                ? '+99'
+                : String(sinLeer.length);
+    }
+
+    return sinLeer.length;
+}

@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Configuración - ZoFranca CR</title>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Material Symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:FILL@0..1&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/empresa/empresa.css">
+    <link rel="stylesheet" href="../../css/empresa/paneles.css">
+    <link rel="stylesheet" href="../../css/configuracion/configuracion.css">
+    <link rel="stylesheet" href="../../css/decor.css">
+</head>
+
+<body>
+
+    <div class="bg-blobs" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <!-- =========================
+         SIDEBAR (generado por rol)
+    ========================== -->
+    <aside class="sidebar">
+
+        <div class="sidebar-header">
+            <h1>ZoFranca CR</h1>
+            <p>Enterprise Core</p>
+        </div>
+
+        <nav class="sidebar-menu" id="menuConfiguracion">
+
+            <!-- JavaScript genera el menú según el rol -->
+
+        </nav>
+
+        <!-- Usuario -->
+        <div class="sidebar-footer">
+
+            <div class="user-profile">
+
+                <div class="user-avatar" id="avatarUsuarioSidebar">
+                    U
+                </div>
+
+                <div class="user-info">
+                    <strong id="nombreUsuarioSidebar">
+                        Usuario
+                    </strong>
+
+                    <span id="rolUsuarioSidebar">
+                        Rol
+                    </span>
+                </div>
+
+            </div>
+
+            <a href="#" class="menu-item logout" id="btnCerrarSesion">
+                <span class="material-symbols-outlined">logout</span>
+                <span>Cerrar Sesión</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =========================
+         BARRA SUPERIOR
+    ========================== -->
+    <header class="topbar">
+
+        <div class="topbar-title">
+
+            <h2>Configuración</h2>
+
+            <p>
+                Perfil, preferencias y seguridad de su cuenta
+            </p>
+
+        </div>
+
+        <div class="topbar-actions">
+
+            <button class="icon-button" title="Ayuda" aria-label="Ayuda" id="btnAyuda">
+                <span class="material-symbols-outlined">
+                    help_outline
+                </span>
+            </button>
+
+            <div class="topbar-avatar" id="avatarUsuarioTop" aria-hidden="true">
+                U
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         CONTENIDO PRINCIPAL
+    ========================== -->
+    <main class="main-content">
+
+        <section class="page-head">
+
+            <div>
+
+                <h2>Configuración de la cuenta</h2>
+
+                <p>
+                  Administre su perfil, preferencias visuales y seguridad.
+                </p>
+
+            </div>
+
+            <div class="page-head-actions">
+
+                <button class="secondary-button" id="btnVolverInicio">
+
+                    <span class="material-symbols-outlined">
+                        arrow_back
+                    </span>
+
+                    Volver al inicio
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <section class="config-grid">
+
+            <!-- Perfil -->
+            <article class="panel-card" style="padding: 22px;">
+
+                <div class="profile-head">
+
+                    <div class="profile-avatar" id="avatarPerfil">
+                        U
+                    </div>
+
+                    <div>
+
+                        <strong id="nombrePerfil">
+                            Usuario
+                        </strong>
+
+                        <span id="rolPerfil">
+                            Rol
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <form id="formPerfil" novalidate>
+
+                    <div class="form-field">
+
+                        <label for="campoNombre">Nombre completo</label>
+
+                        <input
+                            type="text"
+                            id="campoNombre"
+                            readonly
+                        >
+
+                    </div>
+
+                    <div class="form-field">
+
+                        <label for="campoEmail">Correo electrónico</label>
+
+                        <input
+                            type="email"
+                            id="campoEmail"
+                            readonly
+                        >
+
+                    </div>
+
+                    <div class="form-field">
+
+                        <label for="campoOrganizacion">Organización</label>
+
+                        <input
+                            type="text"
+                            id="campoOrganizacion"
+                            readonly
+                        >
+
+                    </div>
+
+                    <div class="backend-note">
+
+                        <span class="material-symbols-outlined">info</span>
+
+                        <span>
+                          La edición de datos del perfil requiere un endpoint
+                          de actualización de usuarios. El formulario está
+                          preparado para conectarse cuando la API lo exponga.
+                        </span>
+
+                    </div>
+
+                </form>
+
+            </article>
+
+
+            <!-- Preferencias -->
+            <article class="panel-card" style="padding: 22px;">
+
+                <div class="card-header" style="margin-bottom: 8px;">
+
+                    <h3>Preferencias</h3>
+
+                </div>
+
+                <div class="pref-row">
+
+                    <div class="pref-info">
+
+                        <strong>Animaciones reducidas</strong>
+
+                        <span>Desactiva el fondo dinámico y las animaciones decorativas.</span>
+
+                    </div>
+
+                    <label class="switch">
+
+                        <input
+                            type="checkbox"
+                            id="prefAnimaciones"
+                            role="switch"
+                            aria-label="Animaciones reducidas"
+                        >
+
+                        <span class="switch-track"></span>
+
+                    </label>
+
+                </div>
+
+                <div class="pref-row">
+
+                    <div class="pref-info">
+
+                        <strong>Avisos de cumplimiento</strong>
+
+                        <span>Muestra recordatorios cuando existan alertas activas.</span>
+
+                    </div>
+
+                    <label class="switch">
+
+                        <input
+                            type="checkbox"
+                            id="prefAvisos"
+                            role="switch"
+                            aria-label="Avisos de cumplimiento"
+                            checked
+                        >
+
+                        <span class="switch-track"></span>
+
+                    </label>
+
+                </div>
+
+                <div class="pref-row">
+
+                    <div class="pref-info">
+
+                        <strong>Resumen semanal</strong>
+
+                        <span>Prepara el envío de un resumen cada lunes. Requiere servicio de correo.</span>
+
+                    </div>
+
+                    <label class="switch">
+
+                        <input
+                            type="checkbox"
+                            id="prefResumen"
+                            role="switch"
+                            aria-label="Resumen semanal"
+                        >
+
+                        <span class="switch-track"></span>
+
+                    </label>
+
+                </div>
+
+                <div class="backend-note">
+
+                    <span class="material-symbols-outlined">info</span>
+
+                    <span>
+                      Las preferencias se guardan localmente en este
+                      navegador hasta que exista un endpoint de usuario.
+                    </span>
+
+                </div>
+
+            </article>
+
+
+            <!-- Seguridad -->
+            <article class="panel-card" style="padding: 22px;">
+
+                <div class="card-header" style="margin-bottom: 14px;">
+
+                    <h3>Seguridad</h3>
+
+                </div>
+
+                <form id="formPassword" novalidate>
+
+                    <div class="form-field">
+
+                        <label for="passActual">Contraseña actual</label>
+
+                        <input
+                            type="password"
+                            id="passActual"
+                            autocomplete="current-password"
+                        >
+
+                        <span class="field-error" id="errorActual">
+                            Ingrese su contraseña actual.
+                        </span>
+
+                    </div>
+
+                    <div class="form-field">
+
+                        <label for="passNueva">Nueva contraseña</label>
+
+                        <input
+                            type="password"
+                            id="passNueva"
+                            autocomplete="new-password"
+                        >
+
+                        <span class="field-error" id="errorNueva">
+                            Debe tener al menos 8 caracteres.
+                        </span>
+
+                    </div>
+
+                    <div class="form-field">
+
+                        <label for="passConfirmar">Confirmar nueva contraseña</label>
+
+                        <input
+                            type="password"
+                            id="passConfirmar"
+                            autocomplete="new-password"
+                        >
+
+                        <span class="field-error" id="errorConfirmar">
+                            Las contraseñas no coinciden.
+                        </span>
+
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="primary-button"
+                        id="btnGuardarPassword"
+                    >
+                        Actualizar contraseña
+                    </button>
+
+                </form>
+
+                <div class="backend-note">
+
+                    <span class="material-symbols-outlined">lock</span>
+
+                    <span>
+                      El cambio real de contraseña requiere un endpoint
+                      seguro en el backend. La validación se realiza aquí
+                      y la conexión queda lista para la API.
+                    </span>
+
+                </div>
+
+            </article>
+
+
+            <!-- Acerca de -->
+            <article class="panel-card" style="padding: 22px;">
+
+                <div class="card-header" style="margin-bottom: 14px;">
+
+                    <h3>Acerca del sistema</h3>
+
+                </div>
+
+                <div class="about-list">
+
+                    <div>
+                        <span>Sistema</span>
+                        <strong>ZoFranca CR</strong>
+                    </div>
+
+                    <div>
+                        <span>Versión</span>
+                        <strong>v2.4.1</strong>
+                    </div>
+
+                    <div>
+                        <span>Certificación</span>
+                        <strong>ISO 27001</strong>
+                    </div>
+
+                    <div>
+                        <span>Soporte</span>
+                        <strong>soporte@zofranca.cr</strong>
+                    </div>
+
+                </div>
+
+            </article>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+    <footer class="footer">
+
+        <p>
+            ZoFranca CR | v2.4.1 | Sistema Seguro • ISO 27001
+        </p>
+
+        <div class="footer-links">
+
+            <a href="#">
+                Certificaciones de Seguridad
+            </a>
+
+            <a href="#">
+                Términos de Servicio
+            </a>
+
+            <a href="#">
+                Privacidad
+            </a>
+
+        </div>
+
+    </footer>
+
+
+    <!-- JavaScript -->
+    <script type="module" src="../../js/configuracion/configuracion.js"></script>
+
+</body>
+</html>
